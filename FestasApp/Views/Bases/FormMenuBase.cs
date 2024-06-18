@@ -5,7 +5,7 @@
 //   Linguagem: C#
 //
 //   Inicio: 23/05/2024
-//   Ultima Alteração: 06/06/2024
+//   Ultima Alteração: 18/06/2024
 //   
 //   FORMULÁRIO PRINCIPAL
 //
@@ -22,28 +22,19 @@ namespace FestasApp
 {
     public partial class FormMenuBase : Form
     {
-        //private Dictionary<Type, Form> openForms = new Dictionary<Type, Form>();
+        // dicionario para os forms
         private Dictionary<Type, (Form form, bool manterAberto)> openForms = new Dictionary<Type, (Form form, bool manterAberto)>();
 
         // instancia formularios...
         public static FormMenuBase? Instance { get; private set; }
-
-        //private FormClientesCadastro? frmClientes;
-        //private FormFestasCadastro? frmFestas;
-        //private FormUsuariosCadastro? frmUsuarios;
-
-        // Indica se a barra lateral está expandida...
-        private bool sidebarExpand = true;
-        // Indica se o submenu financeiro está expandido...
-        private bool subMenuFinanceiroExpand = false;
-        //
+       
         // construtor
         public FormMenuBase()
         {
             InitializeComponent();
+            this.IsMdiContainer = true; // Define o formulário como container MDI
 
             Instance = this; // Atribui o valor dentro do construtor
-
             ConfigurarFrmMenu();
 
             // Chama o método para configurar propriedades MDI...
@@ -53,7 +44,7 @@ namespace FestasApp
         // evento load
         private void FormMenuBase_Load(object sender, EventArgs e)
         {
-            //ConfigurarFrmMenu();
+            
         }
         //
         // Configura propriedades específicas para o formulário MDI...
@@ -61,7 +52,7 @@ namespace FestasApp
         {
             // Utiliza o método de extensão ConfiguraBorda da classe clsMdiProperties
             // para remover a borda (bevel) do cliente MDI...
-            this.ConfiguraBorda(show: true);
+            this.ConfiguraBorda(show: false);
 
             // Verifica se existe algum controle do tipo MdiClient
             MdiClient? mdiClient = Controls.OfType<MdiClient>().FirstOrDefault();
@@ -80,23 +71,11 @@ namespace FestasApp
             // Configurações de exibição do formulário
             this.FormBorderStyle = FormBorderStyle.None;
 
-            // Define o tamanho do formulário para a área de trabalho disponível, sem incluir a barra de tarefas
-            //this.ClientSize = Screen.PrimaryScreen.WorkingArea.Size;
-            //this.Size = Screen.PrimaryScreen.WorkingArea.Size;
-            //this.Size = SystemInformation.WorkingArea.Size;
-
-            // Define a posição do formulário para a área de trabalho disponível
-            //this.Location = Screen.PrimaryScreen.WorkingArea.Location;
-
             // Ajusta o estado do formulário para maximizado
             this.WindowState = FormWindowState.Maximized;
             //
             picRestaurar.Visible = true;
             picMaximizar.Visible = false;
-            //
-            // Associações de eventos MouseEnter e MouseLeave para os botões...
-            AssociarEventosMouse(btnContasReceber);
-            AssociarEventosMouse(btnContasPagar);
             //
             // Associações de eventos MouseEnter e MouseLeave para os PictureBox...
             AssociarPicEventosMouse(picMaximizar);
@@ -105,12 +84,7 @@ namespace FestasApp
             AssociarPicEventosMouse(picFechar);
         }
         //
-        // Associa os eventos MouseEnter e MouseLeave a um botão
-        private void AssociarEventosMouse(Button button)
-        {
-            button.MouseEnter += Btn_MouseEnter;
-            button.MouseLeave += Btn_MouseLeave;
-        }
+        // Associa os eventos MouseEnter e MouseLeave ao controle
         private void AssociarPicEventosMouse(PictureBox picture)
         {
             picture.MouseEnter += Pic_MouseEnter;
@@ -138,7 +112,7 @@ namespace FestasApp
         {
             Application.Exit();
         }
-        //--------------------------
+        //
         // Evento MouseEnter para mudar a cor de fundo...
         private void Pic_MouseEnter(object? sender, EventArgs e)
         {
@@ -162,10 +136,10 @@ namespace FestasApp
                 pic.BackColor = Color.Transparent; // ou a cor original que você deseja
             }
         }
+
+        #region  métodos mover formulario...
         //---------------------
         // Método e bibliotecas para mover o formulário...
-        #region  métodos mover formulario...
-
         [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
         private extern static void ReleaseCapture();
 
@@ -192,11 +166,15 @@ namespace FestasApp
                 picMaximizar.Visible = true;
             }
         } // end mover formulário
-        #endregion
+        #endregion mover formulários.
+
+        #region menu lateral e sub menu finaceiro responsivo
         //--------------------------------------------------------------------------
         // MENU RESPONSIVO...
-        //
         // Evento para ocultar ou mostrar o menu lateral ao clicar no botão btnMenu
+        //
+        // Indica se menu lateral está expandido...
+        private bool sidebarExpand = true;
         private void PicMenuBar_Click(object sender, EventArgs e)
         {
             tmSidebarTransition.Start();
@@ -226,10 +204,13 @@ namespace FestasApp
                 }
             }
         } // end menu responsivo...
+
         //----------------------
         // SUBMENU FINANCEIRO RESPONSIVO...
-        //
         // Evento para ocultar ou mostrar o SUBMENU-financeiro ao clicar no btnFinanceiro...
+        //
+        // Indica se o submenu financeiro está expandido...
+        private bool subMenuFinanceiroExpand = false;
         private void BtnFinanceiro_Click(object sender, EventArgs e)
         {
             TmSubMenuFinanceiroTransition.Start();
@@ -238,6 +219,7 @@ namespace FestasApp
         // submenu contas a pagar e contas a receber...
         private void TmSubMenuFinanceiroTransition_Tick(object sender, EventArgs e)
         {
+            // expande
             if (subMenuFinanceiroExpand == false)
             {
                 pnlSubMenuFinanceiro.Height += 10;
@@ -247,7 +229,7 @@ namespace FestasApp
                     subMenuFinanceiroExpand = true;
                 }
             }
-            else
+            else // esconde
             {
                 pnlSubMenuFinanceiro.Height -= 10;
                 if (pnlSubMenuFinanceiro.Height <= 49)
@@ -259,6 +241,7 @@ namespace FestasApp
         } // end submenu-financeiro...
         private void MudarCorBtnFinanceiro()
         {
+            // ao expandir
             if (subMenuFinanceiroExpand == false)
             {
                 pnlSubMenuFinanceiro.BackColor = Color.FromArgb(37, 46, 59);
@@ -266,7 +249,7 @@ namespace FestasApp
                 btnContasReceber.BackColor = Color.FromArgb(37, 46, 59);
                 //btnFinanceiro.BackColor = Color.FromArgb(37, 46, 59);
             }
-            else
+            else // ao retrair
             {
                 pnlSubMenuFinanceiro.BackColor = Color.FromArgb(26, 32, 40);
                 btnContasPagar.BackColor = Color.FromArgb(26, 32, 40);
@@ -274,205 +257,30 @@ namespace FestasApp
                 //btnFinanceiro.BackColor = Color.FromArgb(26, 32, 40);              
             }
         }
+        #endregion menu lateral e sub menu finaceiro responsivo
 
-        //------------------------------------
-        // Manipulador para eventos MOUSEENTER de todos os botões do menu...
-        private void Btn_MouseEnter(object? sender, EventArgs e)
-        {
-            this.BackColor = Color.FromArgb(37, 46, 59);
-        }
-        //-----------------------------------
-        // Manipulador para eventos MOUSELEAVE de todos os botões do menu...
-        private void Btn_MouseLeave(object? sender, EventArgs e)
-        {
-            this.BackColor = Color.FromArgb(26, 32, 40);
-        }
-
-        // Função auxiliar para obter o controle de borda correspondente ao botão
-        //private Control? GetBordaControl(Button btn)
-        //{
-        //    //return btn.Name switch
-        //    //{
-        //    //    //"buttonFestas" => bordaFestas,
-        //    //    "btnCliente" => bordaCliente,
-        //    //    "btnPacotesFestas" => bordaPacotesFestas,
-        //    //    "btnFornecedor" => bordaFornecedor,
-        //    //    "btnFinanceiro" => bordaFinanceiro,
-        //    //    "btnContasReceber" => bordaContasReceber,
-        //    //    "btnContasPagar" => bordaContasPagar,
-        //    //    "buttonUsuarios" => bordaUsuarios,
-        //    //    "btnCalendario" => bordaCalendario,
-        //    //    _ => null,
-        //    //};
-        //}
-        //-----------------------------------------------------
+        //
         // 
-        // FESTAS...
+        // btn FESTAS...
         //
         private void btnFestas_Click(object sender, EventArgs e)
         {
             AbrirFormulario(new FormFestasCadastro(), manterAberto: true);
-            //if (frmFestas == null)
-            //{
-            //    frmFestas = new FormFestas();
-            //    frmFestas.FormClosed += FrmFestas_FormClosed;
-            //    frmFestas.MdiParent = this;
-            //    frmFestas.Dock = DockStyle.Fill;
-            //    frmFestas.Show();
-            //}
-            //else
-            //{
-            //    frmFestas.Activate();
-            //}
         }
-        //private void FrmFestas_FormClosed(object? sender, FormClosedEventArgs e)
-        //{
-        //    frmFestas = null;
-        //}
-        //----------------------------------------------------------------
+        //
         // CLIENTES...
         //
         private void btnCliente_Click(object sender, EventArgs e)
         {
             AbrirFormulario(new FormClientesCadastro(), manterAberto: true);
-            //if (frmClientes == null)
-            //{
-            //    frmClientes = new FormClientesCadastro();
-            //    frmClientes.FormClosed += FrmClientes_FormClosed;
-            //    frmClientes.MdiParent = this; // Define FormMenuBase como MDI parent
-            //    frmClientes.Dock = DockStyle.Fill;
-            //    frmClientes.Show();
-            //}
-            //else
-            //{
-            //    frmClientes.Activate();
-            //}
-        }
-        //private void FrmClientes_FormClosed(object? sender, FormClosedEventArgs e)
-        //{
-        //    frmClientes = null;
-        //}
-
-        //
-        // CALENDARIO
-        // Evento do botão Calendário
-        private void btnCalendario_ClickSEMUSO(object sender, EventArgs e)
-        {
-            // Verifica se o formulário já está no dicionário
-            Type formType = typeof(FormCalendario);
-            if (openForms.ContainsKey(formType) && openForms[formType].form != null && !openForms[formType].form.IsDisposed)
-            {
-                // Ativa o formulário se ele já estiver aberto
-                openForms[formType].form.Activate();
-            }
-            else
-            {
-                SuspendLayout();
-
-                // Cria a barra de progresso
-                ProgressBar progressBar = new ProgressBar
-                {
-                    Style = ProgressBarStyle.Marquee,
-                    Dock = DockStyle.Bottom,
-                };
-                this.Controls.Add(progressBar);
-                progressBar.BringToFront();
-
-                // Usa um Timer para simular o carregamento do formulário
-                //Timer timer = new Timer();
-                this.timer.Interval = 1000; // Simula um carregamento de 1 segundo
-                this.timer.Tick += (s, args) =>
-                {
-                    timer.Stop();
-                    this.Controls.Remove(progressBar);
-
-                    // Cria a instância do formulário
-                    Form frm = new FormCalendario();
-
-                    frm.MdiParent = this;
-                    frm.Dock = DockStyle.Fill;
-
-                    // Adiciona o formulário no dicionário
-                    openForms[frm.GetType()] = (frm, manterAberto: false);
-
-                    frm.Show();
-                    ResumeLayout();
-                };
-                timer.Start();
-            }
         }
         //
-        // Evento do botão Calendário
-        private void btnCalendario_ClickSEMUSO2(object sender, EventArgs e)
-        {
-            // Verifica se o formulário já está no dicionário
-            Type formType = typeof(FormCalendario);
-            if (openForms.ContainsKey(formType) && openForms[formType].form != null && !openForms[formType].form.IsDisposed)
-            {
-                // Ativa o formulário se ele já estiver aberto
-                openForms[formType].form.Activate();
-            }
-            else
-            {
-                SuspendLayout();
-                //
-                // Cria a instância do formulário
-                Form frm = new FormCalendario();
-
-                frm.MdiParent = this;
-                frm.Dock = DockStyle.Fill;
-
-                // Dispara o evento Load do formulário
-                //MethodInfo onLoadMethod = typeof(Form).GetMethod("OnLoad", BindingFlags.NonPublic | BindingFlags.Instance);
-                //onLoadMethod?.Invoke(frm, new object[] { EventArgs.Empty });
-
-                // Adiciona o formulário no dicionário
-                openForms[frm.GetType()] = (frm, manterAberto: false);
-
-                frm.Show();
-                //
-                ResumeLayout();
-            }
-        }
+        // CALENDARIO...
         //
-        // Evento do botão Calendário
         private void btnCalendario_Click(object sender, EventArgs e)
         {
             AbrirFormulario(new FormCalendario(), manterAberto: true);
-
-            //// Verifica se o formulário já está ABERTO
-            //var frmAberto = Application.OpenForms.OfType<FormCalendario>().FirstOrDefault();
-
-            //if (frmAberto != null)
-            //{
-            //    // Ativa o formulário se ele já estiver aberto
-            //    frmAberto.Activate();
-            //}
-            //else
-            //{
-            //    //
-            //    // Cria a instância do formulário
-            //    Form frm = new FormCalendario
-            //    {
-            //        MdiParent = this,
-            //        Dock = DockStyle.Fill,
-            //        Visible = false // Inicialmente invisível
-            //    };
-
-            //    // Inicializa componentes e faz outras configurações necessárias
-            //    frm.Load += (s, args) =>
-            //    {
-            //        // Inicializações adicionais aqui, se necessário
-            //    };
-
-            //    // Suspende a pintura do formulário até que ele esteja totalmente configurado
-            //    SuspendLayout();
-            //    frm.Show();
-            //    frm.Visible = true; // Torna visível após todas as configurações
-            //    ResumeLayout();
-            //}
         }
-
         //
         // FORNECEDOR
         //
@@ -480,7 +288,7 @@ namespace FestasApp
         {
 
         }
-        //-----------------------------------------------
+        //
         // USUARIOS...
         //
         private void btnUsuarios_Click(object sender, EventArgs e)
@@ -535,7 +343,7 @@ namespace FestasApp
                 form.MdiParent = this;
                 form.Dock = DockStyle.Fill;
                 form.Show();
-
+                               
                 // Adiciona ou atualiza o formulário no dicionário
                 openForms[formType] = (form, manterAberto);
             }

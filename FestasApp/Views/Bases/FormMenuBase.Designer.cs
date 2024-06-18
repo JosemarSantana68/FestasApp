@@ -57,19 +57,19 @@ namespace FestasApp
             TmSubMenuFinanceiroTransition = new System.Windows.Forms.Timer(components);
             timer = new System.Windows.Forms.Timer(components);
             pnlSubMenuFinanceiro = new Panel();
-            btnContasPagar = new MyFramework.myControls.myButtonPnl();
-            btnFinanceiro = new MyFramework.myControls.myButtonPnl();
-            btnContasReceber = new MyFramework.myControls.myButtonPnl();
+            btnContasPagar = new MyFramework.myControls.myButtonMenu();
+            btnFinanceiro = new MyFramework.myControls.myButtonMenu();
+            btnContasReceber = new MyFramework.myControls.myButtonMenu();
             pnlLogo = new Panel();
             pnlBtnMenu = new Panel();
             BarraLateralMenu = new Panel();
             flowBarraLateral = new FlowLayoutPanel();
-            btnFestas = new MyFramework.myControls.myButtonPnl();
-            btnCliente = new MyFramework.myControls.myButtonPnl();
-            btnCalendario = new MyFramework.myControls.myButtonPnl();
-            btnFornecedor = new MyFramework.myControls.myButtonPnl();
-            btnPacotesFestas = new MyFramework.myControls.myButtonPnl();
-            btnUsuarios = new MyFramework.myControls.myButtonPnl();
+            btnFestas = new MyFramework.myControls.myButtonMenu();
+            btnCliente = new MyFramework.myControls.myButtonMenu();
+            btnCalendario = new MyFramework.myControls.myButtonMenu();
+            btnFornecedor = new MyFramework.myControls.myButtonMenu();
+            btnPacotesFestas = new MyFramework.myControls.myButtonMenu();
+            btnUsuarios = new MyFramework.myControls.myButtonMenu();
             PnlBarraTitulo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)picMinimizar).BeginInit();
             panel3.SuspendLayout();
@@ -563,7 +563,7 @@ namespace FestasApp
             // btnUsuarios
             // 
             btnUsuarios._Image = Properties.Resources.pessoas_funcionarios_36;
-            btnUsuarios.BackColor = Color.FromArgb(26, 32, 40);
+            btnUsuarios.BackColor = Color.Transparent;
             btnUsuarios.FlatAppearance.BorderSize = 0;
             btnUsuarios.FlatStyle = FlatStyle.Flat;
             btnUsuarios.ForeColor = Color.White;
@@ -587,7 +587,6 @@ namespace FestasApp
             Controls.Add(BarraLateralMenu);
             Controls.Add(PnlBarraTitulo);
             Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            IsMdiContainer = true;
             Name = "FormMenuBase";
             Text = "FormMenuBase";
             PnlBarraTitulo.ResumeLayout(false);
@@ -637,21 +636,21 @@ namespace FestasApp
         private PictureBox picMenuBar;
         private Panel pnlLogo;
         private Panel pnlBtnMenu;
-        private MyFramework.myControls.myButtonPnl btnContasReceber;
+        private MyFramework.myControls.myButtonMenu btnContasReceber;
         private Panel BarraLateralMenu;
         private FlowLayoutPanel flowBarraLateral;
-        private MyFramework.myControls.myButtonPnl btnFestas;
-        private MyFramework.myControls.myButtonPnl btnCliente;
-        private MyFramework.myControls.myButtonPnl btnCalendario;
-        private MyFramework.myControls.myButtonPnl btnFornecedor;
-        private MyFramework.myControls.myButtonPnl btnPacotesFestas;
-        private MyFramework.myControls.myButtonPnl btnUsuarios;
+        private MyFramework.myControls.myButtonMenu btnFestas;
+        private MyFramework.myControls.myButtonMenu btnCliente;
+        private MyFramework.myControls.myButtonMenu btnCalendario;
+        private MyFramework.myControls.myButtonMenu btnFornecedor;
+        private MyFramework.myControls.myButtonMenu btnPacotesFestas;
+        private MyFramework.myControls.myButtonMenu btnUsuarios;
         private PictureBox pictureLogo;
         private System.Windows.Forms.Timer TmSubMenuFinanceiroTransition;
         private Panel panel3;
         private System.Windows.Forms.Timer timer;
         private Panel pnlSubMenuFinanceiro;
-        private MyFramework.myControls.myButtonPnl btnFinanceiro;
-        private MyFramework.myControls.myButtonPnl btnContasPagar;
+        private MyFramework.myControls.myButtonMenu btnFinanceiro;
+        private MyFramework.myControls.myButtonMenu btnContasPagar;
     }
 }
