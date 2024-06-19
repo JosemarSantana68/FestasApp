@@ -187,7 +187,7 @@ namespace FestasApp
             if (sidebarExpand)
             {
                 BarraLateralMenu.Width -= 5;
-                if (BarraLateralMenu.Width <= 55)
+                if (BarraLateralMenu.Width <= 70)
                 {
                     sidebarExpand = false;
                     tmSidebarTransition.Stop();
@@ -197,7 +197,7 @@ namespace FestasApp
             else
             {
                 BarraLateralMenu.Width += 10;
-                if (BarraLateralMenu.Width >= 220)
+                if (BarraLateralMenu.Width >= 200)
                 {
                     sidebarExpand = true;
                     tmSidebarTransition.Stop();

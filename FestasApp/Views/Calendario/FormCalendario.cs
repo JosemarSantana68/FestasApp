@@ -38,8 +38,13 @@ namespace FestasApp.Views.Calendario
             // Eventos para o formulário
             this.Load += FormCalendario_Load;
             this.ClientSizeChanged += FormCalendario_ClientSizeChanged;
-            this.MonthYearContainer.Click += MonthYearContainer_Click;
+            this.LblMonthYear.Click += MonthYearContainer_Click;
             this.LblMonthYear.TextChanged += lblMonthYear_TextChanged;
+            lblMesAntes.Click += MudarMesAntes_Click;
+            picMesAntes.Click += MudarMesAntes_Click;
+            lblMesApos.Click += MudarMesApos_Click;
+            picMesApos.Click += MudarMesApos_Click;
+
             ResumeLayout(false);
         }
         //
@@ -59,7 +64,7 @@ namespace FestasApp.Views.Calendario
             // Configuração inicial dos containers de layout
             ConfigurarContainers();
             ConfiguraMesAno();
-            AjustarMesAno();
+            //AjustarMesAno();
             AjustarDiasDaSemana();
             AjustarDias();
             //
@@ -98,9 +103,10 @@ namespace FestasApp.Views.Calendario
         private void ConfiguraMesAno()
         {
             LblMonthYear.Font = new Font("Segoe UI", 18, FontStyle.Regular);
-            LblMonthYear.AutoSize = true;
+            LblMonthYear.AutoSize = false;
             LblMonthYear.BackColor = Color.Transparent;
             LblMonthYear.ForeColor = Color.Black;
+            LblMonthYear.TextAlign = ContentAlignment.MiddleCenter;
 
             LblMonthYear.Text = "Mês Ano";
             LblMonthYear.Text = $"{NomeMes(_CalendarInfo.Month)} {_CalendarInfo.Year}";
@@ -114,17 +120,28 @@ namespace FestasApp.Views.Calendario
             {
                 lbl.Text = char.ToUpper(lbl.Text[0]) + lbl.Text.Substring(1);
             }
+
+            //DateTime activeMonth = new DateTime(_CalendarInfo.Year, _CalendarInfo.Month, 1);
+            //DateTime newMonth;
+            ////mes antes
+            //newMonth = activeMonth.AddMonths(-1);
+            //_CalendarInfo.GoToMonth(newMonth.Year, newMonth.Month);
+            //lblMesAntes.Text = $"{NomeMes(_CalendarInfo.Month)} {_CalendarInfo.Year}";
+            ////mes depois
+            //newMonth = activeMonth.AddMonths(1);
+            //_CalendarInfo.GoToMonth(newMonth.Year, newMonth.Month);
+            //lblMesApos.Text = $"{NomeMes(_CalendarInfo.Month)} {_CalendarInfo.Year}";
         }
         //
-        // Método para centralizar o label do mês e ano no container
-        private void AjustarMesAno()
-        {
-            SuspendLayout();
-            int x = (MonthYearContainer.Width - LblMonthYear.Width) / 2;
-            int y = (MonthYearContainer.Height - LblMonthYear.Height) / 2;
-            LblMonthYear.Location = new Point(x, y);
-            ResumeLayout(false);
-        }
+        //// Método para centralizar o label do mês e ano no container
+        //private void AjustarMesAno()
+        //{
+        //    SuspendLayout();
+        //    int x = (MonthYearContainer.Width - LblMonthYear.Width) / 2;
+        //    int y = (MonthYearContainer.Height - LblMonthYear.Height) / 2;
+        //    LblMonthYear.Location = new Point(x, y);
+        //    ResumeLayout(false);
+        //}
         //
         // Método para dimensionar os labels dos dias da semana igualmente
         private void AjustarDiasDaSemana()
@@ -270,23 +287,60 @@ namespace FestasApp.Views.Calendario
         // Método chamado ao clicar no container de mês e ano
         private void MonthYearContainer_Click(object? sender, EventArgs e)
         {
-            int midPointX = MonthYearContainer.Width / 2;
-            Point pointClicked = MonthYearContainer.PointToClient(Cursor.Position);
+            int midPointX = LblMonthYear.Width / 2;
+            Point pointClicked = LblMonthYear.PointToClient(Cursor.Position);
             DateTime activeMonth = new DateTime(_CalendarInfo.Year, _CalendarInfo.Month, 1);
             DateTime newMonth;
 
             if (pointClicked.X < midPointX)
+            {
                 newMonth = activeMonth.AddMonths(-1); // Mês anterior
+            }
             else
+            {
                 newMonth = activeMonth.AddMonths(1); // Próximo mês
-
+            }
+                
             _CalendarInfo.GoToMonth(newMonth.Year, newMonth.Month);
 
             // Remove eventos antigos do calendário
+            AtualizaMesAno();
+        }
+        // Método chamado ao clicar no container de mês e ano
+        private void MudarMesAntes_Click(object? sender, EventArgs e)
+        {
+            DateTime activeMonth = new DateTime(_CalendarInfo.Year, _CalendarInfo.Month, 1);
+            DateTime newMonth;
+            
+            newMonth = activeMonth.AddMonths(-1); // Mês anterior
+           
+            _CalendarInfo.GoToMonth(newMonth.Year, newMonth.Month);
+
+            // Remove eventos antigos do calendário
+            AtualizaMesAno();
+        }
+        // Método chamado ao clicar no container de mês e ano
+        private void MudarMesApos_Click(object? sender, EventArgs e)
+        {
+            DateTime activeMonth = new DateTime(_CalendarInfo.Year, _CalendarInfo.Month, 1);
+            DateTime newMonth;
+
+            newMonth = activeMonth.AddMonths(1); // Próximo mês
+            
+            _CalendarInfo.GoToMonth(newMonth.Year, newMonth.Month);
+            
+            lblMesAntes.Text = $"{NomeMes(_CalendarInfo.Month)} {_CalendarInfo.Year}";
+
+            // Remove eventos antigos do calendário
+            AtualizaMesAno();
+        }
+        private void AtualizaMesAno()
+        {
             RemoverDadosEventos(this);
             PreencherCalendario();
             CriarDadosTeste();
         }
+
         //
         // Método recursivo para remover dados de teste do calendário
         private void RemoverDadosEventos(Control c)
@@ -303,6 +357,11 @@ namespace FestasApp.Views.Calendario
         private string NomeMes(int month)
         {
             return CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(month);
+        }
+
+        private void picBtnFechar_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
         //
     }// end class

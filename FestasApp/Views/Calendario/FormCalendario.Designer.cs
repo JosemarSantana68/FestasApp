@@ -29,7 +29,15 @@
         private void InitializeComponent()
         {
             MonthYearContainer = new Panel();
+            tableLayoutPanel1 = new TableLayoutPanel();
+            panel1 = new Panel();
+            lblMesAntes = new Label();
+            picMesAntes = new PictureBox();
+            panel2 = new Panel();
+            lblMesApos = new Label();
+            picMesApos = new PictureBox();
             LblMonthYear = new Label();
+            picBtnFechar = new PictureBox();
             DaysOfWeekContainer = new Panel();
             LblSabado = new myLblDiasSemana();
             LblSexta = new myLblDiasSemana();
@@ -129,6 +137,12 @@
             PnlDay50 = new myPnlDay();
             LblDayOfMonth50 = new myLblDiasMes();
             MonthYearContainer.SuspendLayout();
+            tableLayoutPanel1.SuspendLayout();
+            panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)picMesAntes).BeginInit();
+            panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)picMesApos).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)picBtnFechar).BeginInit();
             DaysOfWeekContainer.SuspendLayout();
             DaysRow0Containers.SuspendLayout();
             PnlDay06.SuspendLayout();
@@ -183,23 +197,127 @@
             // MonthYearContainer
             // 
             MonthYearContainer.BackColor = SystemColors.Control;
-            MonthYearContainer.Controls.Add(LblMonthYear);
+            MonthYearContainer.Controls.Add(tableLayoutPanel1);
+            MonthYearContainer.Controls.Add(picBtnFechar);
             MonthYearContainer.Dock = DockStyle.Top;
             MonthYearContainer.Location = new Point(0, 0);
             MonthYearContainer.Name = "MonthYearContainer";
+            MonthYearContainer.Padding = new Padding(5, 0, 0, 0);
             MonthYearContainer.Size = new Size(797, 50);
             MonthYearContainer.TabIndex = 0;
+            // 
+            // tableLayoutPanel1
+            // 
+            tableLayoutPanel1.ColumnCount = 5;
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 15F));
+            tableLayoutPanel1.Controls.Add(panel1, 1, 0);
+            tableLayoutPanel1.Controls.Add(panel2, 3, 0);
+            tableLayoutPanel1.Controls.Add(LblMonthYear, 2, 0);
+            tableLayoutPanel1.Dock = DockStyle.Fill;
+            tableLayoutPanel1.Location = new Point(38, 0);
+            tableLayoutPanel1.Name = "tableLayoutPanel1";
+            tableLayoutPanel1.RowCount = 1;
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel1.Size = new Size(759, 50);
+            tableLayoutPanel1.TabIndex = 8;
+            // 
+            // panel1
+            // 
+            panel1.Controls.Add(lblMesAntes);
+            panel1.Controls.Add(picMesAntes);
+            panel1.Dock = DockStyle.Fill;
+            panel1.Location = new Point(23, 3);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(138, 44);
+            panel1.TabIndex = 4;
+            // 
+            // lblMesAntes
+            // 
+            lblMesAntes.Cursor = Cursors.Hand;
+            lblMesAntes.Dock = DockStyle.Fill;
+            lblMesAntes.Location = new Point(0, 0);
+            lblMesAntes.Name = "lblMesAntes";
+            lblMesAntes.Padding = new Padding(0, 0, 0, 10);
+            lblMesAntes.Size = new Size(98, 44);
+            lblMesAntes.TabIndex = 5;
+            lblMesAntes.Text = "Mês Anterior";
+            lblMesAntes.TextAlign = ContentAlignment.BottomRight;
+            // 
+            // picMesAntes
+            // 
+            picMesAntes.Cursor = Cursors.Hand;
+            picMesAntes.Dock = DockStyle.Right;
+            picMesAntes.Image = Properties.Resources.Calendar_Minus;
+            picMesAntes.Location = new Point(98, 0);
+            picMesAntes.Name = "picMesAntes";
+            picMesAntes.Size = new Size(40, 44);
+            picMesAntes.SizeMode = PictureBoxSizeMode.Zoom;
+            picMesAntes.TabIndex = 3;
+            picMesAntes.TabStop = false;
+            // 
+            // panel2
+            // 
+            panel2.Controls.Add(lblMesApos);
+            panel2.Controls.Add(picMesApos);
+            panel2.Dock = DockStyle.Fill;
+            panel2.Location = new Point(601, 3);
+            panel2.Name = "panel2";
+            panel2.Size = new Size(138, 44);
+            panel2.TabIndex = 3;
+            // 
+            // lblMesApos
+            // 
+            lblMesApos.Cursor = Cursors.Hand;
+            lblMesApos.Dock = DockStyle.Fill;
+            lblMesApos.Location = new Point(40, 0);
+            lblMesApos.Name = "lblMesApos";
+            lblMesApos.Padding = new Padding(0, 0, 0, 10);
+            lblMesApos.Size = new Size(98, 44);
+            lblMesApos.TabIndex = 2;
+            lblMesApos.Text = "Mês Anterior";
+            lblMesApos.TextAlign = ContentAlignment.BottomLeft;
+            // 
+            // picMesApos
+            // 
+            picMesApos.Cursor = Cursors.Hand;
+            picMesApos.Dock = DockStyle.Left;
+            picMesApos.Image = Properties.Resources.Calendar_Plus;
+            picMesApos.Location = new Point(0, 0);
+            picMesApos.Name = "picMesApos";
+            picMesApos.Size = new Size(40, 44);
+            picMesApos.SizeMode = PictureBoxSizeMode.Zoom;
+            picMesApos.TabIndex = 1;
+            picMesApos.TabStop = false;
             // 
             // LblMonthYear
             // 
             LblMonthYear.BackColor = Color.Transparent;
+            LblMonthYear.Cursor = Cursors.Hand;
+            LblMonthYear.Dock = DockStyle.Fill;
             LblMonthYear.Font = new Font("Segoe UI", 12F);
-            LblMonthYear.Location = new Point(328, 0);
+            LblMonthYear.Location = new Point(167, 0);
             LblMonthYear.Name = "LblMonthYear";
-            LblMonthYear.Size = new Size(140, 50);
-            LblMonthYear.TabIndex = 0;
+            LblMonthYear.Size = new Size(428, 50);
+            LblMonthYear.TabIndex = 5;
             LblMonthYear.Text = "LblMonthYear";
             LblMonthYear.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // picBtnFechar
+            // 
+            picBtnFechar.Cursor = Cursors.Hand;
+            picBtnFechar.Dock = DockStyle.Left;
+            picBtnFechar.Image = Properties.Resources.Cancel;
+            picBtnFechar.Location = new Point(5, 0);
+            picBtnFechar.Name = "picBtnFechar";
+            picBtnFechar.Size = new Size(33, 50);
+            picBtnFechar.SizeMode = PictureBoxSizeMode.Zoom;
+            picBtnFechar.TabIndex = 3;
+            picBtnFechar.TabStop = false;
+            picBtnFechar.Click += picBtnFechar_Click;
             // 
             // DaysOfWeekContainer
             // 
@@ -324,6 +442,7 @@
             PnlDay06.Controls.Add(LblDayOfMonth06);
             PnlDay06.Dock = DockStyle.Left;
             PnlDay06.Font = new Font("Segoe UI", 10F);
+            PnlDay06.ForeColor = Color.White;
             PnlDay06.Location = new Point(660, 0);
             PnlDay06.Name = "PnlDay06";
             PnlDay06.Size = new Size(110, 68);
@@ -331,6 +450,7 @@
             // 
             // LblDayOfMonth06
             // 
+            LblDayOfMonth06.BackColor = Color.Transparent;
             LblDayOfMonth06.Dock = DockStyle.Top;
             LblDayOfMonth06.ForeColor = Color.White;
             LblDayOfMonth06.Location = new Point(0, 0);
@@ -346,6 +466,7 @@
             PnlDay05.Controls.Add(LblDayOfMonth05);
             PnlDay05.Dock = DockStyle.Left;
             PnlDay05.Font = new Font("Segoe UI", 10F);
+            PnlDay05.ForeColor = Color.White;
             PnlDay05.Location = new Point(550, 0);
             PnlDay05.Name = "PnlDay05";
             PnlDay05.Size = new Size(110, 68);
@@ -353,6 +474,7 @@
             // 
             // LblDayOfMonth05
             // 
+            LblDayOfMonth05.BackColor = Color.Transparent;
             LblDayOfMonth05.Dock = DockStyle.Top;
             LblDayOfMonth05.ForeColor = Color.White;
             LblDayOfMonth05.Location = new Point(0, 0);
@@ -368,6 +490,7 @@
             PnlDay04.Controls.Add(LblDayOfMonth04);
             PnlDay04.Dock = DockStyle.Left;
             PnlDay04.Font = new Font("Segoe UI", 10F);
+            PnlDay04.ForeColor = Color.White;
             PnlDay04.Location = new Point(440, 0);
             PnlDay04.Name = "PnlDay04";
             PnlDay04.Size = new Size(110, 68);
@@ -375,6 +498,7 @@
             // 
             // LblDayOfMonth04
             // 
+            LblDayOfMonth04.BackColor = Color.Transparent;
             LblDayOfMonth04.Dock = DockStyle.Top;
             LblDayOfMonth04.ForeColor = Color.White;
             LblDayOfMonth04.Location = new Point(0, 0);
@@ -390,6 +514,7 @@
             PnlDay03.Controls.Add(LblDayOfMonth03);
             PnlDay03.Dock = DockStyle.Left;
             PnlDay03.Font = new Font("Segoe UI", 10F);
+            PnlDay03.ForeColor = Color.White;
             PnlDay03.Location = new Point(330, 0);
             PnlDay03.Name = "PnlDay03";
             PnlDay03.Size = new Size(110, 68);
@@ -397,6 +522,7 @@
             // 
             // LblDayOfMonth03
             // 
+            LblDayOfMonth03.BackColor = Color.Transparent;
             LblDayOfMonth03.Dock = DockStyle.Top;
             LblDayOfMonth03.ForeColor = Color.White;
             LblDayOfMonth03.Location = new Point(0, 0);
@@ -412,6 +538,7 @@
             PnlDay02.Controls.Add(LblDayOfMonth02);
             PnlDay02.Dock = DockStyle.Left;
             PnlDay02.Font = new Font("Segoe UI", 10F);
+            PnlDay02.ForeColor = Color.White;
             PnlDay02.Location = new Point(220, 0);
             PnlDay02.Name = "PnlDay02";
             PnlDay02.Size = new Size(110, 68);
@@ -419,6 +546,7 @@
             // 
             // LblDayOfMonth02
             // 
+            LblDayOfMonth02.BackColor = Color.Transparent;
             LblDayOfMonth02.Dock = DockStyle.Top;
             LblDayOfMonth02.ForeColor = Color.White;
             LblDayOfMonth02.Location = new Point(0, 0);
@@ -434,6 +562,7 @@
             PnlDay01.Controls.Add(LblDayOfMonth01);
             PnlDay01.Dock = DockStyle.Left;
             PnlDay01.Font = new Font("Segoe UI", 10F);
+            PnlDay01.ForeColor = Color.White;
             PnlDay01.Location = new Point(110, 0);
             PnlDay01.Name = "PnlDay01";
             PnlDay01.Size = new Size(110, 68);
@@ -441,6 +570,7 @@
             // 
             // LblDayOfMonth01
             // 
+            LblDayOfMonth01.BackColor = Color.Transparent;
             LblDayOfMonth01.Dock = DockStyle.Top;
             LblDayOfMonth01.ForeColor = Color.White;
             LblDayOfMonth01.Location = new Point(0, 0);
@@ -456,6 +586,7 @@
             PnlDay00.Controls.Add(LblDayOfMonth00);
             PnlDay00.Dock = DockStyle.Left;
             PnlDay00.Font = new Font("Segoe UI", 10F);
+            PnlDay00.ForeColor = Color.White;
             PnlDay00.Location = new Point(0, 0);
             PnlDay00.Name = "PnlDay00";
             PnlDay00.Size = new Size(110, 68);
@@ -463,6 +594,7 @@
             // 
             // LblDayOfMonth00
             // 
+            LblDayOfMonth00.BackColor = Color.Transparent;
             LblDayOfMonth00.Dock = DockStyle.Top;
             LblDayOfMonth00.ForeColor = Color.White;
             LblDayOfMonth00.Location = new Point(0, 0);
@@ -494,6 +626,7 @@
             PnlDay16.Controls.Add(LblDayOfMonth16);
             PnlDay16.Dock = DockStyle.Left;
             PnlDay16.Font = new Font("Segoe UI", 10F);
+            PnlDay16.ForeColor = Color.White;
             PnlDay16.Location = new Point(660, 0);
             PnlDay16.Name = "PnlDay16";
             PnlDay16.Size = new Size(110, 68);
@@ -501,6 +634,7 @@
             // 
             // LblDayOfMonth16
             // 
+            LblDayOfMonth16.BackColor = Color.Transparent;
             LblDayOfMonth16.Dock = DockStyle.Top;
             LblDayOfMonth16.ForeColor = Color.White;
             LblDayOfMonth16.Location = new Point(0, 0);
@@ -516,6 +650,7 @@
             PnlDay15.Controls.Add(LblDayOfMonth15);
             PnlDay15.Dock = DockStyle.Left;
             PnlDay15.Font = new Font("Segoe UI", 10F);
+            PnlDay15.ForeColor = Color.White;
             PnlDay15.Location = new Point(550, 0);
             PnlDay15.Name = "PnlDay15";
             PnlDay15.Size = new Size(110, 68);
@@ -523,6 +658,7 @@
             // 
             // LblDayOfMonth15
             // 
+            LblDayOfMonth15.BackColor = Color.Transparent;
             LblDayOfMonth15.Dock = DockStyle.Top;
             LblDayOfMonth15.ForeColor = Color.White;
             LblDayOfMonth15.Location = new Point(0, 0);
@@ -538,6 +674,7 @@
             PnlDay14.Controls.Add(LblDayOfMonth14);
             PnlDay14.Dock = DockStyle.Left;
             PnlDay14.Font = new Font("Segoe UI", 10F);
+            PnlDay14.ForeColor = Color.White;
             PnlDay14.Location = new Point(440, 0);
             PnlDay14.Name = "PnlDay14";
             PnlDay14.Size = new Size(110, 68);
@@ -545,6 +682,7 @@
             // 
             // LblDayOfMonth14
             // 
+            LblDayOfMonth14.BackColor = Color.Transparent;
             LblDayOfMonth14.Dock = DockStyle.Top;
             LblDayOfMonth14.ForeColor = Color.White;
             LblDayOfMonth14.Location = new Point(0, 0);
@@ -560,6 +698,7 @@
             PnlDay13.Controls.Add(LblDayOfMonth13);
             PnlDay13.Dock = DockStyle.Left;
             PnlDay13.Font = new Font("Segoe UI", 10F);
+            PnlDay13.ForeColor = Color.White;
             PnlDay13.Location = new Point(330, 0);
             PnlDay13.Name = "PnlDay13";
             PnlDay13.Size = new Size(110, 68);
@@ -567,6 +706,7 @@
             // 
             // LblDayOfMonth13
             // 
+            LblDayOfMonth13.BackColor = Color.Transparent;
             LblDayOfMonth13.Dock = DockStyle.Top;
             LblDayOfMonth13.ForeColor = Color.White;
             LblDayOfMonth13.Location = new Point(0, 0);
@@ -582,6 +722,7 @@
             PnlDay12.Controls.Add(LblDayOfMonth12);
             PnlDay12.Dock = DockStyle.Left;
             PnlDay12.Font = new Font("Segoe UI", 10F);
+            PnlDay12.ForeColor = Color.White;
             PnlDay12.Location = new Point(220, 0);
             PnlDay12.Name = "PnlDay12";
             PnlDay12.Size = new Size(110, 68);
@@ -589,6 +730,7 @@
             // 
             // LblDayOfMonth12
             // 
+            LblDayOfMonth12.BackColor = Color.Transparent;
             LblDayOfMonth12.Dock = DockStyle.Top;
             LblDayOfMonth12.ForeColor = Color.White;
             LblDayOfMonth12.Location = new Point(0, 0);
@@ -604,6 +746,7 @@
             PnlDay11.Controls.Add(LblDayOfMonth11);
             PnlDay11.Dock = DockStyle.Left;
             PnlDay11.Font = new Font("Segoe UI", 10F);
+            PnlDay11.ForeColor = Color.White;
             PnlDay11.Location = new Point(110, 0);
             PnlDay11.Name = "PnlDay11";
             PnlDay11.Size = new Size(110, 68);
@@ -611,6 +754,7 @@
             // 
             // LblDayOfMonth11
             // 
+            LblDayOfMonth11.BackColor = Color.Transparent;
             LblDayOfMonth11.Dock = DockStyle.Top;
             LblDayOfMonth11.ForeColor = Color.White;
             LblDayOfMonth11.Location = new Point(0, 0);
@@ -626,6 +770,7 @@
             PnlDay10.Controls.Add(LblDayOfMonth10);
             PnlDay10.Dock = DockStyle.Left;
             PnlDay10.Font = new Font("Segoe UI", 10F);
+            PnlDay10.ForeColor = Color.White;
             PnlDay10.Location = new Point(0, 0);
             PnlDay10.Name = "PnlDay10";
             PnlDay10.Size = new Size(110, 68);
@@ -633,6 +778,7 @@
             // 
             // LblDayOfMonth10
             // 
+            LblDayOfMonth10.BackColor = Color.Transparent;
             LblDayOfMonth10.Dock = DockStyle.Top;
             LblDayOfMonth10.ForeColor = Color.White;
             LblDayOfMonth10.Location = new Point(0, 0);
@@ -664,6 +810,7 @@
             PnlDay26.Controls.Add(LblDayOfMonth26);
             PnlDay26.Dock = DockStyle.Left;
             PnlDay26.Font = new Font("Segoe UI", 10F);
+            PnlDay26.ForeColor = Color.White;
             PnlDay26.Location = new Point(660, 0);
             PnlDay26.Name = "PnlDay26";
             PnlDay26.Size = new Size(110, 68);
@@ -671,6 +818,7 @@
             // 
             // LblDayOfMonth26
             // 
+            LblDayOfMonth26.BackColor = Color.Transparent;
             LblDayOfMonth26.Dock = DockStyle.Top;
             LblDayOfMonth26.ForeColor = Color.White;
             LblDayOfMonth26.Location = new Point(0, 0);
@@ -686,6 +834,7 @@
             PnlDay25.Controls.Add(LblDayOfMonth25);
             PnlDay25.Dock = DockStyle.Left;
             PnlDay25.Font = new Font("Segoe UI", 10F);
+            PnlDay25.ForeColor = Color.White;
             PnlDay25.Location = new Point(550, 0);
             PnlDay25.Name = "PnlDay25";
             PnlDay25.Size = new Size(110, 68);
@@ -693,6 +842,7 @@
             // 
             // LblDayOfMonth25
             // 
+            LblDayOfMonth25.BackColor = Color.Transparent;
             LblDayOfMonth25.Dock = DockStyle.Top;
             LblDayOfMonth25.ForeColor = Color.White;
             LblDayOfMonth25.Location = new Point(0, 0);
@@ -708,6 +858,7 @@
             PnlDay24.Controls.Add(LblDayOfMonth24);
             PnlDay24.Dock = DockStyle.Left;
             PnlDay24.Font = new Font("Segoe UI", 10F);
+            PnlDay24.ForeColor = Color.White;
             PnlDay24.Location = new Point(440, 0);
             PnlDay24.Name = "PnlDay24";
             PnlDay24.Size = new Size(110, 68);
@@ -715,6 +866,7 @@
             // 
             // LblDayOfMonth24
             // 
+            LblDayOfMonth24.BackColor = Color.Transparent;
             LblDayOfMonth24.Dock = DockStyle.Top;
             LblDayOfMonth24.ForeColor = Color.White;
             LblDayOfMonth24.Location = new Point(0, 0);
@@ -730,6 +882,7 @@
             PnlDay23.Controls.Add(LblDayOfMonth23);
             PnlDay23.Dock = DockStyle.Left;
             PnlDay23.Font = new Font("Segoe UI", 10F);
+            PnlDay23.ForeColor = Color.White;
             PnlDay23.Location = new Point(330, 0);
             PnlDay23.Name = "PnlDay23";
             PnlDay23.Size = new Size(110, 68);
@@ -737,6 +890,7 @@
             // 
             // LblDayOfMonth23
             // 
+            LblDayOfMonth23.BackColor = Color.Transparent;
             LblDayOfMonth23.Dock = DockStyle.Top;
             LblDayOfMonth23.ForeColor = Color.White;
             LblDayOfMonth23.Location = new Point(0, 0);
@@ -752,6 +906,7 @@
             PnlDay22.Controls.Add(LblDayOfMonth22);
             PnlDay22.Dock = DockStyle.Left;
             PnlDay22.Font = new Font("Segoe UI", 10F);
+            PnlDay22.ForeColor = Color.White;
             PnlDay22.Location = new Point(220, 0);
             PnlDay22.Name = "PnlDay22";
             PnlDay22.Size = new Size(110, 68);
@@ -759,6 +914,7 @@
             // 
             // LblDayOfMonth22
             // 
+            LblDayOfMonth22.BackColor = Color.Transparent;
             LblDayOfMonth22.Dock = DockStyle.Top;
             LblDayOfMonth22.ForeColor = Color.White;
             LblDayOfMonth22.Location = new Point(0, 0);
@@ -774,6 +930,7 @@
             PnlDay21.Controls.Add(LblDayOfMonth21);
             PnlDay21.Dock = DockStyle.Left;
             PnlDay21.Font = new Font("Segoe UI", 10F);
+            PnlDay21.ForeColor = Color.White;
             PnlDay21.Location = new Point(110, 0);
             PnlDay21.Name = "PnlDay21";
             PnlDay21.Size = new Size(110, 68);
@@ -781,6 +938,7 @@
             // 
             // LblDayOfMonth21
             // 
+            LblDayOfMonth21.BackColor = Color.Transparent;
             LblDayOfMonth21.Dock = DockStyle.Top;
             LblDayOfMonth21.ForeColor = Color.White;
             LblDayOfMonth21.Location = new Point(0, 0);
@@ -796,6 +954,7 @@
             PnlDay20.Controls.Add(LblDayOfMonth20);
             PnlDay20.Dock = DockStyle.Left;
             PnlDay20.Font = new Font("Segoe UI", 10F);
+            PnlDay20.ForeColor = Color.White;
             PnlDay20.Location = new Point(0, 0);
             PnlDay20.Name = "PnlDay20";
             PnlDay20.Size = new Size(110, 68);
@@ -803,6 +962,7 @@
             // 
             // LblDayOfMonth20
             // 
+            LblDayOfMonth20.BackColor = Color.Transparent;
             LblDayOfMonth20.Dock = DockStyle.Top;
             LblDayOfMonth20.ForeColor = Color.White;
             LblDayOfMonth20.Location = new Point(0, 0);
@@ -834,6 +994,7 @@
             PnlDay36.Controls.Add(LblDayOfMonth36);
             PnlDay36.Dock = DockStyle.Left;
             PnlDay36.Font = new Font("Segoe UI", 10F);
+            PnlDay36.ForeColor = Color.White;
             PnlDay36.Location = new Point(660, 0);
             PnlDay36.Name = "PnlDay36";
             PnlDay36.Size = new Size(110, 68);
@@ -841,6 +1002,7 @@
             // 
             // LblDayOfMonth36
             // 
+            LblDayOfMonth36.BackColor = Color.Transparent;
             LblDayOfMonth36.Dock = DockStyle.Top;
             LblDayOfMonth36.ForeColor = Color.White;
             LblDayOfMonth36.Location = new Point(0, 0);
@@ -856,6 +1018,7 @@
             PnlDay35.Controls.Add(LblDayOfMonth35);
             PnlDay35.Dock = DockStyle.Left;
             PnlDay35.Font = new Font("Segoe UI", 10F);
+            PnlDay35.ForeColor = Color.White;
             PnlDay35.Location = new Point(550, 0);
             PnlDay35.Name = "PnlDay35";
             PnlDay35.Size = new Size(110, 68);
@@ -863,6 +1026,7 @@
             // 
             // LblDayOfMonth35
             // 
+            LblDayOfMonth35.BackColor = Color.Transparent;
             LblDayOfMonth35.Dock = DockStyle.Top;
             LblDayOfMonth35.ForeColor = Color.White;
             LblDayOfMonth35.Location = new Point(0, 0);
@@ -878,6 +1042,7 @@
             PnlDay34.Controls.Add(LblDayOfMonth34);
             PnlDay34.Dock = DockStyle.Left;
             PnlDay34.Font = new Font("Segoe UI", 10F);
+            PnlDay34.ForeColor = Color.White;
             PnlDay34.Location = new Point(440, 0);
             PnlDay34.Name = "PnlDay34";
             PnlDay34.Size = new Size(110, 68);
@@ -885,6 +1050,7 @@
             // 
             // LblDayOfMonth34
             // 
+            LblDayOfMonth34.BackColor = Color.Transparent;
             LblDayOfMonth34.Dock = DockStyle.Top;
             LblDayOfMonth34.ForeColor = Color.White;
             LblDayOfMonth34.Location = new Point(0, 0);
@@ -900,6 +1066,7 @@
             PnlDay33.Controls.Add(LblDayOfMonth33);
             PnlDay33.Dock = DockStyle.Left;
             PnlDay33.Font = new Font("Segoe UI", 10F);
+            PnlDay33.ForeColor = Color.White;
             PnlDay33.Location = new Point(330, 0);
             PnlDay33.Name = "PnlDay33";
             PnlDay33.Size = new Size(110, 68);
@@ -907,6 +1074,7 @@
             // 
             // LblDayOfMonth33
             // 
+            LblDayOfMonth33.BackColor = Color.Transparent;
             LblDayOfMonth33.Dock = DockStyle.Top;
             LblDayOfMonth33.ForeColor = Color.White;
             LblDayOfMonth33.Location = new Point(0, 0);
@@ -922,6 +1090,7 @@
             PnlDay32.Controls.Add(LblDayOfMonth32);
             PnlDay32.Dock = DockStyle.Left;
             PnlDay32.Font = new Font("Segoe UI", 10F);
+            PnlDay32.ForeColor = Color.White;
             PnlDay32.Location = new Point(220, 0);
             PnlDay32.Name = "PnlDay32";
             PnlDay32.Size = new Size(110, 68);
@@ -929,6 +1098,7 @@
             // 
             // LblDayOfMonth32
             // 
+            LblDayOfMonth32.BackColor = Color.Transparent;
             LblDayOfMonth32.Dock = DockStyle.Top;
             LblDayOfMonth32.ForeColor = Color.White;
             LblDayOfMonth32.Location = new Point(0, 0);
@@ -944,6 +1114,7 @@
             PnlDay31.Controls.Add(LblDayOfMonth31);
             PnlDay31.Dock = DockStyle.Left;
             PnlDay31.Font = new Font("Segoe UI", 10F);
+            PnlDay31.ForeColor = Color.White;
             PnlDay31.Location = new Point(110, 0);
             PnlDay31.Name = "PnlDay31";
             PnlDay31.Size = new Size(110, 68);
@@ -951,6 +1122,7 @@
             // 
             // LblDayOfMonth31
             // 
+            LblDayOfMonth31.BackColor = Color.Transparent;
             LblDayOfMonth31.Dock = DockStyle.Top;
             LblDayOfMonth31.ForeColor = Color.White;
             LblDayOfMonth31.Location = new Point(0, 0);
@@ -966,6 +1138,7 @@
             PnlDay30.Controls.Add(LblDayOfMonth30);
             PnlDay30.Dock = DockStyle.Left;
             PnlDay30.Font = new Font("Segoe UI", 10F);
+            PnlDay30.ForeColor = Color.White;
             PnlDay30.Location = new Point(0, 0);
             PnlDay30.Name = "PnlDay30";
             PnlDay30.Size = new Size(110, 68);
@@ -973,6 +1146,7 @@
             // 
             // LblDayOfMonth30
             // 
+            LblDayOfMonth30.BackColor = Color.Transparent;
             LblDayOfMonth30.Dock = DockStyle.Top;
             LblDayOfMonth30.ForeColor = Color.White;
             LblDayOfMonth30.Location = new Point(0, 0);
@@ -1004,6 +1178,7 @@
             PnlDay46.Controls.Add(LblDayOfMonth46);
             PnlDay46.Dock = DockStyle.Left;
             PnlDay46.Font = new Font("Segoe UI", 10F);
+            PnlDay46.ForeColor = Color.White;
             PnlDay46.Location = new Point(660, 0);
             PnlDay46.Name = "PnlDay46";
             PnlDay46.Size = new Size(110, 68);
@@ -1011,6 +1186,7 @@
             // 
             // LblDayOfMonth46
             // 
+            LblDayOfMonth46.BackColor = Color.Transparent;
             LblDayOfMonth46.Dock = DockStyle.Top;
             LblDayOfMonth46.ForeColor = Color.White;
             LblDayOfMonth46.Location = new Point(0, 0);
@@ -1026,6 +1202,7 @@
             PnlDay45.Controls.Add(LblDayOfMonth45);
             PnlDay45.Dock = DockStyle.Left;
             PnlDay45.Font = new Font("Segoe UI", 10F);
+            PnlDay45.ForeColor = Color.White;
             PnlDay45.Location = new Point(550, 0);
             PnlDay45.Name = "PnlDay45";
             PnlDay45.Size = new Size(110, 68);
@@ -1033,6 +1210,7 @@
             // 
             // LblDayOfMonth45
             // 
+            LblDayOfMonth45.BackColor = Color.Transparent;
             LblDayOfMonth45.Dock = DockStyle.Top;
             LblDayOfMonth45.ForeColor = Color.White;
             LblDayOfMonth45.Location = new Point(0, 0);
@@ -1048,6 +1226,7 @@
             PnlDay44.Controls.Add(LblDayOfMonth44);
             PnlDay44.Dock = DockStyle.Left;
             PnlDay44.Font = new Font("Segoe UI", 10F);
+            PnlDay44.ForeColor = Color.White;
             PnlDay44.Location = new Point(440, 0);
             PnlDay44.Name = "PnlDay44";
             PnlDay44.Size = new Size(110, 68);
@@ -1055,6 +1234,7 @@
             // 
             // LblDayOfMonth44
             // 
+            LblDayOfMonth44.BackColor = Color.Transparent;
             LblDayOfMonth44.Dock = DockStyle.Top;
             LblDayOfMonth44.ForeColor = Color.White;
             LblDayOfMonth44.Location = new Point(0, 0);
@@ -1070,6 +1250,7 @@
             PnlDay43.Controls.Add(LblDayOfMonth43);
             PnlDay43.Dock = DockStyle.Left;
             PnlDay43.Font = new Font("Segoe UI", 10F);
+            PnlDay43.ForeColor = Color.White;
             PnlDay43.Location = new Point(330, 0);
             PnlDay43.Name = "PnlDay43";
             PnlDay43.Size = new Size(110, 68);
@@ -1077,6 +1258,7 @@
             // 
             // LblDayOfMonth43
             // 
+            LblDayOfMonth43.BackColor = Color.Transparent;
             LblDayOfMonth43.Dock = DockStyle.Top;
             LblDayOfMonth43.ForeColor = Color.White;
             LblDayOfMonth43.Location = new Point(0, 0);
@@ -1092,6 +1274,7 @@
             PnlDay42.Controls.Add(LblDayOfMonth42);
             PnlDay42.Dock = DockStyle.Left;
             PnlDay42.Font = new Font("Segoe UI", 10F);
+            PnlDay42.ForeColor = Color.White;
             PnlDay42.Location = new Point(220, 0);
             PnlDay42.Name = "PnlDay42";
             PnlDay42.Size = new Size(110, 68);
@@ -1099,6 +1282,7 @@
             // 
             // LblDayOfMonth42
             // 
+            LblDayOfMonth42.BackColor = Color.Transparent;
             LblDayOfMonth42.Dock = DockStyle.Top;
             LblDayOfMonth42.ForeColor = Color.White;
             LblDayOfMonth42.Location = new Point(0, 0);
@@ -1114,6 +1298,7 @@
             PnlDay41.Controls.Add(LblDayOfMonth41);
             PnlDay41.Dock = DockStyle.Left;
             PnlDay41.Font = new Font("Segoe UI", 10F);
+            PnlDay41.ForeColor = Color.White;
             PnlDay41.Location = new Point(110, 0);
             PnlDay41.Name = "PnlDay41";
             PnlDay41.Size = new Size(110, 68);
@@ -1121,6 +1306,7 @@
             // 
             // LblDayOfMonth41
             // 
+            LblDayOfMonth41.BackColor = Color.Transparent;
             LblDayOfMonth41.Dock = DockStyle.Top;
             LblDayOfMonth41.ForeColor = Color.White;
             LblDayOfMonth41.Location = new Point(0, 0);
@@ -1136,6 +1322,7 @@
             PnlDay40.Controls.Add(LblDayOfMonth40);
             PnlDay40.Dock = DockStyle.Left;
             PnlDay40.Font = new Font("Segoe UI", 10F);
+            PnlDay40.ForeColor = Color.White;
             PnlDay40.Location = new Point(0, 0);
             PnlDay40.Name = "PnlDay40";
             PnlDay40.Size = new Size(110, 68);
@@ -1143,6 +1330,7 @@
             // 
             // LblDayOfMonth40
             // 
+            LblDayOfMonth40.BackColor = Color.Transparent;
             LblDayOfMonth40.Dock = DockStyle.Top;
             LblDayOfMonth40.ForeColor = Color.White;
             LblDayOfMonth40.Location = new Point(0, 0);
@@ -1174,6 +1362,7 @@
             PnlDay56.Controls.Add(LblDayOfMonth56);
             PnlDay56.Dock = DockStyle.Left;
             PnlDay56.Font = new Font("Segoe UI", 10F);
+            PnlDay56.ForeColor = Color.White;
             PnlDay56.Location = new Point(660, 0);
             PnlDay56.Name = "PnlDay56";
             PnlDay56.Size = new Size(110, 68);
@@ -1181,6 +1370,7 @@
             // 
             // LblDayOfMonth56
             // 
+            LblDayOfMonth56.BackColor = Color.Transparent;
             LblDayOfMonth56.Dock = DockStyle.Top;
             LblDayOfMonth56.ForeColor = Color.White;
             LblDayOfMonth56.Location = new Point(0, 0);
@@ -1196,6 +1386,7 @@
             PnlDay55.Controls.Add(LblDayOfMonth55);
             PnlDay55.Dock = DockStyle.Left;
             PnlDay55.Font = new Font("Segoe UI", 10F);
+            PnlDay55.ForeColor = Color.White;
             PnlDay55.Location = new Point(550, 0);
             PnlDay55.Name = "PnlDay55";
             PnlDay55.Size = new Size(110, 68);
@@ -1203,6 +1394,7 @@
             // 
             // LblDayOfMonth55
             // 
+            LblDayOfMonth55.BackColor = Color.Transparent;
             LblDayOfMonth55.Dock = DockStyle.Top;
             LblDayOfMonth55.ForeColor = Color.White;
             LblDayOfMonth55.Location = new Point(0, 0);
@@ -1218,6 +1410,7 @@
             PnlDay54.Controls.Add(LblDayOfMonth54);
             PnlDay54.Dock = DockStyle.Left;
             PnlDay54.Font = new Font("Segoe UI", 10F);
+            PnlDay54.ForeColor = Color.White;
             PnlDay54.Location = new Point(440, 0);
             PnlDay54.Name = "PnlDay54";
             PnlDay54.Size = new Size(110, 68);
@@ -1225,6 +1418,7 @@
             // 
             // LblDayOfMonth54
             // 
+            LblDayOfMonth54.BackColor = Color.Transparent;
             LblDayOfMonth54.Dock = DockStyle.Top;
             LblDayOfMonth54.ForeColor = Color.White;
             LblDayOfMonth54.Location = new Point(0, 0);
@@ -1240,6 +1434,7 @@
             PnlDay53.Controls.Add(LblDayOfMonth53);
             PnlDay53.Dock = DockStyle.Left;
             PnlDay53.Font = new Font("Segoe UI", 10F);
+            PnlDay53.ForeColor = Color.White;
             PnlDay53.Location = new Point(330, 0);
             PnlDay53.Name = "PnlDay53";
             PnlDay53.Size = new Size(110, 68);
@@ -1247,6 +1442,7 @@
             // 
             // LblDayOfMonth53
             // 
+            LblDayOfMonth53.BackColor = Color.Transparent;
             LblDayOfMonth53.Dock = DockStyle.Top;
             LblDayOfMonth53.ForeColor = Color.White;
             LblDayOfMonth53.Location = new Point(0, 0);
@@ -1262,6 +1458,7 @@
             PnlDay52.Controls.Add(LblDayOfMonth52);
             PnlDay52.Dock = DockStyle.Left;
             PnlDay52.Font = new Font("Segoe UI", 10F);
+            PnlDay52.ForeColor = Color.White;
             PnlDay52.Location = new Point(220, 0);
             PnlDay52.Name = "PnlDay52";
             PnlDay52.Size = new Size(110, 68);
@@ -1269,6 +1466,7 @@
             // 
             // LblDayOfMonth52
             // 
+            LblDayOfMonth52.BackColor = Color.Transparent;
             LblDayOfMonth52.Dock = DockStyle.Top;
             LblDayOfMonth52.ForeColor = Color.White;
             LblDayOfMonth52.Location = new Point(0, 0);
@@ -1284,6 +1482,7 @@
             PnlDay51.Controls.Add(LblDayOfMonth51);
             PnlDay51.Dock = DockStyle.Left;
             PnlDay51.Font = new Font("Segoe UI", 10F);
+            PnlDay51.ForeColor = Color.White;
             PnlDay51.Location = new Point(110, 0);
             PnlDay51.Name = "PnlDay51";
             PnlDay51.Size = new Size(110, 68);
@@ -1291,6 +1490,7 @@
             // 
             // LblDayOfMonth51
             // 
+            LblDayOfMonth51.BackColor = Color.Transparent;
             LblDayOfMonth51.Dock = DockStyle.Top;
             LblDayOfMonth51.ForeColor = Color.White;
             LblDayOfMonth51.Location = new Point(0, 0);
@@ -1306,6 +1506,7 @@
             PnlDay50.Controls.Add(LblDayOfMonth50);
             PnlDay50.Dock = DockStyle.Left;
             PnlDay50.Font = new Font("Segoe UI", 10F);
+            PnlDay50.ForeColor = Color.White;
             PnlDay50.Location = new Point(0, 0);
             PnlDay50.Name = "PnlDay50";
             PnlDay50.Size = new Size(110, 68);
@@ -1313,6 +1514,7 @@
             // 
             // LblDayOfMonth50
             // 
+            LblDayOfMonth50.BackColor = Color.Transparent;
             LblDayOfMonth50.Dock = DockStyle.Top;
             LblDayOfMonth50.ForeColor = Color.White;
             LblDayOfMonth50.Location = new Point(0, 0);
@@ -1325,7 +1527,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(797, 503);
+            ClientSize = new Size(797, 645);
             Controls.Add(DaysRow5Containers);
             Controls.Add(DaysRow4Containers);
             Controls.Add(DaysRow3Containers);
@@ -1337,6 +1539,12 @@
             Name = "FormCalendario";
             Text = "FormCalendario";
             MonthYearContainer.ResumeLayout(false);
+            tableLayoutPanel1.ResumeLayout(false);
+            panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)picMesAntes).EndInit();
+            panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)picMesApos).EndInit();
+            ((System.ComponentModel.ISupportInitialize)picBtnFechar).EndInit();
             DaysOfWeekContainer.ResumeLayout(false);
             DaysRow0Containers.ResumeLayout(false);
             PnlDay06.ResumeLayout(false);
@@ -1399,7 +1607,6 @@
         private Panel DaysRow3Containers;
         private Panel DaysRow4Containers;
         private Panel DaysRow5Containers;
-        private Label LblMonthYear;
         private myLblDiasSemana LblTerca;
         private myLblDiasSemana LblSegunda;
         private myLblDiasSemana LblDomingo;
@@ -1491,5 +1698,14 @@
         private myLblDiasMes LblDayOfMonth51;
         private myPnlDay PnlDay50;
         private myLblDiasMes LblDayOfMonth50;
+        private PictureBox picMesApos;
+        private PictureBox picBtnFechar;
+        private Panel panel2;
+        private Label lblMesApos;
+        private Label LblMonthYear;
+        private Panel panel1;
+        private Label lblMesAntes;
+        private PictureBox picMesAntes;
+        private TableLayoutPanel tableLayoutPanel1;
     }
 }

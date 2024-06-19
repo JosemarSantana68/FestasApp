@@ -61,6 +61,7 @@ namespace FestasApp
             btnFinanceiro = new MyFramework.myControls.myButtonMenu();
             btnContasReceber = new MyFramework.myControls.myButtonMenu();
             pnlLogo = new Panel();
+            panel2 = new Panel();
             pnlBtnMenu = new Panel();
             BarraLateralMenu = new Panel();
             flowBarraLateral = new FlowLayoutPanel();
@@ -87,6 +88,7 @@ namespace FestasApp
             ((System.ComponentModel.ISupportInitialize)pictureLogo).BeginInit();
             pnlSubMenuFinanceiro.SuspendLayout();
             pnlLogo.SuspendLayout();
+            panel2.SuspendLayout();
             pnlBtnMenu.SuspendLayout();
             BarraLateralMenu.SuspendLayout();
             flowBarraLateral.SuspendLayout();
@@ -327,7 +329,7 @@ namespace FestasApp
             picMenuBar.Cursor = Cursors.Hand;
             picMenuBar.Dock = DockStyle.Right;
             picMenuBar.Image = Properties.Resources.Menu3;
-            picMenuBar.Location = new Point(177, 0);
+            picMenuBar.Location = new Point(157, 0);
             picMenuBar.Name = "picMenuBar";
             picMenuBar.Padding = new Padding(0, 0, 5, 0);
             picMenuBar.Size = new Size(43, 38);
@@ -338,11 +340,11 @@ namespace FestasApp
             // 
             // pictureLogo
             // 
-            pictureLogo.Anchor = AnchorStyles.None;
+            pictureLogo.Dock = DockStyle.Fill;
             pictureLogo.Image = Properties.Resources.home_casa_36;
-            pictureLogo.Location = new Point(72, 44);
+            pictureLogo.Location = new Point(0, 2);
             pictureLogo.Name = "pictureLogo";
-            pictureLogo.Size = new Size(84, 50);
+            pictureLogo.Size = new Size(200, 43);
             pictureLogo.SizeMode = PictureBoxSizeMode.Zoom;
             pictureLogo.TabIndex = 0;
             pictureLogo.TabStop = false;
@@ -361,21 +363,22 @@ namespace FestasApp
             pnlSubMenuFinanceiro.Location = new Point(0, 233);
             pnlSubMenuFinanceiro.Margin = new Padding(0, 3, 3, 0);
             pnlSubMenuFinanceiro.Name = "pnlSubMenuFinanceiro";
-            pnlSubMenuFinanceiro.Size = new Size(220, 40);
+            pnlSubMenuFinanceiro.Size = new Size(200, 40);
             pnlSubMenuFinanceiro.TabIndex = 14;
             // 
             // btnContasPagar
             // 
             btnContasPagar._Image = Properties.Resources.cash_out_32;
-            btnContasPagar.BackColor = Color.FromArgb(26, 32, 40);
+            btnContasPagar.BackColor = Color.Transparent;
+            btnContasPagar.CorDefault = Color.Transparent;
             btnContasPagar.FlatAppearance.BorderSize = 0;
             btnContasPagar.FlatStyle = FlatStyle.Flat;
             btnContasPagar.ForeColor = Color.White;
-            btnContasPagar.Location = new Point(9, 92);
+            btnContasPagar.Location = new Point(9, 89);
             btnContasPagar.Margin = new Padding(0, 3, 3, 3);
             btnContasPagar.Name = "btnContasPagar";
-            btnContasPagar.Padding = new Padding(50, 0, 0, 0);
-            btnContasPagar.Size = new Size(211, 40);
+            btnContasPagar.Padding = new Padding(60, 0, 0, 0);
+            btnContasPagar.Size = new Size(191, 40);
             btnContasPagar.TabIndex = 0;
             btnContasPagar.Text = "Contas a Pagar";
             btnContasPagar.TextAlign = ContentAlignment.MiddleLeft;
@@ -386,14 +389,15 @@ namespace FestasApp
             // 
             btnFinanceiro._Image = Properties.Resources.pasta_investimento_36;
             btnFinanceiro.BackColor = Color.FromArgb(26, 32, 40);
+            btnFinanceiro.CorDefault = Color.Empty;
             btnFinanceiro.FlatAppearance.BorderSize = 0;
             btnFinanceiro.FlatStyle = FlatStyle.Flat;
             btnFinanceiro.ForeColor = Color.White;
             btnFinanceiro.Location = new Point(0, 0);
             btnFinanceiro.Margin = new Padding(0, 3, 3, 3);
             btnFinanceiro.Name = "btnFinanceiro";
-            btnFinanceiro.Padding = new Padding(50, 0, 0, 0);
-            btnFinanceiro.Size = new Size(220, 37);
+            btnFinanceiro.Padding = new Padding(63, 0, 0, 0);
+            btnFinanceiro.Size = new Size(200, 37);
             btnFinanceiro.TabIndex = 0;
             btnFinanceiro.Text = "Financeiro";
             btnFinanceiro.TextAlign = ContentAlignment.MiddleLeft;
@@ -404,15 +408,16 @@ namespace FestasApp
             // btnContasReceber
             // 
             btnContasReceber._Image = Properties.Resources.cash_in_32;
-            btnContasReceber.BackColor = Color.FromArgb(26, 32, 40);
+            btnContasReceber.BackColor = Color.Transparent;
+            btnContasReceber.CorDefault = Color.Transparent;
             btnContasReceber.FlatAppearance.BorderSize = 0;
             btnContasReceber.FlatStyle = FlatStyle.Flat;
             btnContasReceber.ForeColor = Color.White;
-            btnContasReceber.Location = new Point(9, 46);
+            btnContasReceber.Location = new Point(9, 43);
             btnContasReceber.Margin = new Padding(0, 3, 3, 3);
             btnContasReceber.Name = "btnContasReceber";
-            btnContasReceber.Padding = new Padding(50, 0, 0, 0);
-            btnContasReceber.Size = new Size(211, 40);
+            btnContasReceber.Padding = new Padding(60, 0, 0, 0);
+            btnContasReceber.Size = new Size(191, 40);
             btnContasReceber.TabIndex = 0;
             btnContasReceber.Text = "Contas a Receber";
             btnContasReceber.TextAlign = ContentAlignment.MiddleLeft;
@@ -422,13 +427,23 @@ namespace FestasApp
             // pnlLogo
             // 
             pnlLogo.BackColor = Color.FromArgb(26, 32, 40);
+            pnlLogo.Controls.Add(panel2);
             pnlLogo.Controls.Add(pnlBtnMenu);
-            pnlLogo.Controls.Add(pictureLogo);
             pnlLogo.Dock = DockStyle.Top;
             pnlLogo.Location = new Point(0, 0);
             pnlLogo.Name = "pnlLogo";
-            pnlLogo.Size = new Size(220, 100);
+            pnlLogo.Size = new Size(200, 86);
             pnlLogo.TabIndex = 14;
+            // 
+            // panel2
+            // 
+            panel2.Controls.Add(pictureLogo);
+            panel2.Dock = DockStyle.Fill;
+            panel2.Location = new Point(0, 38);
+            panel2.Name = "panel2";
+            panel2.Padding = new Padding(0, 2, 0, 3);
+            panel2.Size = new Size(200, 48);
+            panel2.TabIndex = 15;
             // 
             // pnlBtnMenu
             // 
@@ -437,7 +452,7 @@ namespace FestasApp
             pnlBtnMenu.Dock = DockStyle.Top;
             pnlBtnMenu.Location = new Point(0, 0);
             pnlBtnMenu.Name = "pnlBtnMenu";
-            pnlBtnMenu.Size = new Size(220, 38);
+            pnlBtnMenu.Size = new Size(200, 38);
             pnlBtnMenu.TabIndex = 14;
             // 
             // BarraLateralMenu
@@ -447,7 +462,7 @@ namespace FestasApp
             BarraLateralMenu.Dock = DockStyle.Left;
             BarraLateralMenu.Location = new Point(0, 30);
             BarraLateralMenu.Name = "BarraLateralMenu";
-            BarraLateralMenu.Size = new Size(220, 555);
+            BarraLateralMenu.Size = new Size(200, 555);
             BarraLateralMenu.TabIndex = 16;
             // 
             // flowBarraLateral
@@ -461,23 +476,24 @@ namespace FestasApp
             flowBarraLateral.Controls.Add(pnlSubMenuFinanceiro);
             flowBarraLateral.Controls.Add(btnUsuarios);
             flowBarraLateral.Dock = DockStyle.Fill;
-            flowBarraLateral.Location = new Point(0, 100);
+            flowBarraLateral.Location = new Point(0, 86);
             flowBarraLateral.Name = "flowBarraLateral";
-            flowBarraLateral.Size = new Size(220, 455);
+            flowBarraLateral.Size = new Size(200, 469);
             flowBarraLateral.TabIndex = 16;
             // 
             // btnFestas
             // 
             btnFestas._Image = Properties.Resources.icons8_party_balloons_36;
-            btnFestas.BackColor = Color.FromArgb(26, 32, 40);
+            btnFestas.BackColor = Color.Transparent;
+            btnFestas.CorDefault = Color.Transparent;
             btnFestas.FlatAppearance.BorderSize = 0;
             btnFestas.FlatStyle = FlatStyle.Flat;
             btnFestas.ForeColor = Color.White;
             btnFestas.Location = new Point(0, 3);
             btnFestas.Margin = new Padding(0, 3, 3, 3);
             btnFestas.Name = "btnFestas";
-            btnFestas.Padding = new Padding(50, 0, 0, 0);
-            btnFestas.Size = new Size(220, 40);
+            btnFestas.Padding = new Padding(63, 0, 0, 0);
+            btnFestas.Size = new Size(200, 40);
             btnFestas.TabIndex = 0;
             btnFestas.Text = "Festas";
             btnFestas.TextAlign = ContentAlignment.MiddleLeft;
@@ -488,15 +504,16 @@ namespace FestasApp
             // btnCliente
             // 
             btnCliente._Image = Properties.Resources.pessoas_clientes_36;
-            btnCliente.BackColor = Color.FromArgb(26, 32, 40);
+            btnCliente.BackColor = Color.Transparent;
+            btnCliente.CorDefault = Color.Transparent;
             btnCliente.FlatAppearance.BorderSize = 0;
             btnCliente.FlatStyle = FlatStyle.Flat;
             btnCliente.ForeColor = Color.White;
             btnCliente.Location = new Point(0, 49);
             btnCliente.Margin = new Padding(0, 3, 3, 3);
             btnCliente.Name = "btnCliente";
-            btnCliente.Padding = new Padding(50, 0, 0, 0);
-            btnCliente.Size = new Size(220, 40);
+            btnCliente.Padding = new Padding(63, 0, 0, 0);
+            btnCliente.Size = new Size(200, 40);
             btnCliente.TabIndex = 0;
             btnCliente.Text = "Clientes";
             btnCliente.TextAlign = ContentAlignment.MiddleLeft;
@@ -506,16 +523,17 @@ namespace FestasApp
             // 
             // btnCalendario
             // 
-            btnCalendario._Image = null;
-            btnCalendario.BackColor = Color.FromArgb(26, 32, 40);
+            btnCalendario._Image = Properties.Resources.Edit_Calendar;
+            btnCalendario.BackColor = Color.Transparent;
+            btnCalendario.CorDefault = Color.Transparent;
             btnCalendario.FlatAppearance.BorderSize = 0;
             btnCalendario.FlatStyle = FlatStyle.Flat;
             btnCalendario.ForeColor = Color.White;
             btnCalendario.Location = new Point(0, 95);
             btnCalendario.Margin = new Padding(0, 3, 3, 3);
             btnCalendario.Name = "btnCalendario";
-            btnCalendario.Padding = new Padding(50, 0, 0, 0);
-            btnCalendario.Size = new Size(220, 40);
+            btnCalendario.Padding = new Padding(63, 0, 0, 0);
+            btnCalendario.Size = new Size(200, 40);
             btnCalendario.TabIndex = 0;
             btnCalendario.Text = "Calendário";
             btnCalendario.TextAlign = ContentAlignment.MiddleLeft;
@@ -526,15 +544,16 @@ namespace FestasApp
             // btnFornecedor
             // 
             btnFornecedor._Image = Properties.Resources.pessoas_fornecedor_36;
-            btnFornecedor.BackColor = Color.FromArgb(26, 32, 40);
+            btnFornecedor.BackColor = Color.Transparent;
+            btnFornecedor.CorDefault = Color.Transparent;
             btnFornecedor.FlatAppearance.BorderSize = 0;
             btnFornecedor.FlatStyle = FlatStyle.Flat;
             btnFornecedor.ForeColor = Color.White;
             btnFornecedor.Location = new Point(0, 141);
             btnFornecedor.Margin = new Padding(0, 3, 3, 3);
             btnFornecedor.Name = "btnFornecedor";
-            btnFornecedor.Padding = new Padding(50, 0, 0, 0);
-            btnFornecedor.Size = new Size(220, 40);
+            btnFornecedor.Padding = new Padding(63, 0, 0, 0);
+            btnFornecedor.Size = new Size(200, 40);
             btnFornecedor.TabIndex = 0;
             btnFornecedor.Text = "Fornecedores";
             btnFornecedor.TextAlign = ContentAlignment.MiddleLeft;
@@ -545,15 +564,16 @@ namespace FestasApp
             // btnPacotesFestas
             // 
             btnPacotesFestas._Image = Properties.Resources.icons8_confete_36;
-            btnPacotesFestas.BackColor = Color.FromArgb(26, 32, 40);
+            btnPacotesFestas.BackColor = Color.Transparent;
+            btnPacotesFestas.CorDefault = Color.Transparent;
             btnPacotesFestas.FlatAppearance.BorderSize = 0;
             btnPacotesFestas.FlatStyle = FlatStyle.Flat;
             btnPacotesFestas.ForeColor = Color.White;
             btnPacotesFestas.Location = new Point(0, 187);
             btnPacotesFestas.Margin = new Padding(0, 3, 3, 3);
             btnPacotesFestas.Name = "btnPacotesFestas";
-            btnPacotesFestas.Padding = new Padding(50, 0, 0, 0);
-            btnPacotesFestas.Size = new Size(220, 40);
+            btnPacotesFestas.Padding = new Padding(63, 0, 0, 0);
+            btnPacotesFestas.Size = new Size(200, 40);
             btnPacotesFestas.TabIndex = 0;
             btnPacotesFestas.Text = "Pacotes Festas";
             btnPacotesFestas.TextAlign = ContentAlignment.MiddleLeft;
@@ -563,15 +583,16 @@ namespace FestasApp
             // btnUsuarios
             // 
             btnUsuarios._Image = Properties.Resources.pessoas_funcionarios_36;
-            btnUsuarios.BackColor = Color.Transparent;
+            btnUsuarios.BackColor = Color.FromArgb(26, 32, 40);
+            btnUsuarios.CorDefault = Color.FromArgb(26, 32, 40);
             btnUsuarios.FlatAppearance.BorderSize = 0;
             btnUsuarios.FlatStyle = FlatStyle.Flat;
             btnUsuarios.ForeColor = Color.White;
             btnUsuarios.Location = new Point(0, 276);
             btnUsuarios.Margin = new Padding(0, 3, 3, 3);
             btnUsuarios.Name = "btnUsuarios";
-            btnUsuarios.Padding = new Padding(50, 0, 0, 0);
-            btnUsuarios.Size = new Size(220, 40);
+            btnUsuarios.Padding = new Padding(63, 0, 0, 0);
+            btnUsuarios.Size = new Size(200, 40);
             btnUsuarios.TabIndex = 0;
             btnUsuarios.Text = "Usuários";
             btnUsuarios.TextAlign = ContentAlignment.MiddleLeft;
@@ -606,6 +627,7 @@ namespace FestasApp
             ((System.ComponentModel.ISupportInitialize)pictureLogo).EndInit();
             pnlSubMenuFinanceiro.ResumeLayout(false);
             pnlLogo.ResumeLayout(false);
+            panel2.ResumeLayout(false);
             pnlBtnMenu.ResumeLayout(false);
             BarraLateralMenu.ResumeLayout(false);
             flowBarraLateral.ResumeLayout(false);
@@ -652,5 +674,6 @@ namespace FestasApp
         private Panel pnlSubMenuFinanceiro;
         private MyFramework.myControls.myButtonMenu btnFinanceiro;
         private MyFramework.myControls.myButtonMenu btnContasPagar;
+        private Panel panel2;
     }
 }
