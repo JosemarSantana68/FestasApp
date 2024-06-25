@@ -12,8 +12,6 @@
 //
 //************************************************************
 
-using System.Globalization;
-
 namespace FestasApp.Views.Calendario
 {
     public partial class FormCalendario : Form
@@ -40,6 +38,7 @@ namespace FestasApp.Views.Calendario
             this.ClientSizeChanged += FormCalendario_ClientSizeChanged;
             this.LblMonthYear.Click += MonthYearContainer_Click;
             this.LblMonthYear.TextChanged += lblMonthYear_TextChanged;
+            // container Mês Ano
             lblMesAntes.Click += MudarMesAntes_Click;
             picMesAntes.Click += MudarMesAntes_Click;
             lblMesApos.Click += MudarMesApos_Click;
@@ -116,32 +115,30 @@ namespace FestasApp.Views.Calendario
         private void lblMonthYear_TextChanged(object? sender, EventArgs e)
         {
             Label? lbl = sender as Label;
-            if (!string.IsNullOrEmpty(lbl?.Text))
+            if (lbl != null)
             {
-                lbl.Text = char.ToUpper(lbl.Text[0]) + lbl.Text.Substring(1);
+                lbl.Text = lbl.Text.ToPrimeUpper();
             }
-
-            //DateTime activeMonth = new DateTime(_CalendarInfo.Year, _CalendarInfo.Month, 1);
-            //DateTime newMonth;
-            ////mes antes
-            //newMonth = activeMonth.AddMonths(-1);
-            //_CalendarInfo.GoToMonth(newMonth.Year, newMonth.Month);
-            //lblMesAntes.Text = $"{NomeMes(_CalendarInfo.Month)} {_CalendarInfo.Year}";
-            ////mes depois
-            //newMonth = activeMonth.AddMonths(1);
-            //_CalendarInfo.GoToMonth(newMonth.Year, newMonth.Month);
-            //lblMesApos.Text = $"{NomeMes(_CalendarInfo.Month)} {_CalendarInfo.Year}";
+            // mudar datas antes e depois
+            DateTime activeMonth = new DateTime(_CalendarInfo.Year, _CalendarInfo.Month, 1);
+            DateTime newMonth;
+            //mes/ano antes
+            newMonth = activeMonth.AddMonths(-1);
+            lblMesAntes.Text = $"{NomeMes(newMonth.Month)} {newMonth.Year}".ToPrimeUpper();
+            //mes/ano depois
+            newMonth = activeMonth.AddMonths(1);
+            lblMesApos.Text = $"{NomeMes(newMonth.Month)} {newMonth.Year}".ToPrimeUpper();
         }
         //
-        //// Método para centralizar o label do mês e ano no container
-        //private void AjustarMesAno()
-        //{
-        //    SuspendLayout();
-        //    int x = (MonthYearContainer.Width - LblMonthYear.Width) / 2;
-        //    int y = (MonthYearContainer.Height - LblMonthYear.Height) / 2;
-        //    LblMonthYear.Location = new Point(x, y);
-        //    ResumeLayout(false);
-        //}
+        // Método para centralizar o label do mês e ano no container
+        private void AjustarMesAno()
+        {
+            SuspendLayout();
+            int x = (MonthYearContainer.Width - LblMonthYear.Width) / 2; // meio da largura
+            int y = (MonthYearContainer.Height - LblMonthYear.Height) / 2; // meio da altura
+            LblMonthYear.Location = new Point(x, y);
+            ResumeLayout(false);
+        }
         //
         // Método para dimensionar os labels dos dias da semana igualmente
         private void AjustarDiasDaSemana()
@@ -154,11 +151,13 @@ namespace FestasApp.Views.Calendario
         private void AjustarLarguraIgual(Control c)
         {
             SuspendLayout();
+            // testa se há controles
             if (c.Controls.Count == 0) return;
 
+            // ajusta a largura
             int width = c.Width / c.Controls.Count;
             int x = 0;
-
+            // ajusta a altura
             foreach (Control ctrl in c.Controls)
             {
                 ctrl.Height = c.Height;
@@ -284,14 +283,13 @@ namespace FestasApp.Views.Calendario
             }
         }
         //
-        // Método chamado ao clicar no container de mês e ano
+        // Método chamado ao clicar no label lblMonthYear de mês e ano
         private void MonthYearContainer_Click(object? sender, EventArgs e)
         {
             int midPointX = LblMonthYear.Width / 2;
             Point pointClicked = LblMonthYear.PointToClient(Cursor.Position);
             DateTime activeMonth = new DateTime(_CalendarInfo.Year, _CalendarInfo.Month, 1);
             DateTime newMonth;
-
             if (pointClicked.X < midPointX)
             {
                 newMonth = activeMonth.AddMonths(-1); // Mês anterior
@@ -300,10 +298,7 @@ namespace FestasApp.Views.Calendario
             {
                 newMonth = activeMonth.AddMonths(1); // Próximo mês
             }
-                
             _CalendarInfo.GoToMonth(newMonth.Year, newMonth.Month);
-
-            // Remove eventos antigos do calendário
             AtualizaMesAno();
         }
         // Método chamado ao clicar no container de mês e ano
@@ -311,12 +306,8 @@ namespace FestasApp.Views.Calendario
         {
             DateTime activeMonth = new DateTime(_CalendarInfo.Year, _CalendarInfo.Month, 1);
             DateTime newMonth;
-            
             newMonth = activeMonth.AddMonths(-1); // Mês anterior
-           
             _CalendarInfo.GoToMonth(newMonth.Year, newMonth.Month);
-
-            // Remove eventos antigos do calendário
             AtualizaMesAno();
         }
         // Método chamado ao clicar no container de mês e ano
@@ -324,14 +315,9 @@ namespace FestasApp.Views.Calendario
         {
             DateTime activeMonth = new DateTime(_CalendarInfo.Year, _CalendarInfo.Month, 1);
             DateTime newMonth;
-
             newMonth = activeMonth.AddMonths(1); // Próximo mês
-            
             _CalendarInfo.GoToMonth(newMonth.Year, newMonth.Month);
-            
             lblMesAntes.Text = $"{NomeMes(_CalendarInfo.Month)} {_CalendarInfo.Year}";
-
-            // Remove eventos antigos do calendário
             AtualizaMesAno();
         }
         private void AtualizaMesAno()
@@ -340,7 +326,6 @@ namespace FestasApp.Views.Calendario
             PreencherCalendario();
             CriarDadosTeste();
         }
-
         //
         // Método recursivo para remover dados de teste do calendário
         private void RemoverDadosEventos(Control c)

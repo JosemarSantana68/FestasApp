@@ -12,11 +12,6 @@
 //
 //************************************************************
 
-using FestasApp.Enums;
-using FestasApp.ViewModels;
-using MyFramework.myCodes;
-using MySql.Data.MySqlClient;
-
 namespace FestasApp.Views.Usuarios
 {
     public partial class FormUsuariosCRUD : FormBaseCRUD
@@ -34,43 +29,14 @@ namespace FestasApp.Views.Usuarios
             this.usuario = _usuario;
             this.operacao = _operacao;
 
-            this.SuspendLayout();
-
-            ConfigurarForm();
+            SuspendLayout();
+                ConfigurarFormBaseCrud("U s u á r i o s", operacao);
             ConfigurarControles();
             PopularControlesComUsuario();
 
             this.ResumeLayout();
 
             this.tstbtnSalvar.Click += TstbtnSalvar_Click;
-        }
-        //
-        // Configura o formulário com base na operação
-        private void ConfigurarForm()
-        {
-            lblTitulo.Text = "C a d a s t r o  d e   U s u á r i o s";
-            lblOperacao.Text = "";
-
-            // Testa a operacao e preenche o Text da Label...
-            switch (operacao)
-            {
-                case OperacaoCRUD.NOVO:
-                    this.lblOperacao.Text = " A D I C I O N A R";
-                    break;
-                case OperacaoCRUD.EDITAR:
-                    this.lblOperacao.Text = " A L T E R A R";
-                    tstbtnSalvar.Enabled = true;
-                    break;
-                case OperacaoCRUD.EXCLUIR:
-                    this.lblOperacao.Text = " E X C L U I R";
-                    ConfigurarParaExcluir();
-                    break;
-                case OperacaoCRUD.CONSULTAR:
-                    this.lblOperacao.Text = " C O N S U L T A R";
-                    tstbtnSalvar.Enabled = false;
-                    ConfigurarParaConsulta();
-                    break;
-            }
         }
         //
         // btn SALVAR
@@ -233,18 +199,12 @@ namespace FestasApp.Views.Usuarios
         private void ConfigurarParaExcluir()
         {
             //TravarControles();
-            tstbtnSalvar.Text = "Excluir";
-            tstbtnSalvar.ToolTipText = "Excluir";
         }
         //
         // Configuração dos btns para a operação de consulta
         private void ConfigurarParaConsulta()
         {
             //TravarControles();
-            tstbtnSalvar.Visible = false;
-            tstSeparadorSalvar.Visible = false;
-            tstbtnCancel.Text = "Fechar";
-            tstbtnCancel.ToolTipText = "Fechar";
         }
         //
         // Método para validar os controles antes de salvar ou alterar

@@ -39,10 +39,10 @@
             label8 = new Label();
             label9 = new Label();
             lblID = new Label();
-            txtNome = new MyFramework.myControls.myTextBox();
-            txtEndereco = new MyFramework.myControls.myTextBox();
-            txtCidade = new MyFramework.myControls.myTextBox();
-            txtUF = new MyFramework.myControls.myTextBox();
+            txtNome = new myTextBox();
+            txtEndereco = new myTextBox();
+            txtCidade = new myTextBox();
+            txtUF = new myTextBox();
             txtTelefone1 = new MyFramework.myControls.myMaskedTextBox();
             txtTelefone2 = new MyFramework.myControls.myMaskedTextBox();
             txtCpf = new MyFramework.myControls.myMaskedTextBox();
@@ -69,9 +69,7 @@
             // 
             // lblTitulo
             // 
-            lblTitulo.Image = Properties.Resources.pessoas_clientes_36;
-            lblTitulo.ImageAlign = ContentAlignment.MiddleLeft;
-            lblTitulo.Padding = new Padding(30, 0, 0, 0);
+            lblTitulo.Image = Resources.pessoas_clientes_36;
             lblTitulo.Size = new Size(419, 73);
             // 
             // pnlCentral
@@ -325,6 +323,7 @@
             AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(611, 422);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             KeyPreview = true;
             Name = "FormClientesCRUD";
             StartPosition = FormStartPosition.CenterScreen;
@@ -349,10 +348,10 @@
         private Label label8;
         private Label label9;
         private Label lblID;
-        private MyFramework.myControls.myTextBox txtNome;
-        private MyFramework.myControls.myTextBox txtEndereco;
-        private MyFramework.myControls.myTextBox txtCidade;
-        private MyFramework.myControls.myTextBox txtUF;
+        private myTextBox txtNome;
+        private myTextBox txtEndereco;
+        private myTextBox txtCidade;
+        private myTextBox txtUF;
         private MyFramework.myControls.myMaskedTextBox txtTelefone1;
         private MyFramework.myControls.myMaskedTextBox txtTelefone2;
         private MyFramework.myControls.myMaskedTextBox txtCpf;

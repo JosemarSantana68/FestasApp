@@ -63,9 +63,9 @@ namespace FestasApp.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Calendar_Minus {
+        internal static System.Drawing.Bitmap add {
             get {
-                object obj = ResourceManager.GetObject("Calendar Minus", resourceCulture);
+                object obj = ResourceManager.GetObject("add", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -73,9 +73,9 @@ namespace FestasApp.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Calendar_Plus {
+        internal static System.Drawing.Bitmap calendar {
             get {
-                object obj = ResourceManager.GetObject("Calendar Plus", resourceCulture);
+                object obj = ResourceManager.GetObject("calendar", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -83,9 +83,9 @@ namespace FestasApp.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Cancel {
+        internal static System.Drawing.Bitmap calendar_edit {
             get {
-                object obj = ResourceManager.GetObject("Cancel", resourceCulture);
+                object obj = ResourceManager.GetObject("calendar_edit", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -93,9 +93,9 @@ namespace FestasApp.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Cancel_48 {
+        internal static System.Drawing.Bitmap calendar_minus {
             get {
-                object obj = ResourceManager.GetObject("Cancel-48", resourceCulture);
+                object obj = ResourceManager.GetObject("calendar_minus", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -103,9 +103,9 @@ namespace FestasApp.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Cancel_481 {
+        internal static System.Drawing.Bitmap calendar_plus {
             get {
-                object obj = ResourceManager.GetObject("Cancel-481", resourceCulture);
+                object obj = ResourceManager.GetObject("calendar_plus", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -115,7 +115,17 @@ namespace FestasApp.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap cash_in_32 {
             get {
-                object obj = ResourceManager.GetObject("cash-in-32", resourceCulture);
+                object obj = ResourceManager.GetObject("cash_in_32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap cash_investimento_36 {
+            get {
+                object obj = ResourceManager.GetObject("cash_investimento_36", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -125,7 +135,7 @@ namespace FestasApp.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap cash_out_32 {
             get {
-                object obj = ResourceManager.GetObject("cash-out-32", resourceCulture);
+                object obj = ResourceManager.GetObject("cash_out_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -133,9 +143,9 @@ namespace FestasApp.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Check_Mark {
+        internal static System.Drawing.Bitmap check_mark {
             get {
-                object obj = ResourceManager.GetObject("Check Mark", resourceCulture);
+                object obj = ResourceManager.GetObject("check_mark", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -143,9 +153,9 @@ namespace FestasApp.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Check_Mark_48 {
+        internal static System.Drawing.Bitmap delete {
             get {
-                object obj = ResourceManager.GetObject("Check Mark-48", resourceCulture);
+                object obj = ResourceManager.GetObject("delete", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -153,9 +163,9 @@ namespace FestasApp.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Close {
+        internal static System.Drawing.Bitmap delete_36 {
             get {
-                object obj = ResourceManager.GetObject("Close", resourceCulture);
+                object obj = ResourceManager.GetObject("delete_36", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -163,9 +173,9 @@ namespace FestasApp.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Edit {
+        internal static System.Drawing.Bitmap edit_lapis {
             get {
-                object obj = ResourceManager.GetObject("Edit", resourceCulture);
+                object obj = ResourceManager.GetObject("edit_lapis", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -173,9 +183,9 @@ namespace FestasApp.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Edit_Calendar {
+        internal static System.Drawing.Bitmap editar {
             get {
-                object obj = ResourceManager.GetObject("Edit Calendar", resourceCulture);
+                object obj = ResourceManager.GetObject("editar", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -193,9 +203,9 @@ namespace FestasApp.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap FolderOpen {
+        internal static System.Drawing.Bitmap fechar_close {
             get {
-                object obj = ResourceManager.GetObject("FolderOpen", resourceCulture);
+                object obj = ResourceManager.GetObject("fechar_close", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -203,9 +213,9 @@ namespace FestasApp.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap home_casa_36 {
+        internal static System.Drawing.Bitmap festa_balloons_36 {
             get {
-                object obj = ResourceManager.GetObject("home-casa-36", resourceCulture);
+                object obj = ResourceManager.GetObject("festa_balloons_36", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -213,9 +223,9 @@ namespace FestasApp.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Icono_cerrar_FN {
+        internal static System.Drawing.Bitmap festa_confete_36 {
             get {
-                object obj = ResourceManager.GetObject("Icono cerrar FN", resourceCulture);
+                object obj = ResourceManager.GetObject("festa_confete_36", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -223,9 +233,9 @@ namespace FestasApp.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Icono_Maximizar {
+        internal static System.Drawing.Bitmap folder_open {
             get {
-                object obj = ResourceManager.GetObject("Icono Maximizar", resourceCulture);
+                object obj = ResourceManager.GetObject("folder_open", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -233,9 +243,9 @@ namespace FestasApp.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Icono_Minimizar {
+        internal static System.Drawing.Bitmap home_36 {
             get {
-                object obj = ResourceManager.GetObject("Icono Minimizar", resourceCulture);
+                object obj = ResourceManager.GetObject("home_36", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -243,9 +253,9 @@ namespace FestasApp.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Icono_Restaurar {
+        internal static System.Drawing.Bitmap icono_cerrar {
             get {
-                object obj = ResourceManager.GetObject("Icono Restaurar", resourceCulture);
+                object obj = ResourceManager.GetObject("icono_cerrar", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -253,9 +263,9 @@ namespace FestasApp.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap icons8_add_64 {
+        internal static System.Drawing.Bitmap icono_maximizar {
             get {
-                object obj = ResourceManager.GetObject("icons8-add-64", resourceCulture);
+                object obj = ResourceManager.GetObject("icono_maximizar", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -263,9 +273,9 @@ namespace FestasApp.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap icons8_balões_de_festa_36 {
+        internal static System.Drawing.Bitmap icono_minimizar {
             get {
-                object obj = ResourceManager.GetObject("icons8-balões-de-festa-36", resourceCulture);
+                object obj = ResourceManager.GetObject("icono_minimizar", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -273,9 +283,9 @@ namespace FestasApp.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap icons8_close_64 {
+        internal static System.Drawing.Bitmap icono_restaurar {
             get {
-                object obj = ResourceManager.GetObject("icons8-close-64", resourceCulture);
+                object obj = ResourceManager.GetObject("icono_restaurar", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -283,99 +293,9 @@ namespace FestasApp.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap icons8_confete_36 {
+        internal static System.Drawing.Bitmap menu3 {
             get {
-                object obj = ResourceManager.GetObject("icons8-confete-36", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap icons8_confete_361 {
-            get {
-                object obj = ResourceManager.GetObject("icons8-confete-361", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap icons8_delete_64 {
-            get {
-                object obj = ResourceManager.GetObject("icons8-delete-64", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap icons8_edit_64 {
-            get {
-                object obj = ResourceManager.GetObject("icons8-edit-64", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap icons8_info_64 {
-            get {
-                object obj = ResourceManager.GetObject("icons8-info-64", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap icons8_party_balloons_36 {
-            get {
-                object obj = ResourceManager.GetObject("icons8-party-balloons-36", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Menu {
-            get {
-                object obj = ResourceManager.GetObject("Menu", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Menu3 {
-            get {
-                object obj = ResourceManager.GetObject("Menu3", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Mobile_Menu_Icon {
-            get {
-                object obj = ResourceManager.GetObject("Mobile-Menu-Icon", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap pasta_investimento_36 {
-            get {
-                object obj = ResourceManager.GetObject("pasta-investimento-36", resourceCulture);
+                object obj = ResourceManager.GetObject("menu3", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -385,7 +305,7 @@ namespace FestasApp.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap pessoas_clientes_36 {
             get {
-                object obj = ResourceManager.GetObject("pessoas-clientes-36", resourceCulture);
+                object obj = ResourceManager.GetObject("pessoas_clientes_36", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -395,7 +315,7 @@ namespace FestasApp.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap pessoas_fornecedor_36 {
             get {
-                object obj = ResourceManager.GetObject("pessoas-fornecedor-36", resourceCulture);
+                object obj = ResourceManager.GetObject("pessoas_fornecedor_36", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -405,27 +325,7 @@ namespace FestasApp.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap pessoas_funcionarios_36 {
             get {
-                object obj = ResourceManager.GetObject("pessoas-funcionarios-36", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Schedule {
-            get {
-                object obj = ResourceManager.GetObject("Schedule", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Search {
-            get {
-                object obj = ResourceManager.GetObject("Search", resourceCulture);
+                object obj = ResourceManager.GetObject("pessoas_funcionarios_36", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -11,36 +11,31 @@
 //
 //************************************************************
 
-using FestasApp.Enums;
-using MySql.Data.MySqlClient;
-using System.ComponentModel;
-using System.Data;
-
-
 namespace FestasApp.Views.Usuarios
 {
     public partial class FormUsuariosCadastro : FormBaseCadastro
     {
-        //--------------------------------------
-        // CONTRUTOR...
+        //
+        // construtor
         public FormUsuariosCadastro()
         {
+            // Configurações iniciais antes da inicialização dos componentes
+
+
             InitializeComponent();
+            
 
             this.SuspendLayout();
-
+                this.FormBorderStyle = FormBorderStyle.None;
                 ConfigurarForm();
                 AddToolStripEventHandlers();
-
             this.ResumeLayout();
         }
-        //---------------------------------------
+        //
         // Configurações iniciais do formulário
         private void ConfigurarForm()
         {
             // Adicione aqui as configurações específicas para o formulário
-            
-            this.FormBorderStyle = FormBorderStyle.None;
             lblTitulo.Text = "C a d a s t r o  d e  U s u á r i o s";           
             lblTitulo.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
 
@@ -188,58 +183,40 @@ namespace FestasApp.Views.Usuarios
                 FormMenuBase.ShowMyMessageBox($"Erro: {ex.Message}", "Erro no Banco de Dados", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        //----------------------------
-        // configura coluna datagrid
+        //--------------------------------------------
+        // DataGridViews
+        //
+        private const int ColId = 0;
+        private const int ColNomeUser = 1;
+        private const int ColLogin = 2;
+        private const int ColEmail = 3;
+        private const int ColSenha = 4;
+        private const int ColAtivo = 5;
         private void ConfigurarColunasDtgUsuarios()
         {
-            //dtgUsuarios.Columns.Clear(); // Limpa quaisquer colunas existentes
             //-----------------------------------------
             // Colunas
             //
-            int col = 0; // 0
-            dtgUsuarios.Columns[col].HeaderText = "ID";
-            dtgUsuarios.Columns[col].Width = 30;
-            dtgUsuarios.Columns[col].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-
-            col++;   // 1
-            dtgUsuarios.Columns[col].HeaderText = "Nome Usuário";
-            dtgUsuarios.Columns[col].Width = 220;
-            dtgUsuarios.Columns[col].DefaultCellStyle.Padding = new Padding(5, 0, 0, 0);
-
-            col++;   // 2
-            dtgUsuarios.Columns[col].HeaderText = "Login";
-            dtgUsuarios.Columns[col].Width = 120;
-            //dtgUsuarios.Columns[col].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-
-            col++;   // 3
-            dtgUsuarios.Columns[col].HeaderText = "Email";
-            dtgUsuarios.Columns[col].Width = 120;
-            //dtgUsuarios.Columns[col].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-
-            col++;   // 4
-            dtgUsuarios.Columns[col].HeaderText = "Senha";
-            dtgUsuarios.Columns[col].Width = 100;
-            dtgUsuarios.Columns[col].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-
-            col++;   // 5
-            dtgUsuarios.Columns[col].HeaderText = "Ativo";
-            dtgUsuarios.Columns[col].Width = 100;
-            dtgUsuarios.Columns[col].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            DataGridView dtg = dtgUsuarios;
+            // configurar colunas
+            myFunctions.ConfigurarColuna(dtg, ColId, "ID", 30, DataGridViewContentAlignment.MiddleCenter);
+            myFunctions.ConfigurarColuna(dtg, ColNomeUser, "Nome Usuário", 200, padding: new Padding(5, 0, 0, 0));
+            myFunctions.ConfigurarColuna(dtg, ColLogin, "Login", 12);
+            myFunctions.ConfigurarColuna(dtg, ColEmail, "Email", 120);
+            myFunctions.ConfigurarColuna(dtg, ColSenha, "Senha", 100);
+            myFunctions.ConfigurarColuna(dtg, ColAtivo, "Ativo", 100, DataGridViewContentAlignment.MiddleCenter);
             //
             // ordenar datagrid - Nome
-            dtgUsuarios.Sort(dtgUsuarios.Columns[1], ListSortDirection.Ascending);
+            dtgUsuarios.Sort(dtgUsuarios.Columns[ColNomeUser], ListSortDirection.Ascending);
 
             // Adiciona o evento CellFormatting para formatação dos dados
             dtgUsuarios.CellFormatting += DtgUsuarios_CellFormatting;
-
-        } // end ConfigurarDtgClientes
+        }
         //-----------------------------------------------------------
         // Evento disparado para formatar as células do DataGridView.
         private void DtgUsuarios_CellFormatting(object? sender, DataGridViewCellFormattingEventArgs e)
         {
             // Formatar Ativo
-
-
             if (dtgUsuarios.Columns[e.ColumnIndex].HeaderText == "Ativo" && e.Value != null)
             {
                 // Verifica se o valor da célula é "0" ou "1"
@@ -252,33 +229,5 @@ namespace FestasApp.Views.Usuarios
                 }
             }
         }
-
-            //if (dtgUsuarios.Columns[e.ColumnIndex].HeaderText == "Ativo" && e.Value != null)
-            //{
-            //    //bool ativo = Convert.ToBoolean(e.Value);
-            //    if (bool.TryParse(e.Value.ToString(), out bool ativo))
-            //    {
-            //        e.Value = ativo ? "SIM" : "NÃO";
-            //        e.FormattingApplied = true;
-            //    }
-            //}
-
-            //// Formatar Ativo
-            //if (dtgUsuarios.Columns[e.ColumnIndex].HeaderText == "Ativo" && e.Value != null)
-            //{
-            //    // Convertendo o valor '0' ou '1' para 'NÃO' ou 'SIM'
-            //    if (e.Value.ToString() == "1")
-            //    {
-            //        e.Value = "SIM";
-            //        e.FormattingApplied = true;
-            //    }
-            //    else if (e.Value.ToString() == "0")
-            //    {
-            //        e.Value = "NÃO";
-            //        e.FormattingApplied = true;
-            //    }
-            //}
-        //}
-
-    } // end class FormUsuariosCadastro
+     } // end class FormUsuariosCadastro
 } // end namespace FestasApp.Views.Usuarios

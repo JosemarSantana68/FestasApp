@@ -107,7 +107,7 @@
             // tstbtnCancel
             // 
             tstbtnCancel.Font = new Font("Segoe UI", 11F);
-            tstbtnCancel.Image = Properties.Resources.Cancel_48;
+            tstbtnCancel.Image = Resources.fechar;
             tstbtnCancel.ImageTransparentColor = Color.Magenta;
             tstbtnCancel.Name = "tstbtnCancel";
             tstbtnCancel.Size = new Size(86, 33);
@@ -124,7 +124,7 @@
             // 
             tstbtnSalvar.AutoSize = false;
             tstbtnSalvar.Font = new Font("Segoe UI", 11F);
-            tstbtnSalvar.Image = Properties.Resources.Check_Mark_48;
+            tstbtnSalvar.Image = Resources.check_mark;
             tstbtnSalvar.ImageTransparentColor = Color.Magenta;
             tstbtnSalvar.Name = "tstbtnSalvar";
             tstbtnSalvar.Size = new Size(86, 33);

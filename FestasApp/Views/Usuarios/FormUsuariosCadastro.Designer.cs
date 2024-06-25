@@ -32,7 +32,7 @@
             DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
             label1 = new Label();
-            dtgUsuarios = new MyFramework.myControls.myDataGridView();
+            dtgUsuarios = new MyFramework.myControls.myDataGrids.myDataGridView();
             pnlTitulo.SuspendLayout();
             pnlCabecalho.SuspendLayout();
             pnlMeio.SuspendLayout();
@@ -42,30 +42,30 @@
             // pnlRodape
             // 
             pnlRodape.Location = new Point(0, 370);
-            pnlRodape.Size = new Size(800, 80);
+            pnlRodape.Size = new Size(681, 80);
             // 
             // pnlTitulo
             // 
-            pnlTitulo.Size = new Size(800, 30);
+            pnlTitulo.Size = new Size(681, 30);
             // 
             // lblTitulo
             // 
-            lblTitulo.Size = new Size(800, 30);
+            lblTitulo.Size = new Size(681, 30);
             // 
             // pnlCabecalho
             // 
-            pnlCabecalho.Size = new Size(800, 80);
+            pnlCabecalho.Size = new Size(681, 80);
             // 
             // pnlTopo
             // 
             pnlTopo.Location = new Point(0, 30);
-            pnlTopo.Size = new Size(800, 50);
+            pnlTopo.Size = new Size(681, 50);
             // 
             // pnlMeio
             // 
             pnlMeio.Controls.Add(dtgUsuarios);
             pnlMeio.Controls.Add(label1);
-            pnlMeio.Size = new Size(800, 240);
+            pnlMeio.Size = new Size(681, 240);
             // 
             // label1
             // 
@@ -109,14 +109,15 @@
             dtgUsuarios.ReadOnly = true;
             dtgUsuarios.RowHeadersVisible = false;
             dtgUsuarios.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dtgUsuarios.Size = new Size(800, 240);
+            dtgUsuarios.Size = new Size(681, 240);
             dtgUsuarios.TabIndex = 1;
             // 
             // FormUsuariosCadastro
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(681, 450);
+            ControlBox = true;
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Name = "FormUsuariosCadastro";
             Text = "FormUsuariosCadastro";
@@ -131,6 +132,6 @@
         #endregion
 
         private Label label1;
-        private MyFramework.myControls.myDataGridView dtgUsuarios;
+        private MyFramework.myControls.myDataGrids.myDataGridView dtgUsuarios;
     }
 }

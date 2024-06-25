@@ -29,11 +29,11 @@
         private void InitializeComponent()
         {
             MonthYearContainer = new Panel();
-            tableLayoutPanel1 = new TableLayoutPanel();
-            panel1 = new Panel();
+            tblMonthYear = new TableLayoutPanel();
+            pnlMesAntes = new Panel();
             lblMesAntes = new Label();
             picMesAntes = new PictureBox();
-            panel2 = new Panel();
+            pnlMesApos = new Panel();
             lblMesApos = new Label();
             picMesApos = new PictureBox();
             LblMonthYear = new Label();
@@ -137,12 +137,12 @@
             PnlDay50 = new myPnlDay();
             LblDayOfMonth50 = new myLblDiasMes();
             MonthYearContainer.SuspendLayout();
-            tableLayoutPanel1.SuspendLayout();
-            panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)picMesAntes).BeginInit();
-            panel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)picMesApos).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)picBtnFechar).BeginInit();
+            tblMonthYear.SuspendLayout();
+            pnlMesAntes.SuspendLayout();
+            ((ISupportInitialize)picMesAntes).BeginInit();
+            pnlMesApos.SuspendLayout();
+            ((ISupportInitialize)picMesApos).BeginInit();
+            ((ISupportInitialize)picBtnFechar).BeginInit();
             DaysOfWeekContainer.SuspendLayout();
             DaysRow0Containers.SuspendLayout();
             PnlDay06.SuspendLayout();
@@ -197,7 +197,7 @@
             // MonthYearContainer
             // 
             MonthYearContainer.BackColor = SystemColors.Control;
-            MonthYearContainer.Controls.Add(tableLayoutPanel1);
+            MonthYearContainer.Controls.Add(tblMonthYear);
             MonthYearContainer.Controls.Add(picBtnFechar);
             MonthYearContainer.Dock = DockStyle.Top;
             MonthYearContainer.Location = new Point(0, 0);
@@ -206,34 +206,35 @@
             MonthYearContainer.Size = new Size(797, 50);
             MonthYearContainer.TabIndex = 0;
             // 
-            // tableLayoutPanel1
+            // tblMonthYear
             // 
-            tableLayoutPanel1.ColumnCount = 5;
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60F));
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 15F));
-            tableLayoutPanel1.Controls.Add(panel1, 1, 0);
-            tableLayoutPanel1.Controls.Add(panel2, 3, 0);
-            tableLayoutPanel1.Controls.Add(LblMonthYear, 2, 0);
-            tableLayoutPanel1.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Location = new Point(38, 0);
-            tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.RowCount = 1;
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.Size = new Size(759, 50);
-            tableLayoutPanel1.TabIndex = 8;
+            tblMonthYear.ColumnCount = 5;
+            tblMonthYear.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tblMonthYear.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
+            tblMonthYear.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
+            tblMonthYear.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
+            tblMonthYear.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tblMonthYear.Controls.Add(pnlMesAntes, 1, 0);
+            tblMonthYear.Controls.Add(pnlMesApos, 3, 0);
+            tblMonthYear.Controls.Add(LblMonthYear, 2, 0);
+            tblMonthYear.Dock = DockStyle.Fill;
+            tblMonthYear.Location = new Point(38, 0);
+            tblMonthYear.Name = "tblMonthYear";
+            tblMonthYear.RowCount = 1;
+            tblMonthYear.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tblMonthYear.Size = new Size(759, 50);
+            tblMonthYear.TabIndex = 8;
             // 
-            // panel1
+            // pnlMesAntes
             // 
-            panel1.Controls.Add(lblMesAntes);
-            panel1.Controls.Add(picMesAntes);
-            panel1.Dock = DockStyle.Fill;
-            panel1.Location = new Point(23, 3);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(138, 44);
-            panel1.TabIndex = 4;
+            pnlMesAntes.BackColor = SystemColors.Control;
+            pnlMesAntes.Controls.Add(lblMesAntes);
+            pnlMesAntes.Controls.Add(picMesAntes);
+            pnlMesAntes.Dock = DockStyle.Fill;
+            pnlMesAntes.Location = new Point(23, 3);
+            pnlMesAntes.Name = "pnlMesAntes";
+            pnlMesAntes.Size = new Size(209, 44);
+            pnlMesAntes.TabIndex = 4;
             // 
             // lblMesAntes
             // 
@@ -242,7 +243,7 @@
             lblMesAntes.Location = new Point(0, 0);
             lblMesAntes.Name = "lblMesAntes";
             lblMesAntes.Padding = new Padding(0, 0, 0, 10);
-            lblMesAntes.Size = new Size(98, 44);
+            lblMesAntes.Size = new Size(169, 44);
             lblMesAntes.TabIndex = 5;
             lblMesAntes.Text = "Mês Anterior";
             lblMesAntes.TextAlign = ContentAlignment.BottomRight;
@@ -251,23 +252,23 @@
             // 
             picMesAntes.Cursor = Cursors.Hand;
             picMesAntes.Dock = DockStyle.Right;
-            picMesAntes.Image = Properties.Resources.Calendar_Minus;
-            picMesAntes.Location = new Point(98, 0);
+            picMesAntes.Image = Resources.calendar_minus;
+            picMesAntes.Location = new Point(169, 0);
             picMesAntes.Name = "picMesAntes";
             picMesAntes.Size = new Size(40, 44);
             picMesAntes.SizeMode = PictureBoxSizeMode.Zoom;
             picMesAntes.TabIndex = 3;
             picMesAntes.TabStop = false;
             // 
-            // panel2
+            // pnlMesApos
             // 
-            panel2.Controls.Add(lblMesApos);
-            panel2.Controls.Add(picMesApos);
-            panel2.Dock = DockStyle.Fill;
-            panel2.Location = new Point(601, 3);
-            panel2.Name = "panel2";
-            panel2.Size = new Size(138, 44);
-            panel2.TabIndex = 3;
+            pnlMesApos.Controls.Add(lblMesApos);
+            pnlMesApos.Controls.Add(picMesApos);
+            pnlMesApos.Dock = DockStyle.Fill;
+            pnlMesApos.Location = new Point(525, 3);
+            pnlMesApos.Name = "pnlMesApos";
+            pnlMesApos.Size = new Size(209, 44);
+            pnlMesApos.TabIndex = 3;
             // 
             // lblMesApos
             // 
@@ -276,7 +277,7 @@
             lblMesApos.Location = new Point(40, 0);
             lblMesApos.Name = "lblMesApos";
             lblMesApos.Padding = new Padding(0, 0, 0, 10);
-            lblMesApos.Size = new Size(98, 44);
+            lblMesApos.Size = new Size(169, 44);
             lblMesApos.TabIndex = 2;
             lblMesApos.Text = "Mês Anterior";
             lblMesApos.TextAlign = ContentAlignment.BottomLeft;
@@ -285,7 +286,7 @@
             // 
             picMesApos.Cursor = Cursors.Hand;
             picMesApos.Dock = DockStyle.Left;
-            picMesApos.Image = Properties.Resources.Calendar_Plus;
+            picMesApos.Image = Resources.calendar_plus;
             picMesApos.Location = new Point(0, 0);
             picMesApos.Name = "picMesApos";
             picMesApos.Size = new Size(40, 44);
@@ -299,9 +300,9 @@
             LblMonthYear.Cursor = Cursors.Hand;
             LblMonthYear.Dock = DockStyle.Fill;
             LblMonthYear.Font = new Font("Segoe UI", 12F);
-            LblMonthYear.Location = new Point(167, 0);
+            LblMonthYear.Location = new Point(238, 0);
             LblMonthYear.Name = "LblMonthYear";
-            LblMonthYear.Size = new Size(428, 50);
+            LblMonthYear.Size = new Size(281, 50);
             LblMonthYear.TabIndex = 5;
             LblMonthYear.Text = "LblMonthYear";
             LblMonthYear.TextAlign = ContentAlignment.MiddleCenter;
@@ -310,7 +311,7 @@
             // 
             picBtnFechar.Cursor = Cursors.Hand;
             picBtnFechar.Dock = DockStyle.Left;
-            picBtnFechar.Image = Properties.Resources.Cancel;
+            picBtnFechar.Image = Resources.fechar_close;
             picBtnFechar.Location = new Point(5, 0);
             picBtnFechar.Name = "picBtnFechar";
             picBtnFechar.Size = new Size(33, 50);
@@ -1539,12 +1540,12 @@
             Name = "FormCalendario";
             Text = "FormCalendario";
             MonthYearContainer.ResumeLayout(false);
-            tableLayoutPanel1.ResumeLayout(false);
-            panel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)picMesAntes).EndInit();
-            panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)picMesApos).EndInit();
-            ((System.ComponentModel.ISupportInitialize)picBtnFechar).EndInit();
+            tblMonthYear.ResumeLayout(false);
+            pnlMesAntes.ResumeLayout(false);
+            ((ISupportInitialize)picMesAntes).EndInit();
+            pnlMesApos.ResumeLayout(false);
+            ((ISupportInitialize)picMesApos).EndInit();
+            ((ISupportInitialize)picBtnFechar).EndInit();
             DaysOfWeekContainer.ResumeLayout(false);
             DaysRow0Containers.ResumeLayout(false);
             PnlDay06.ResumeLayout(false);
@@ -1700,12 +1701,12 @@
         private myLblDiasMes LblDayOfMonth50;
         private PictureBox picMesApos;
         private PictureBox picBtnFechar;
-        private Panel panel2;
+        private Panel pnlMesApos;
         private Label lblMesApos;
         private Label LblMonthYear;
-        private Panel panel1;
+        private Panel pnlMesAntes;
         private Label lblMesAntes;
         private PictureBox picMesAntes;
-        private TableLayoutPanel tableLayoutPanel1;
+        private TableLayoutPanel tblMonthYear;
     }
 }

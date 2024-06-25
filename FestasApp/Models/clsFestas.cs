@@ -29,18 +29,14 @@ CREATE TABLE `tblfestas` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
  */
 
-using FestasApp.Controllers;
-using MySql.Data.MySqlClient;
-using System.Data;
-
-namespace FestasApp.Views.Festas
+namespace FestasApp.Models
 {
     public class clsFestas
     {
         // Propriedades correspondentes aos campos da tabela `tblfestas`
         public int Id { get; set; }
-        public int ClienteId { get; set; }
-        public int UsuarioId { get; set; }
+        public int ClienteId { get; set; } // Não anulável
+        public int UsuarioId { get; set; } // Não anulável
         public int? PacoteId { get; set; }
         public int? TemaId { get; set; }
         public int? EspacoId { get; set; }
@@ -54,16 +50,16 @@ namespace FestasApp.Views.Festas
         public clsFestas() { }
 
         // Construtor que inicializa todas as propriedades
-        public clsFestas(int id, 
-                         int clienteId, 
-                         int usuarioId, 
-                         int? pacoteId, 
-                         int? temaId, 
-                         int? espacoId, 
-                         int? statusId, 
-                         int? tipoEventoId, 
-                         DateTime dataVenda, 
-                         DateTime dataFesta, 
+        public clsFestas(int id,
+                         int clienteId,
+                         int usuarioId,
+                         int? pacoteId,
+                         int? temaId,
+                         int? espacoId,
+                         int? statusId,
+                         int? tipoEventoId,
+                         DateTime dataVenda,
+                         DateTime dataFesta,
                          double? valor)
         {
             Id = id;
@@ -138,7 +134,7 @@ namespace FestasApp.Views.Festas
             }
         }
         //-----------------------------------------------------------------------------
-        // C.READ.U.D. - Método para obter os dados de uma festa específica pelo seu ID
+        // C.READ.U.D. - Método para obter os dados de uma única festa específica pelo seu ID
         public void ReadFesta(int idFesta)
         {
             string sql = "SELECT * FROM tblfestas WHERE fest_id = @IdFesta";
@@ -155,18 +151,18 @@ namespace FestasApp.Views.Festas
                         {
                             if (dr.HasRows && dr.Read())
                             {
-                                // Atribuindo valores das colunas às propriedades da classe
-                                Id = Convert.ToInt32(dr["fest_id"]);
-                                ClienteId = Convert.ToInt32(dr["fest_cli_id"]);
-                                UsuarioId = Convert.ToInt32(dr["fest_user_id"]);
-                                PacoteId = dr["fest_pct_id"] as int?;
-                                TemaId = dr["fest_tema_id"] as int?;
-                                EspacoId = dr["fest_espc_id"] as int?;
-                                StatusId = dr["fest_stt_id"] as int?;
-                                TipoEventoId = dr["fest_tpEv_id"] as int?;
+                                // Atribuindo valores das colunas DataReader às propriedades da classe
+                                Id = idFesta;
+                                ClienteId = Convert.ToInt32(dr["fest_cli_id"]); // Não anulável
+                                UsuarioId = Convert.ToInt32(dr["fest_user_id"]); // Não anulável
+                                PacoteId = dr["fest_pct_id"] != DBNull.Value ? dr["fest_pct_id"] as int? : null;
+                                TemaId = dr["fest_tema_id"] != DBNull.Value ? dr["fest_tema_id"] as int? : null;
+                                EspacoId = dr["fest_espc_id"] != DBNull.Value ? dr["fest_espc_id"] as int? : null;
+                                StatusId = dr["fest_stt_id"] != DBNull.Value ? dr["fest_stt_id"] as int? : null; 
+                                TipoEventoId = dr["fest_tpEv_id"] != DBNull.Value ? dr["fest_tpEv_id"] as int? : null; 
                                 DataVenda = Convert.ToDateTime(dr["fest_dtVenda"]);
                                 DataFesta = Convert.ToDateTime(dr["fest_dtFesta"]);
-                                Valor = dr["fest_valor"] as double?;
+                                Valor = dr["fest_valor"] != DBNull.Value ? dr["fest_valor"] as double? : null;                              
                             }
                         }
                     }
@@ -182,7 +178,24 @@ namespace FestasApp.Views.Festas
         public static DataTable ReadAllFestas()
         {
             DataTable dt = new DataTable();
-            string sql = "SELECT * FROM tblfestas";
+            // Consulta SQL para selecionar os dados das festas com o nome do cliente
+            string sql = "SELECT " +
+                        "f.fest_id, " +         // 0 - id da festa
+                        "f.fest_cli_id, " +
+                        "c.cli_nome AS NomeCliente, " + // col2 - Alias para cli_nome como NomeCliente
+                        "f.fest_user_id, " +
+                        "u.user_nome,"+         // 4 - nom usuario/vendedor
+                        "f.fest_pct_id, " +
+                        "f.fest_tema_id, " +
+                        "fest_espc_id, " +
+                        "f.fest_stt_id, " +
+                        "f.fest_tpEv_id, " +
+                        "f.fest_dtVenda, " +
+                        "f.fest_dtFesta, " +
+                        "f.fest_valor " +
+                        "FROM tblfestas f " +
+                        "JOIN tblclientes c ON f.fest_cli_id = c.cli_id " +
+                        "JOIN tblusuarios u ON f.fest_user_id = u.user_id ";
             try
             {
                 using (MySqlConnection cn = new MySqlConnection(ConnMySql.strConnMySql))
@@ -220,7 +233,9 @@ namespace FestasApp.Views.Festas
                     cn.Open();
                     using (MySqlCommand cmd = new MySqlCommand(sql, cn))
                     {
+                        // parametro de WHERE fest_id = @Id
                         cmd.Parameters.AddWithValue("@Id", Id);
+                        // parametros para atualizar
                         cmd.Parameters.AddWithValue("@ClienteId", ClienteId);
                         cmd.Parameters.AddWithValue("@UsuarioId", UsuarioId);
                         cmd.Parameters.AddWithValue("@PacoteId", PacoteId);

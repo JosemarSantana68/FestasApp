@@ -5,31 +5,20 @@
 //   Linguagem: C#
 //
 //   Inicio: 23/05/2024
-//   Ultima Alteração: 06/06/2024
+//   Criação do módulo: 23/05/2024
+//   Ultima Alteração: 24/06/2024
 //   
-//   FORMULÁRIO DE CLIENTE C.R.U.D.
+//   FORMULÁRIO DE CLIENTES - C.R.U.D.
 //
 //************************************************************
-
-using FestasApp.Enums;
-using FestasApp.ViewModels; // Importa o namespace do pai, IMPORTANTE
-using MyFramework.myCodes;
-using MySql.Data.MySqlClient;
 
 namespace FestasApp.Views.Clientes
 {
     public partial class FormClientesCRUD : FormBaseCRUD
     {
-        //
-        // Instância única do FormClientesCRUD
-        //public static FormClientesCRUD? Instance { get; private set; }
-
-        // variaveis...
-
         // objeto cliente instanciado da classe...
         private clsClientes cliente;
         private OperacaoCRUD operacao;
-
         //
         // Construtor que aceita um objeto clsClientes e a operação
         public FormClientesCRUD(clsClientes _cliente, OperacaoCRUD _operacao)
@@ -38,81 +27,40 @@ namespace FestasApp.Views.Clientes
             // Recebe o cliente e a operação passados por parâmetro
             this.cliente = _cliente;
             this.operacao = _operacao;
-            //Instance = this; // Define a instância atual como a instância única
 
             SuspendLayout();
-
-            ConfigurarForm();
-            ConfigurarControles();
-            AddToolStripEventHandlers();
-            CarregaDadosCliente();
-
+                ConfigurarFormBaseCrud("C l i e n t e s", operacao);
+                SetThisForm();
+                AddToolStripEventHandlers();
+                CarregaDadosCliente();
             ResumeLayout(false);
         }
-        //----------------------
         // LOAD...
         // Associa o evento KeyDown ao formulário
         private void FormClientesCRUD_Load(object sender, EventArgs e)
         {
-            //this.KeyPreview = true;
-            //this.KeyDown += new KeyEventHandler(FormClientesCRUD_KeyDown);
+            SetControls();
         }
         //
         // Configura o formulário com base na operação
-        private void ConfigurarForm()
+        private void SetThisForm()
         {
-            //this.FormBorderStyle = FormBorderStyle.None;
-            lblTitulo.Text = "C a d a s t r o  d e   C l i e n t e s";
-            lblOperacao.Text = "";
-
-            // Testa a operacao e preenche o Text da Label...
+            // Testa a operacao e configura os controles...
             switch (operacao)
             {
                 case OperacaoCRUD.NOVO:
-                    this.lblOperacao.Text = " A D I C I O N A R";
                     break;
                 case OperacaoCRUD.EDITAR:
-                    this.lblOperacao.Text = " A L T E R A R";
-                    tstbtnSalvar.Enabled = true;
                     break;
                 case OperacaoCRUD.EXCLUIR:
-                    this.lblOperacao.Text = " E X C L U I R";
-                    ConfigurarParaExcluir();
+                    TravarControles();
                     break;
                 case OperacaoCRUD.CONSULTAR:
-                    this.lblOperacao.Text = " C O N S U L T A R";
-                    tstbtnSalvar.Enabled = false;
-                    ConfigurarParaConsulta();
+                    TravarControles();
                     break;
             }
         }
-        private void ConfigurarParaExcluir()
-        {
-            TravarControles();
-            ConfigurarBotaoExcluir();
-        }
-        private void ConfigurarParaConsulta()
-        {
-            TravarControles();
-            OcultarBotoesSalvar();
-            ConfigurarBotaoCancelar();
-        }
-        private void OcultarBotoesSalvar()
-        {
-            tstbtnSalvar.Visible = false;
-            tstSeparadorSalvar.Visible = false;
-        }
-        private void ConfigurarBotaoCancelar()
-        {
-            tstbtnCancel.Text = "Fechar";
-            tstbtnCancel.ToolTipText = "Fechar";
-        }
-        private void ConfigurarBotaoExcluir()
-        {
-            tstbtnSalvar.Text = "Excluir";
-            tstbtnSalvar.ToolTipText = "Excluir";
-        }
-        private void ConfigurarControles()
+         private void SetControls()
         {
             txtNome.MaxLength = 100;
             txtEndereco.MaxLength = 100;
@@ -131,7 +79,7 @@ namespace FestasApp.Views.Clientes
             txtUF.ReadOnly = true;
         }
         //
-        // Método para carregar os dados do cliente nos controles do formulário
+        // Método para carregar os dados do cliente(recebido no parâmetro) nos controles do formulário
         private void CarregaDadosCliente()
         {
             if (cliente != null)
@@ -148,20 +96,16 @@ namespace FestasApp.Views.Clientes
                 txtUF.Text = cliente.UF;
             }
         }
-        //-----------------------------
+        //
         // Adiciona eventos aos botões da ToolStrip
         private void AddToolStripEventHandlers()
         {
             this.tstbtnSalvar.Click += TstbtnSalvar_Click;
         }
         //
-        //************************************************************
         // Evento click do botão SALVAR...
         private void TstbtnSalvar_Click(object? sender, EventArgs e)
         {
-            // Atualiza os dados do cliente
-            //AtualizarDadosCliente();
-
             // Verifica a operação: NOVO, EDITAR ou EXCLUIR
             if (operacao == OperacaoCRUD.NOVO || operacao == OperacaoCRUD.EDITAR)
             {
@@ -182,9 +126,8 @@ namespace FestasApp.Views.Clientes
                         {
                             // Exibe a mensagem de sucesso usando a nova função myMessageBox
                             myUtilities.myMessageBox(this, $"Cliente {cliente.Nome}\n salvo com sucesso!", "A d i c i o n a r", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                            this.Close(); // Fecha o formulário após salvar 
-                            //return;
+                            
+                            this.Close(); // Fecha o formulário após salvar
                         }
                     }
                     // Se a operação for "EDITAR"
@@ -208,7 +151,13 @@ namespace FestasApp.Views.Clientes
                         if (cliente.UpdateCliente())
                         {
                             // Exibe a mensagem de sucesso usando a nova função myMessageBox
-                            myUtilities.myMessageBox(this, $"Cliente {cliente.Nome}\n salvo com sucesso!", "S a l v a r", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            var message = $"""
+                                Cliente {cliente.Nome}
+
+                                Salvo com sucesso!
+                                """;
+
+                            myUtilities.myMessageBox(this, message, "S a l v a r", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                             this.Close(); // Fecha o formulário após salvar 
                             //return;
@@ -230,7 +179,13 @@ namespace FestasApp.Views.Clientes
                 try
                 {
                     // Exibe a mensagem de confirmação usando MessageBox.Show
-                    var result = myUtilities.myMessageBox(this, $"Deseja Excluir o cliente\n{cliente.Nome}?\n\nEsta ação não poderá ser desfeita.", "Excluir Cliente", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                    var message = $"""
+                        Deseja Excluir o cliente
+                        {cliente.Nome}?
+                        
+                        Esta ação não poderá ser desfeita."
+                        """;
+                    var result = myUtilities.myMessageBox(this, message, "Excluir Cliente", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
                     if (result == DialogResult.Yes)
                     {
@@ -261,7 +216,7 @@ namespace FestasApp.Views.Clientes
         // Atualiza os dados do cliente com base nos controles do formulário
         private void AtualizarDadosCliente()
         {
-            // Transfere os dados dos controles para o objeto cliente
+            // Transfere os dados dos controles para o objeto clsCliente
             //cliente.Id = Convert.ToInt32(lblID.Text);
             cliente.Nome = txtNome.Text;
             cliente.Telefone1 = txtTelefone1.Text;
@@ -299,12 +254,11 @@ namespace FestasApp.Views.Clientes
                 txtCpf.Focus();
                 return false;
             }
-
             // Se todas as validações passarem, retorna verdadeiro
             return true;
         }
         //
-        // Método para validar se houve alguma alteração nos dados do cliente
+        // Método para validar se houve alguma alteração nos dados do clsCliente
         private bool ValidarCliente()
         {
             // Compara os dados do cliente com os controles do formulário

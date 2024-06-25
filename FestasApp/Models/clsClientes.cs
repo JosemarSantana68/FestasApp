@@ -11,24 +11,21 @@
 //
 //************************************************************
 
-using FestasApp.Controllers; // namespace da conexão
-using MySql.Data.MySqlClient;
-using System.Data;
-
-namespace FestasApp.Views.Clientes
+namespace FestasApp.Models
 {
     public class clsClientes
     {
+
         // campos da tabela
-        // cli_id int NOT NULL auto_increment,
-        // cli_nome varchar(100) NOT NULL,
-        // cli_telefone1 varchar(11) NOT NULL,
-        // cli_telefone2 varchar(11),
-        // cli_cpf varchar(11),
-        // cli_endereco varchar(100),
-        // cli_cep varchar(10),
-        // cli_cidade varchar(50),
-        // cli_uf varchar(20),
+        // cli_id           int NOT NULL auto_increment,
+        // cli_nome         varchar(100) NOT NULL,
+        // cli_telefone1    varchar(11) NOT NULL,
+        // cli_telefone2    varchar(11),
+        // cli_cpf          varchar(11),
+        // cli_endereco     varchar(100),
+        // cli_cep          varchar(10),
+        // cli_cidade       varchar(50),
+        // cli_uf           varchar(20),
         // primary key(cli_id)
 
         // Propriedades correspondentes aos campos da tabela `tblclientes`
@@ -46,14 +43,14 @@ namespace FestasApp.Views.Clientes
         public clsClientes() { }
 
         // Construtor que inicializa todas as propriedades
-        public clsClientes(int id, 
-                        string nome, 
-                        string telefone1, 
-                        string telefone2, 
-                        string cpf, 
-                        string endereco, 
-                        string cep, 
-                        string cidade, 
+        public clsClientes(int id,
+                        string nome,
+                        string telefone1,
+                        string telefone2,
+                        string cpf,
+                        string endereco,
+                        string cep,
+                        string cidade,
                         string uf)
         {
             Id = id;
@@ -127,7 +124,7 @@ namespace FestasApp.Views.Clientes
         //------------------------------------------------------------
         // SELECT - WHERE (especifico)
         // Método para obter os dados de somente UM cliente a partir do seu ID
-        public void ReadUmCliente(int _idCliente)
+        public void ReadUmCliente(int IdCliente)
         {
             // Definindo a consulta SQL para selecionar o cliente pelo ID
             string sql = "SELECT * FROM tblClientes WHERE cli_id=@IdCliente";
@@ -142,15 +139,16 @@ namespace FestasApp.Views.Clientes
                     // Preparando o comando SQL com o parâmetro para evitar SQL Injection
                     using (MySqlCommand cmd = new MySqlCommand(sql, cn))
                     {
-                        cmd.Parameters.AddWithValue("@IdCliente", _idCliente);
-
+                        cmd.Parameters.AddWithValue("@IdCliente", IdCliente);
+                        // execute o DataReader para lê registro na tabela
                         using (MySqlDataReader dr = cmd.ExecuteReader())
                         {
                             if (dr.HasRows && dr.Read())
                             {
-                                // Atribuindo valores das colunas às propriedades da classe
-                                this.Id = Convert.ToInt32(dr["cli_id"]);
-                                this.Nome = dr["cli_nome"].ToString();
+                                // Atribuindo valores das colunas do dr às propriedades da classe
+                                //this.Id = Convert.ToInt32(dr["cli_id"]);
+                                this.Id = IdCliente;
+                                this.Nome = dr["cli_nome"] != DBNull.Value ? dr["cli_nome"].ToString() : null;
                                 this.Telefone1 = dr["cli_telefone1"].ToString();
                                 this.Telefone2 = dr["cli_telefone2"].ToString();
                                 this.CPF = dr["cli_cpf"].ToString();
@@ -172,6 +170,7 @@ namespace FestasApp.Views.Clientes
                 throw new Exception("Erro ao obter dados do cliente: " + ex.Message);
             }
         } // end GetUMCliente.
+
         //-------------------------------------------------
         // SELECT (Todos)
         // Obtém TODOS os clientes da tabela `tblclientes`.
@@ -211,7 +210,7 @@ namespace FestasApp.Views.Clientes
             {
                 // Trata outros tipos de exceções
                 //FormMenuBase.ShowMyMessageBox($"Erro: {ex.Message}", "Erro no Banco de Dados", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                
+
 
                 // Use a maneira adequada de exibir mensagens de erro em um contexto de UI.
                 // Evite MessageBox.Show em código de backend.
@@ -236,10 +235,10 @@ namespace FestasApp.Views.Clientes
                                 "WHERE cli_id=@Id";
             try
             {
-                using(MySqlConnection cn = new MySqlConnection(ConnMySql.strConnMySql))
+                using (MySqlConnection cn = new MySqlConnection(ConnMySql.strConnMySql))
                 {
                     cn.Open();
-                    using(MySqlCommand cmd = new MySqlCommand(sql, cn))
+                    using (MySqlCommand cmd = new MySqlCommand(sql, cn))
                     {
                         cmd.Parameters.AddWithValue("@Id", Id);
                         cmd.Parameters.AddWithValue("@Nome", Nome);
@@ -267,7 +266,7 @@ namespace FestasApp.Views.Clientes
                 throw new Exception($"Erro ao salvar cliente: {ex.Message}");
             }
         }
-        
+
         //-------------------------------------------------------
         // Método para excluir um cliente da tabela `tblclientes`
         public bool DeleteCliente()
@@ -297,6 +296,6 @@ namespace FestasApp.Views.Clientes
                 throw new Exception($"Erro ao excluir cliente: {ex.Message}");
             }
         }
-
-    } // end class
+    } // end class clsClientes
 } // end namespace
+ 

@@ -36,10 +36,10 @@
             label5 = new Label();
             label6 = new Label();
             lblID = new Label();
-            txtUserNome = new MyFramework.myControls.myTextBox();
-            txtUserLogin = new MyFramework.myControls.myTextBox();
-            txtUserEmail = new MyFramework.myControls.myTextBox();
-            txtUserSenha = new MyFramework.myControls.myTextBox();
+            txtUserNome = new myTextBox();
+            txtUserLogin = new myTextBox();
+            txtUserEmail = new myTextBox();
+            txtUserSenha = new myTextBox();
             chkUserAtivo = new CheckBox();
             pnlTitulo.SuspendLayout();
             pnlCentral.SuspendLayout();
@@ -62,7 +62,7 @@
             // 
             // lblTitulo
             // 
-            lblTitulo.Image = Properties.Resources.pessoas_funcionarios_36;
+            lblTitulo.Image = Resources.pessoas_funcionarios_36;
             // 
             // pnlCentral
             // 
@@ -256,10 +256,10 @@
         private Label label5;
         private Label label6;
         private Label lblID;
-        private MyFramework.myControls.myTextBox txtUserNome;
-        private MyFramework.myControls.myTextBox txtUserLogin;
-        private MyFramework.myControls.myTextBox txtUserEmail;
-        private MyFramework.myControls.myTextBox txtUserSenha;
+        private myTextBox txtUserNome;
+        private myTextBox txtUserLogin;
+        private myTextBox txtUserEmail;
+        private myTextBox txtUserSenha;
         private CheckBox chkUserAtivo;
     }
 }

@@ -11,10 +11,6 @@
 //   CLASSE DE USUARIOS - C.R.U.D
 //
 //************************************************************
-using FestasApp.Controllers;
-using MySql.Data.MySqlClient;
-using System.Data;
-
 // TABLE `tblusuarios` 
 //  `user_id`       int NOT NULL AUTO_INCREMENT,
 //  `user_nome`     varchar(100)    NOT NULL,
@@ -23,7 +19,7 @@ using System.Data;
 //  `user_senha`    varchar(50)     NOT NULL,
 //  `user_ativo`    tinyint         DEFAULT NULL,
 
-namespace FestasApp.Views.Usuarios
+namespace FestasApp.Models
 {
     public class clsUsuarios
     {
@@ -39,11 +35,11 @@ namespace FestasApp.Views.Usuarios
         public clsUsuarios() { }
 
         // Construtor que inicializa todas as propriedades
-        public clsUsuarios(int id, 
-                            string nome, 
-                            string login, 
-                            string email, 
-                            string senha, 
+        public clsUsuarios(int id,
+                            string nome,
+                            string login,
+                            string email,
+                            string senha,
                             bool ativo)
         {
             Id = id;
@@ -125,7 +121,7 @@ namespace FestasApp.Views.Usuarios
                                 Email = dr["user_email"].ToString();
                                 Senha = dr["user_senha"].ToString();
                                 //Ativo = Convert.ToBoolean(dr["user_ativo"]);
-                                
+
                                 // se == 1 é true, senão false...
                                 Ativo = Convert.ToInt32(dr["user_ativo"]) == 1; // Converter tinyint para booleano
 

@@ -65,7 +65,7 @@
             // 
             // tstbtnFechar
             // 
-            tstbtnFechar.Image = Properties.Resources.Cancel_48;
+            tstbtnFechar.Image = Resources.fechar;
             tstbtnFechar.ImageTransparentColor = Color.Magenta;
             tstbtnFechar.Name = "tstbtnFechar";
             tstbtnFechar.Size = new Size(53, 47);
@@ -80,7 +80,7 @@
             // 
             // tstbtnNovo
             // 
-            tstbtnNovo.Image = Properties.Resources.icons8_add_64;
+            tstbtnNovo.Image = Resources.add;
             tstbtnNovo.ImageTransparentColor = Color.Magenta;
             tstbtnNovo.Name = "tstbtnNovo";
             tstbtnNovo.Size = new Size(46, 47);
@@ -94,7 +94,7 @@
             // 
             // tstbtnEditar
             // 
-            tstbtnEditar.Image = Properties.Resources.icons8_edit_64;
+            tstbtnEditar.Image = Resources.editar;
             tstbtnEditar.ImageTransparentColor = Color.Magenta;
             tstbtnEditar.Name = "tstbtnEditar";
             tstbtnEditar.Size = new Size(48, 47);
@@ -108,7 +108,7 @@
             // 
             // tstbtnConsultar
             // 
-            tstbtnConsultar.Image = Properties.Resources.icons8_info_64;
+            tstbtnConsultar.Image = Resources.folder_open;
             tstbtnConsultar.ImageTransparentColor = Color.Magenta;
             tstbtnConsultar.Name = "tstbtnConsultar";
             tstbtnConsultar.Size = new Size(72, 47);
@@ -122,7 +122,7 @@
             // 
             // tstbtnExcluir
             // 
-            tstbtnExcluir.Image = Properties.Resources.icons8_delete_64;
+            tstbtnExcluir.Image = Resources.fechar_close;
             tstbtnExcluir.ImageTransparentColor = Color.Magenta;
             tstbtnExcluir.Name = "tstbtnExcluir";
             tstbtnExcluir.Size = new Size(51, 47);

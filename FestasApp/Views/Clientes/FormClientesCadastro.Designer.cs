@@ -34,13 +34,13 @@
             tableLayoutPanel1 = new TableLayoutPanel();
             lblCliente = new Label();
             txtPesquisaCliente = new TextBox();
-            dtgClientes = new MyFramework.myControls.myDataGridView();
+            dtgClientes = new myDataGridView();
             pnlTitulo.SuspendLayout();
             pnlCabecalho.SuspendLayout();
             pnlTopo.SuspendLayout();
             pnlMeio.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dtgClientes).BeginInit();
+            ((ISupportInitialize)dtgClientes).BeginInit();
             SuspendLayout();
             // 
             // pnlRodape
@@ -109,6 +109,7 @@
             txtPesquisaCliente.Location = new Point(298, 12);
             txtPesquisaCliente.MaxLength = 50;
             txtPesquisaCliente.Name = "txtPesquisaCliente";
+            txtPesquisaCliente.PlaceholderText = "Pesquisar Nome do Cliente";
             txtPesquisaCliente.Size = new Size(298, 25);
             txtPesquisaCliente.TabIndex = 1;
             txtPesquisaCliente.TextChanged += txtPesquisaCliente_TextChanged;
@@ -121,6 +122,7 @@
             dtgClientes.AllowUserToResizeRows = false;
             dataGridViewCellStyle1.BackColor = Color.LightGoldenrodYellow;
             dtgClientes.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dtgClientes.BackgroundColor = Color.White;
             dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.BottomCenter;
             dataGridViewCellStyle2.BackColor = Color.DarkGoldenrod;
             dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
@@ -163,7 +165,7 @@
             pnlMeio.ResumeLayout(false);
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)dtgClientes).EndInit();
+            ((ISupportInitialize)dtgClientes).EndInit();
             ResumeLayout(false);
         }
 
@@ -172,6 +174,6 @@
         private TableLayoutPanel tableLayoutPanel1;
         private Label lblCliente;
         private TextBox txtPesquisaCliente;
-        private MyFramework.myControls.myDataGridView dtgClientes;
+        private MyFramework.myControls.myDataGrids.myDataGridView dtgClientes;
     }
 }

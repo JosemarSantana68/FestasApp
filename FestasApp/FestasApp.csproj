@@ -8,6 +8,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+	
   <ItemGroup>
     <Compile Remove="Views\Bases\FormFundo.cs" />
     <Compile Remove="Views\Bases\FormFundo.Designer.cs" />
@@ -18,14 +19,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
     <Folder Include="Repositories\" />
     <Folder Include="Services\" />
-    <Folder Include="Resources\" />
+    <Folder Include="ViewModels\" />
+    <Folder Include="Views\FestasDetalhes\" />
+    <Folder Include="Views\FestasPacotes\" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="MySql.Data" Version="8.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\MyFramework\MyFramework\MyFramework.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -40,6 +46,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -49,4 +60,11 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+	
 </Project>

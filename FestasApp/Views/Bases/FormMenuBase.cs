@@ -11,13 +11,6 @@
 //
 //************************************************************
 
-using FestasApp.Properties;
-using FestasApp.Views;
-using FestasApp.Views.Calendario;
-using FestasApp.Views.Usuarios;
-using MyFramework.myCodes;
-using System.Runtime.InteropServices;
-
 namespace FestasApp
 {
     public partial class FormMenuBase : Form
@@ -39,6 +32,7 @@ namespace FestasApp
 
             // Chama o método para configurar propriedades MDI...
             MdiPropiedades();
+                     
         }
         //
         // evento load
@@ -186,8 +180,8 @@ namespace FestasApp
             // se o menu está expandido...
             if (sidebarExpand)
             {
-                BarraLateralMenu.Width -= 5;
-                if (BarraLateralMenu.Width <= 70)
+                pnlBarraLateralMenu.Width -= 10;
+                if (pnlBarraLateralMenu.Width <= 70)
                 {
                     sidebarExpand = false;
                     tmSidebarTransition.Stop();
@@ -196,17 +190,15 @@ namespace FestasApp
             // Se o menu está retraido...
             else
             {
-                BarraLateralMenu.Width += 10;
-                if (BarraLateralMenu.Width >= 200)
+                pnlBarraLateralMenu.Width += 10;
+                if (pnlBarraLateralMenu.Width >= 200)
                 {
                     sidebarExpand = true;
                     tmSidebarTransition.Stop();
                 }
             }
         } // end menu responsivo...
-
-        //----------------------
-        // SUBMENU FINANCEIRO RESPONSIVO...
+        //
         // Evento para ocultar ou mostrar o SUBMENU-financeiro ao clicar no btnFinanceiro...
         //
         // Indica se o submenu financeiro está expandido...
@@ -222,8 +214,8 @@ namespace FestasApp
             // expande
             if (subMenuFinanceiroExpand == false)
             {
-                pnlSubMenuFinanceiro.Height += 10;
-                if (pnlSubMenuFinanceiro.Height >= 138)
+                ContainerSubFinanceiro.Height += 10;
+                if (ContainerSubFinanceiro.Height >= 132)
                 {
                     TmSubMenuFinanceiroTransition.Stop();
                     subMenuFinanceiroExpand = true;
@@ -231,8 +223,8 @@ namespace FestasApp
             }
             else // esconde
             {
-                pnlSubMenuFinanceiro.Height -= 10;
-                if (pnlSubMenuFinanceiro.Height <= 49)
+                ContainerSubFinanceiro.Height -= 10;
+                if (ContainerSubFinanceiro.Height <= 46)
                 {
                     TmSubMenuFinanceiroTransition.Stop();
                     subMenuFinanceiroExpand = false;
@@ -244,21 +236,14 @@ namespace FestasApp
             // ao expandir
             if (subMenuFinanceiroExpand == false)
             {
-                pnlSubMenuFinanceiro.BackColor = Color.FromArgb(37, 46, 59);
-                btnContasPagar.BackColor = Color.FromArgb(37, 46, 59);
-                btnContasReceber.BackColor = Color.FromArgb(37, 46, 59);
-                //btnFinanceiro.BackColor = Color.FromArgb(37, 46, 59);
+                ContainerSubFinanceiro.BackColor = Color.FromArgb(37, 46, 59);
             }
             else // ao retrair
             {
-                pnlSubMenuFinanceiro.BackColor = Color.FromArgb(26, 32, 40);
-                btnContasPagar.BackColor = Color.FromArgb(26, 32, 40);
-                btnContasReceber.BackColor = Color.FromArgb(26, 32, 40);
-                //btnFinanceiro.BackColor = Color.FromArgb(26, 32, 40);              
+                ContainerSubFinanceiro.BackColor = Color.FromArgb(26, 32, 40);            
             }
         }
         #endregion menu lateral e sub menu finaceiro responsivo
-
         //
         // 
         // btn FESTAS...
@@ -286,7 +271,7 @@ namespace FestasApp
         //
         private void btnFornecedor_Click(object sender, EventArgs e)
         {
-
+            // chamar form fornecedor
         }
         //
         // USUARIOS...
@@ -295,7 +280,7 @@ namespace FestasApp
         {
             AbrirFormulario(new FormUsuariosCadastro(), manterAberto: false);
         }
-        //----------------------------------------------------------------
+        //
         // método para ABRIR formulários
         //
         private void AbrirFormulario(Form form, bool manterAberto = false)
@@ -349,11 +334,12 @@ namespace FestasApp
             }
         }
 
-        //***************************************************************************************************************
+        //***********************************************************************************************************
         // Para evitar a necessidade de verificar a nulidade de FormMenuBase.Instance repetidamente
         // antes de chamar myUtilities.myMessageBox,
         // criar um método auxiliar dentro da classe FormMenuBase que encapsule essa verificação.
         // Dessa forma, centraliza a verificação em um único lugar e simplifica o código em outras partes do programa.
+        //***********************************************************************************************************
         public static void ShowMyMessageBox(string mensagem, string titulo = "Mensagem", MessageBoxButtons botoes = MessageBoxButtons.OK, MessageBoxIcon icone = MessageBoxIcon.Information, int opacidade = 60, Color cor = default)
         {
             if (Instance != null)

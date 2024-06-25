@@ -7,15 +7,9 @@
 //   Inicio: 23/05/2024
 //   Ultima Alteração: 06/06/2024
 //   
-//   FORMULÁRIO DE CLIENTE
+//   FORMULÁRIO DE CLIENTES - CADASTRO
 //
 //************************************************************
-
-using FestasApp.Views.Clientes;
-using MySql.Data.MySqlClient;
-using System.ComponentModel;
-using System.Data;
-using FestasApp.Enums;
 
 namespace FestasApp.Views
 {
@@ -103,9 +97,8 @@ namespace FestasApp.Views
                 int rowIndex = dtgClientes.CurrentRow.Index;
 
                 // Verifique se a célula da coluna desejada, ID, não é nula
-                if (dtgClientes.Rows[rowIndex].Cells[0].Value != null)
+                if (dtgClientes.Rows[rowIndex].Cells[ColId].Value != null)
                 {
-
                     try
                     {
                         // carrega os dados do datagrid no objeto cliente...
@@ -113,26 +106,25 @@ namespace FestasApp.Views
                         {
                             // Tente converter o valor da célula para inteiro
                             Id = Convert.ToInt32(dtgClientes.Rows[rowIndex].Cells[0].Value),
-                            //
-                            Nome = dtgClientes.Rows[rowIndex].Cells[1].Value.ToString(),
-                            Telefone1 = dtgClientes.Rows[rowIndex].Cells[2].Value.ToString(),
-                            Telefone2 = dtgClientes.Rows[rowIndex].Cells[3].Value.ToString(),
-                            CPF = dtgClientes.Rows[rowIndex].Cells[4].Value.ToString(),
-                            Endereco = dtgClientes.Rows[rowIndex].Cells[5].Value.ToString(),
-                            CEP = dtgClientes.Rows[rowIndex].Cells[6].Value.ToString(),
-                            Cidade = dtgClientes.Rows[rowIndex].Cells[7].Value.ToString(),
-                            UF = dtgClientes.Rows[rowIndex].Cells[8].Value.ToString()
+                            // carrega os dados do datagrid no objeto clsCliente
+                            Nome = dtgClientes.Rows[rowIndex].Cells[ColNomeCliente].Value.ToString(),
+                            Telefone1 = dtgClientes.Rows[rowIndex].Cells[ColTelefone1].Value.ToString(),
+                            Telefone2 = dtgClientes.Rows[rowIndex].Cells[ColTelefone2].Value.ToString(),
+                            CPF = dtgClientes.Rows[rowIndex].Cells[ColCpf].Value.ToString(),
+                            Endereco = dtgClientes.Rows[rowIndex].Cells[ColEndereco].Value.ToString(),
+                            CEP = dtgClientes.Rows[rowIndex].Cells[ColCep].Value.ToString(),
+                            Cidade = dtgClientes.Rows[rowIndex].Cells[Colcidade].Value.ToString(),
+                            UF = dtgClientes.Rows[rowIndex].Cells[ColUf].Value.ToString()
                         };
 
                         // Abra o formulárioCRUD de edição de clientes passando o cliente e operação
                         using (FormClientesCRUD frm = new FormClientesCRUD(cliente, operacao))
                         {
                             // Usar a sombra para exibir o FormClientesCRUD
-                            //if (FormMenuBase.Instance != null)
-                            //myUtilities.CreateModalOverlay(FormMenuBase.Instance, null, frm);
                             FormMenuBase.ShowModalOverlay(frm);
-
+                            
                             // quando volta do CRUD, atualiza dataGrid com dados da tabela no BD
+                            
                             CarregarDtgClientes();
                         }
                     }
@@ -160,10 +152,9 @@ namespace FestasApp.Views
             }
 
         } // end AbrirFormClientesCRUD
-
-        //-------------------------------
+        //
         // carregar dataGrid com dados da tabela tblclientes do banco de dados
-        private void CarregarDtgClientes()
+        public void CarregarDtgClientes()
         {
             try
             {
@@ -174,87 +165,76 @@ namespace FestasApp.Views
                 {
                     dtgClientes.DataSource = dtClientes;
                     ConfigurarColunasDtgClientes();
+                    TratarControles(false); // Habilita botões de CRUD
                 }
                 else
                 {
                     FormMenuBase.ShowMyMessageBox("Nenhum cliente encontrado.", "Informação", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    TratarControles(true); // Desabilita botões de CRUD
                 }
             }
             catch (MySqlException mysqlEx)
             {
                 // Trata erros específicos do MySQL
                 FormMenuBase.ShowMyMessageBox($"Erro no banco de dados: {mysqlEx.Message}", "SQL exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                TratarControles(true); // Desabilita botões de CRUD em caso de erro
             }
             catch (Exception ex)
             {
                 // Trata outros tipos de exceções
                 FormMenuBase.ShowMyMessageBox($"Erro: {ex.Message}", "Erro no Banco de Dados", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                TratarControles(true); // Desabilita botões de CRUD em caso de erro
             }
         }
-        //--------------------------------------------------
+        //
+        private void TratarControles(bool desabilitar)
+        {
+            // controles deste form
+            if (txtPesquisaCliente != null) txtPesquisaCliente.Enabled = !desabilitar;
+            // controles do formBase
+            TratarBtnCrud(desabilitar);
+        }
+        //
         // Configura o DataGridView para exibir os clientes.
+        //--------------------------------------------
+        // DataGridViews
+        //
+        private const int ColId = 0;
+        private const int ColNomeCliente = 1;
+        private const int ColTelefone1 = 2;
+        private const int ColTelefone2 = 3;
+        private const int ColCpf = 4;
+        private const int ColEndereco = 5;
+        private const int ColCep = 6;
+        private const int Colcidade = 7;
+        private const int ColUf = 8;
         private void ConfigurarColunasDtgClientes()
         {
-            //dtgClientes.Columns.Clear(); // Limpa quaisquer colunas existentes
-            //-----------------------------------------
-            // Colunas
-            //
-            int col = 0; // 0
-            dtgClientes.Columns[col].HeaderText = "ID";
-            //dtgClientes.Columns[col].Visible = false;
-            dtgClientes.Columns[col].Width = 30;
-            dtgClientes.Columns[col].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-
-            col++;   // 1
-            dtgClientes.Columns[col].HeaderText = "Nome Cliente";
-            dtgClientes.Columns[col].Width = 220;
-            dtgClientes.Columns[col].DefaultCellStyle.Padding = new Padding(5, 0, 0, 0);
-
-            col++;   // 2
-            dtgClientes.Columns[col].HeaderText = "Telefone-1";
-            dtgClientes.Columns[col].Width = 120;
-            dtgClientes.Columns[col].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-
-            col++;   // 3
-            dtgClientes.Columns[col].HeaderText = "Telefone-2";
-            dtgClientes.Columns[col].Width = 120;
-            dtgClientes.Columns[col].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-
-            col++;   // 4
-            dtgClientes.Columns[col].HeaderText = "CPF";
-            dtgClientes.Columns[col].Width = 100;
-
-            col++;   // 5
-            dtgClientes.Columns[col].HeaderText = "Endereço";
-            dtgClientes.Columns[col].Width = 220;
-
-            col++;   // 6
-            dtgClientes.Columns[col].HeaderText = "CEP";
-            dtgClientes.Columns[col].Width = 80;
-
-            col++;   // 7
-            dtgClientes.Columns[col].HeaderText = "Cidade";
-            dtgClientes.Columns[col].Width = 80;
-
-            col++;   // 8
-            dtgClientes.Columns[col].HeaderText = "UF";
-            dtgClientes.Columns[col].Width = 80;
-            dtgClientes.Columns[col].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            DataGridView dtg = dtgClientes;
+            // configurar colunas
+            myFunctions.ConfigurarColuna(dtg, ColId, "ID", 30, DataGridViewContentAlignment.MiddleCenter);
+            myFunctions.ConfigurarColuna(dtg, ColNomeCliente, "Nome Cliente", 220, padding: new Padding(5, 0, 0, 0));
+            myFunctions.ConfigurarColuna(dtg, ColTelefone1, "Telefone-1", 120, DataGridViewContentAlignment.MiddleCenter);
+            myFunctions.ConfigurarColuna(dtg, ColTelefone2, "Telefone-2", 120, DataGridViewContentAlignment.MiddleCenter);
+            myFunctions.ConfigurarColuna(dtg, ColCpf, "CPF", 100, DataGridViewContentAlignment.MiddleCenter);
+            myFunctions.ConfigurarColuna(dtg, ColEndereco, "Endereço", 220);
+            myFunctions.ConfigurarColuna(dtg, ColCep, "CEP", 80, DataGridViewContentAlignment.MiddleCenter);
+            myFunctions.ConfigurarColuna(dtg, Colcidade, "Cidade", 120);
+            myFunctions.ConfigurarColuna(dtg, ColUf, "UF", 80, DataGridViewContentAlignment.MiddleCenter);
             //
             // ordenar datagrid - Nome
-            dtgClientes.Sort(dtgClientes.Columns[1], ListSortDirection.Ascending);
+            dtgClientes.Sort(dtgClientes.Columns[ColNomeCliente], ListSortDirection.Ascending);
 
             // Adiciona o evento CellFormatting para formatação dos dados
             dtgClientes.CellFormatting += DtgClientes_CellFormatting;
 
         } // end ConfigurarDtgClientes
-
-        //-----------------------------------------------------------
+        //
         // Evento disparado para formatar as células do DataGridView.
         private void DtgClientes_CellFormatting(object? sender, DataGridViewCellFormattingEventArgs e)
         {
             // Formatar Telefone-1
-            if (dtgClientes.Columns[e.ColumnIndex].HeaderText == "Telefone-1" && e.Value != null)
+            if (e.ColumnIndex == ColTelefone1 && e.Value != null)
             {
                 string? value = e.Value.ToString();
                 if (!string.IsNullOrEmpty(value) && value.Length == 11)
@@ -264,7 +244,7 @@ namespace FestasApp.Views
                 }
             }
             // Formatar Telefone-2
-            if (dtgClientes.Columns[e.ColumnIndex].HeaderText == "Telefone-2" && e.Value != null)
+            if (e.ColumnIndex == ColTelefone2 && e.Value != null)
             {
                 string? value = e.Value.ToString();
                 if (!string.IsNullOrEmpty(value) && value.Length == 11)
@@ -274,7 +254,7 @@ namespace FestasApp.Views
                 }
             }
             // Formatar CPF
-            if (dtgClientes.Columns[e.ColumnIndex].HeaderText == "CPF" && e.Value != null)
+            if (e.ColumnIndex == ColCpf && e.Value != null)
             {
                 string? value = e.Value.ToString();
                 if (!string.IsNullOrEmpty(value) && value.Length == 11)
@@ -284,7 +264,7 @@ namespace FestasApp.Views
                 }
             }
             // Formatar CEP
-            if (dtgClientes.Columns[e.ColumnIndex].HeaderText == "CEP" && e.Value != null)
+            if (e.ColumnIndex == ColCep && e.Value != null)
             {
                 string? value = e.Value.ToString();
                 if (!string.IsNullOrEmpty(value) && value.Length == 8)

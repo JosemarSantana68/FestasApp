@@ -12,7 +12,7 @@
 //
 //************************************************************
 
-namespace FestasApp.Views.Calendario
+namespace FestasApp.Models
 {
     public class clsMonthlyCalendarInfo
     {
