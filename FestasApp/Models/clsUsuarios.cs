@@ -21,15 +21,17 @@
 
 namespace FestasApp.Models
 {
+    [Table("tblusuarios")]
     public class clsUsuarios
     {
         // Propriedades correspondentes aos campos da tabela `tblUsuarios`
-        public int Id { get; set; }
-        public string? Nome { get; set; }
-        public string? Login { get; set; }
-        public string? Email { get; set; }
-        public string? Senha { get; set; }
-        public bool Ativo { get; set; }
+        [Key]
+        public int user_id { get; set; }
+        public string? user_nome { get; set; }
+        public string? user_login { get; set; }
+        public string? user_email { get; set; }
+        public string? user_senha { get; set; }
+        public bool user_ativo { get; set; }
 
         // Construtor padrão
         public clsUsuarios() { }
@@ -42,12 +44,12 @@ namespace FestasApp.Models
                             string senha,
                             bool ativo)
         {
-            Id = id;
-            Nome = nome;
-            Login = login;
-            Email = email;
-            Senha = senha;
-            Ativo = ativo;
+            user_id = id;
+            user_nome = nome;
+            user_login = login;
+            user_email = email;
+            user_senha = senha;
+            user_ativo = ativo;
         }
         //
         // CREATE.R.U.D.
@@ -72,12 +74,12 @@ namespace FestasApp.Models
                     cn.Open();
                     using (MySqlCommand cmd = new MySqlCommand(sql, cn))
                     {
-                        cmd.Parameters.AddWithValue("@Nome", Nome);
-                        cmd.Parameters.AddWithValue("@Login", Login);
-                        cmd.Parameters.AddWithValue("@Email", Email);
-                        cmd.Parameters.AddWithValue("@Senha", Senha);
+                        cmd.Parameters.AddWithValue("@Nome", user_nome);
+                        cmd.Parameters.AddWithValue("@Login", user_login);
+                        cmd.Parameters.AddWithValue("@Email", user_email);
+                        cmd.Parameters.AddWithValue("@Senha", user_senha);
                         // se Ativo == true, grava 1 na tabela, se não grava 0
-                        cmd.Parameters.AddWithValue("@Ativo", Ativo ? 1 : 0); // Converter booleano para tinyint
+                        cmd.Parameters.AddWithValue("@Ativo", user_ativo ? 1 : 0); // Converter booleano para tinyint
 
                         cmd.ExecuteNonQuery();
                     }
@@ -115,15 +117,15 @@ namespace FestasApp.Models
                             if (dr.HasRows && dr.Read())
                             {
                                 // Atribuindo valores das colunas às propriedades da classe
-                                Id = Convert.ToInt32(dr["user_id"]);
-                                Nome = dr["user_nome"].ToString();
-                                Login = dr["user_login"].ToString();
-                                Email = dr["user_email"].ToString();
-                                Senha = dr["user_senha"].ToString();
+                                user_id = Convert.ToInt32(dr["user_id"]);
+                                user_nome = dr["user_nome"].ToString();
+                                user_login = dr["user_login"].ToString();
+                                user_email = dr["user_email"].ToString();
+                                user_senha = dr["user_senha"].ToString();
                                 //Ativo = Convert.ToBoolean(dr["user_ativo"]);
 
                                 // se == 1 é true, senão false...
-                                Ativo = Convert.ToInt32(dr["user_ativo"]) == 1; // Converter tinyint para booleano
+                                user_ativo = Convert.ToInt32(dr["user_ativo"]) == 1; // Converter tinyint para booleano
 
                             }
                         }
@@ -180,13 +182,13 @@ namespace FestasApp.Models
                     cn.Open();
                     using (MySqlCommand cmd = new MySqlCommand(sql, cn))
                     {
-                        cmd.Parameters.AddWithValue("@Id", Id);
-                        cmd.Parameters.AddWithValue("@Nome", Nome);
-                        cmd.Parameters.AddWithValue("@Login", Login);
-                        cmd.Parameters.AddWithValue("@Email", Email);
-                        cmd.Parameters.AddWithValue("@Senha", Senha);
+                        cmd.Parameters.AddWithValue("@Id", user_id);
+                        cmd.Parameters.AddWithValue("@Nome", user_nome);
+                        cmd.Parameters.AddWithValue("@Login", user_login);
+                        cmd.Parameters.AddWithValue("@Email", user_email);
+                        cmd.Parameters.AddWithValue("@Senha", user_senha);
                         // se Ativo == true, grava 1 na tabela, se não grava 0
-                        cmd.Parameters.AddWithValue("@Ativo", Ativo ? 1 : 0); // Converter booleano para tinyint
+                        cmd.Parameters.AddWithValue("@Ativo", user_ativo ? 1 : 0); // Converter booleano para tinyint
 
                         cmd.ExecuteNonQuery();
                     }
@@ -217,7 +219,7 @@ namespace FestasApp.Models
                     cn.Open();
                     using (MySqlCommand cmd = new MySqlCommand(sql, cn))
                     {
-                        cmd.Parameters.AddWithValue("@Id", Id);
+                        cmd.Parameters.AddWithValue("@Id", user_id);
                         cmd.ExecuteNonQuery();
                     }
                 }

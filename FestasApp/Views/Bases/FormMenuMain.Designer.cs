@@ -4,7 +4,7 @@ using MyFramework.myControls.myButtons;
 
 namespace FestasApp
 {
-    partial class FormMenuBase
+    partial class FormMenuMain
     {
         /// <summary>
         ///  Required designer variable.
@@ -33,7 +33,7 @@ namespace FestasApp
         private void InitializeComponent()
         {
             components = new Container();
-            ComponentResourceManager resources = new ComponentResourceManager(typeof(FormMenuBase));
+            ComponentResourceManager resources = new ComponentResourceManager(typeof(FormMenuMain));
             PnlBarraTitulo = new Panel();
             picMinimizar = new PictureBox();
             pnlMaxRest = new Panel();
@@ -72,6 +72,8 @@ namespace FestasApp
             btnPacotesFestas = new myButtonMenu();
             ContainerSubFinanceiro = new FlowLayoutPanel();
             btnUsuarios = new myButtonMenu();
+            pnlStatusRodape = new Panel();
+            lblStatusConn = new Label();
             PnlBarraTitulo.SuspendLayout();
             ((ISupportInitialize)picMinimizar).BeginInit();
             pnlMaxRest.SuspendLayout();
@@ -93,6 +95,7 @@ namespace FestasApp
             pnlBarraLateralMenu.SuspendLayout();
             flowBarraLateral.SuspendLayout();
             ContainerSubFinanceiro.SuspendLayout();
+            pnlStatusRodape.SuspendLayout();
             SuspendLayout();
             // 
             // PnlBarraTitulo
@@ -443,8 +446,10 @@ namespace FestasApp
             // 
             // pnlBarraLateralMenu
             // 
+            pnlBarraLateralMenu.BackColor = Color.FromArgb(26, 32, 40);
             pnlBarraLateralMenu.Controls.Add(flowBarraLateral);
             pnlBarraLateralMenu.Controls.Add(pnlTopoLogo);
+            pnlBarraLateralMenu.Controls.Add(pnlStatusRodape);
             pnlBarraLateralMenu.Dock = DockStyle.Left;
             pnlBarraLateralMenu.Location = new Point(0, 30);
             pnlBarraLateralMenu.Name = "pnlBarraLateralMenu";
@@ -464,7 +469,7 @@ namespace FestasApp
             flowBarraLateral.Dock = DockStyle.Fill;
             flowBarraLateral.Location = new Point(0, 86);
             flowBarraLateral.Name = "flowBarraLateral";
-            flowBarraLateral.Size = new Size(200, 469);
+            flowBarraLateral.Size = new Size(200, 446);
             flowBarraLateral.TabIndex = 16;
             // 
             // btnFestas
@@ -598,7 +603,28 @@ namespace FestasApp
             btnUsuarios.UseVisualStyleBackColor = false;
             btnUsuarios.Click += btnUsuarios_Click;
             // 
-            // FormMenuBase
+            // pnlStatusRodape
+            // 
+            pnlStatusRodape.BackColor = Color.Transparent;
+            pnlStatusRodape.Controls.Add(lblStatusConn);
+            pnlStatusRodape.Dock = DockStyle.Bottom;
+            pnlStatusRodape.Location = new Point(0, 532);
+            pnlStatusRodape.Name = "pnlStatusRodape";
+            pnlStatusRodape.Size = new Size(200, 23);
+            pnlStatusRodape.TabIndex = 17;
+            // 
+            // lblStatusConn
+            // 
+            lblStatusConn.Dock = DockStyle.Top;
+            lblStatusConn.ForeColor = Color.Red;
+            lblStatusConn.Location = new Point(0, 0);
+            lblStatusConn.Name = "lblStatusConn";
+            lblStatusConn.Size = new Size(200, 19);
+            lblStatusConn.TabIndex = 0;
+            lblStatusConn.Text = "Connection Off";
+            lblStatusConn.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // FormMenuMain
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -607,7 +633,7 @@ namespace FestasApp
             Controls.Add(pnlBarraLateralMenu);
             Controls.Add(PnlBarraTitulo);
             Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            Name = "FormMenuBase";
+            Name = "FormMenuMain";
             Text = "FormMenuBase";
             PnlBarraTitulo.ResumeLayout(false);
             ((ISupportInitialize)picMinimizar).EndInit();
@@ -630,6 +656,7 @@ namespace FestasApp
             pnlBarraLateralMenu.ResumeLayout(false);
             flowBarraLateral.ResumeLayout(false);
             ContainerSubFinanceiro.ResumeLayout(false);
+            pnlStatusRodape.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -673,5 +700,7 @@ namespace FestasApp
         private myButtonMenu btnContasPagar;
         private Panel pnlLogoHome;
         private FlowLayoutPanel ContainerSubFinanceiro;
+        private Panel pnlStatusRodape;
+        public Label lblStatusConn;
     }
 }

@@ -11,6 +11,8 @@
 //
 //************************************************************
 
+using MySqlX.XDevAPI;
+
 namespace FestasApp.Views
 {
     public partial class FormClientesCadastro : FormBaseCadastro
@@ -19,8 +21,10 @@ namespace FestasApp.Views
         public FormClientesCadastro()
         {
             InitializeComponent();
-            ConfigurarForm();
+            SuspendLayout();
+            SetThisForm();
             AddToolStripEventHandlers();
+            ResumeLayout(false);
         }
         //
         // Evento disparado quando o formulário de cliente é carregado
@@ -31,7 +35,7 @@ namespace FestasApp.Views
         }
         //
         // Configurações iniciais do formulário de cliente
-        private void ConfigurarForm()
+        private void SetThisForm()
         {
             // Adicione aqui as configurações específicas para o formulário de cliente
             // Remove a borda do formulário
@@ -61,7 +65,7 @@ namespace FestasApp.Views
             FormClientesCRUD frm = new FormClientesCRUD(cliente, operacao);
 
             // Usar a CreateModalOverlay para exibir o FormClientesCRUD
-            FormMenuBase.ShowModalOverlay(frm);
+            FormMenuMain.ShowModalOverlay(frm);
 
             // quando volta do CRUD, atualiza dataGrid com dados da tabela no BD
             CarregarDtgClientes();
@@ -90,67 +94,27 @@ namespace FestasApp.Views
         //---------------------------------------------------------------
         private void AbrirFormClientesCRUD(OperacaoCRUD operacao)
         {
-            // Verifique se há uma linha selecionada no DataGridView
-            if (dtgClientes.CurrentRow != null)
+            AbrirFormCRUDGenerico(
+            dtg: dtgClientes,
+            colIdIndex: ColId,
+            mapper: row => new clsClientes //Func<DataGridViewRow, T> mapper,
             {
-                // Pegue o índice da linha atual
-                int rowIndex = dtgClientes.CurrentRow.Index;
-
-                // Verifique se a célula da coluna desejada, ID, não é nula
-                if (dtgClientes.Rows[rowIndex].Cells[ColId].Value != null)
-                {
-                    try
-                    {
-                        // carrega os dados do datagrid no objeto cliente...
-                        clsClientes cliente = new clsClientes
-                        {
-                            // Tente converter o valor da célula para inteiro
-                            Id = Convert.ToInt32(dtgClientes.Rows[rowIndex].Cells[0].Value),
-                            // carrega os dados do datagrid no objeto clsCliente
-                            Nome = dtgClientes.Rows[rowIndex].Cells[ColNomeCliente].Value.ToString(),
-                            Telefone1 = dtgClientes.Rows[rowIndex].Cells[ColTelefone1].Value.ToString(),
-                            Telefone2 = dtgClientes.Rows[rowIndex].Cells[ColTelefone2].Value.ToString(),
-                            CPF = dtgClientes.Rows[rowIndex].Cells[ColCpf].Value.ToString(),
-                            Endereco = dtgClientes.Rows[rowIndex].Cells[ColEndereco].Value.ToString(),
-                            CEP = dtgClientes.Rows[rowIndex].Cells[ColCep].Value.ToString(),
-                            Cidade = dtgClientes.Rows[rowIndex].Cells[Colcidade].Value.ToString(),
-                            UF = dtgClientes.Rows[rowIndex].Cells[ColUf].Value.ToString()
-                        };
-
-                        // Abra o formulárioCRUD de edição de clientes passando o cliente e operação
-                        using (FormClientesCRUD frm = new FormClientesCRUD(cliente, operacao))
-                        {
-                            // Usar a sombra para exibir o FormClientesCRUD
-                            FormMenuBase.ShowModalOverlay(frm);
-                            
-                            // quando volta do CRUD, atualiza dataGrid com dados da tabela no BD
-                            
-                            CarregarDtgClientes();
-                        }
-                    }
-                    catch (FormatException)
-                    {
-                        FormMenuBase.ShowMyMessageBox("O valor na primeira coluna não é um número válido.", "Erro de Formato", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                    catch (InvalidCastException)
-                    {
-                        FormMenuBase.ShowMyMessageBox("Não foi possível converter o valor na primeira coluna para um número inteiro.", "Erro de Conversão", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                    catch (Exception ex)
-                    {
-                        FormMenuBase.ShowMyMessageBox("Erro ao carregar dados do cliente: " + ex.Message);
-                    }
-                }
-                else
-                {
-                    FormMenuBase.ShowMyMessageBox("A célula da primeira coluna está vazia.", "Erro de Dados", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-            }
-            else
-            {
-                FormMenuBase.ShowMyMessageBox("Nenhuma linha está selecionada.", "Erro de Seleção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-
+                // Tente converter o valor da célula para inteiro
+                cli_id = Convert.ToInt32(row.Cells[ColId].Value),
+                // carrega os dados do datagrid no objeto clsCliente
+                cli_nome = row.Cells[ColNomeCliente].Value.ToString(),
+                cli_telefone1 = row.Cells[ColTelefone1].Value.ToString(),
+                cli_telefone2 = row.Cells[ColTelefone2].Value.ToString(),
+                cli_cpf = row.Cells[ColCpf].Value.ToString(),
+                cli_endereco = row.Cells[ColEndereco].Value.ToString(),
+                cli_cep = row.Cells[ColCep].Value.ToString(),
+                cli_cidade = row.Cells[Colcidade].Value.ToString(),
+                cli_uf = row.Cells[ColUf].Value.ToString()
+            },
+            reloadGrid: CarregarDtgClientes,
+            formFactory: (cliente, op) => new FormClientesCRUD(cliente, op),
+            operacao: operacao
+            );
         } // end AbrirFormClientesCRUD
         //
         // carregar dataGrid com dados da tabela tblclientes do banco de dados
@@ -165,24 +129,24 @@ namespace FestasApp.Views
                 {
                     dtgClientes.DataSource = dtClientes;
                     ConfigurarColunasDtgClientes();
-                    TratarControles(false); // Habilita botões de CRUD
+                    TratarControles(desabilitar: false); // Habilita botões de CRUD
                 }
                 else
                 {
-                    FormMenuBase.ShowMyMessageBox("Nenhum cliente encontrado.", "Informação", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    FormMenuMain.ShowMyMessageBox("Nenhum cliente encontrado.", "Informação", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     TratarControles(true); // Desabilita botões de CRUD
                 }
             }
             catch (MySqlException mysqlEx)
             {
                 // Trata erros específicos do MySQL
-                FormMenuBase.ShowMyMessageBox($"Erro no banco de dados: {mysqlEx.Message}", "SQL exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                FormMenuMain.ShowMyMessageBox($"Erro no banco de dados: {mysqlEx.Message}", "SQL exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 TratarControles(true); // Desabilita botões de CRUD em caso de erro
             }
             catch (Exception ex)
             {
                 // Trata outros tipos de exceções
-                FormMenuBase.ShowMyMessageBox($"Erro: {ex.Message}", "Erro no Banco de Dados", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                FormMenuMain.ShowMyMessageBox($"Erro: {ex.Message}", "Erro no Banco de Dados", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 TratarControles(true); // Desabilita botões de CRUD em caso de erro
             }
         }
@@ -196,8 +160,6 @@ namespace FestasApp.Views
         }
         //
         // Configura o DataGridView para exibir os clientes.
-        //--------------------------------------------
-        // DataGridViews
         //
         private const int ColId = 0;
         private const int ColNomeCliente = 1;
@@ -280,6 +242,7 @@ namespace FestasApp.Views
         {
             tstbtnEditar.PerformClick();
         }
+        //
         // txtPesquisaCliente
         private void txtPesquisaCliente_TextChanged(object sender, EventArgs e)
         {
@@ -317,7 +280,7 @@ namespace FestasApp.Views
             catch (Exception ex)
             {
                 // Exibe a mensagem de erro
-                FormMenuBase.ShowMyMessageBox("Erro ao filtrar clientes: " + ex.Message, "Pesquisa Clientes", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                FormMenuMain.ShowMyMessageBox("Erro ao filtrar clientes: " + ex.Message, "Pesquisa Clientes", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         } // end FiltrarClientes
 

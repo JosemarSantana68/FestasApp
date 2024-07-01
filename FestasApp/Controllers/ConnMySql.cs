@@ -21,5 +21,22 @@ namespace FestasApp.Controllers
         private const string senha = "";
 
         static public string strConnMySql = $"server = {servidor}; User Id = {usuario}; database = {bancoDados}; password={senha}";
+
+        // Método para testar a conexão
+        public static bool TestarConexao()
+        {
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(strConnMySql))
+                {
+                    conn.Open();
+                    return true;
+                }
+            }
+            catch (MySqlException)
+            {
+                return false;
+            }
+        }
     }
 }

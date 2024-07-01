@@ -13,32 +13,63 @@
 
 namespace FestasApp
 {
-    public partial class FormMenuBase : Form
+    public partial class FormMenuMain : Form
     {
+        //private readonly clsFestasContext _context;
         // dicionario para os forms
         private Dictionary<Type, (Form form, bool manterAberto)> openForms = new Dictionary<Type, (Form form, bool manterAberto)>();
 
         // instancia formularios...
-        public static FormMenuBase? Instance { get; private set; }
-       
+        public static FormMenuMain? Instance { get; private set; }
+
         // construtor
-        public FormMenuBase()
+        public FormMenuMain()
         {
+            /* Aqui é o lugar ideal para configurar:
+            1.Inicialização de componentes: Configuração básica dos controles que estarão no formulário (definição de propriedades visuais e comportamentais).
+            2.Event Handlers: Associação de eventos aos seus respectivos manipuladores, como clique de botão, alteração de texto, etc.
+            3.Definição de propriedades estáticas: Propriedades que não vão depender de nenhuma lógica dinâmica ou de dados que precisam ser carregados de fontes externas.
+             */
+
             InitializeComponent();
+
             this.IsMdiContainer = true; // Define o formulário como container MDI
 
             Instance = this; // Atribui o valor dentro do construtor
             ConfigurarFrmMenu();
-
+            // Testar a conexão ao iniciar o formulário
+            AtualizarStatusConexao();
             // Chama o método para configurar propriedades MDI...
             MdiPropiedades();
-                     
         }
         //
         // evento load
         private void FormMenuBase_Load(object sender, EventArgs e)
         {
-            
+            /* Aqui é o lugar ideal para configurar:
+            1.Carregamento de dados: Busca e carregamento de dados de fontes externas, como bancos de dados ou arquivos.
+            2.Inicialização de lógica de negócio: Qualquer lógica de inicialização que dependa de dados ou estado do sistema.
+            3.Configuração dinâmica: Configuração de controles com base em dados carregados dinamicamente ou estado da aplicação.
+             */
+
+        }
+
+        // Método para atualizar o status da conexão
+        public static bool ConexaoAtiva { get; private set; }
+        private void AtualizarStatusConexao()
+        {
+            if (ConnMySql.TestarConexao())
+            {
+                lblStatusConn.Text = "Connection On";
+                lblStatusConn.ForeColor = Color.Green;
+                ConexaoAtiva = true; // Conexão está ativa
+            }
+            else
+            {
+                lblStatusConn.Text = "Connection Off";
+                lblStatusConn.ForeColor = Color.Red;
+                ConexaoAtiva = false; // Conexão está inativa
+            }
         }
         //
         // Configura propriedades específicas para o formulário MDI...
@@ -240,7 +271,7 @@ namespace FestasApp
             }
             else // ao retrair
             {
-                ContainerSubFinanceiro.BackColor = Color.FromArgb(26, 32, 40);            
+                ContainerSubFinanceiro.BackColor = Color.FromArgb(26, 32, 40);
             }
         }
         #endregion menu lateral e sub menu finaceiro responsivo
@@ -250,7 +281,10 @@ namespace FestasApp
         //
         private void btnFestas_Click(object sender, EventArgs e)
         {
+            //using (var context = new clsFestasContext())
+            //{
             AbrirFormulario(new FormFestasCadastro(), manterAberto: true);
+            //}
         }
         //
         // CLIENTES...
@@ -278,11 +312,37 @@ namespace FestasApp
         //
         private void btnUsuarios_Click(object sender, EventArgs e)
         {
-            AbrirFormulario(new FormUsuariosCadastro(), manterAberto: false);
+            Form frm = new FormUsuariosCadastro();
+
+            // Verifica se o formulário FormUsuariosCadastro já está aberto antes de abrir um novo
+            if (!IsFormOpen(typeof(FormUsuariosCadastro)))
+            {
+                // Chama o método para abrir o formulário FormUsuariosCadastro
+                AbrirFormulario(frm, manterAberto: false);
+            }
+            else
+            {
+                frm.Activate();
+            }
+        }
+        //
+        // Método que verifica se um formulário do tipo especificado está aberto
+        private bool IsFormOpen(Type formType)
+        {
+            // Verifica todos os formulários abertos na aplicação
+            foreach (Form openForm in Application.OpenForms)
+            {
+                // Se algum formulário aberto for do tipo especificado, retorna verdadeiro
+                if (openForm.GetType() == formType)
+                {
+                    return true;
+                }
+            }
+            // Se nenhum formulário aberto for do tipo especificado, retorna falso
+            return false;
         }
         //
         // método para ABRIR formulários
-        //
         private void AbrirFormulario(Form form, bool manterAberto = false)
         {
             Type formType = form.GetType();
@@ -292,29 +352,28 @@ namespace FestasApp
             {
                 if (!openForms[key].manterAberto && openForms[key].form != null)
                 {
-                    openForms[key].form.Close();
-                    openForms.Remove(key);
+                    openForms[key].form.Close(); // Fecha o formulário
+                    openForms.Remove(key); // Remove do dicionário
                 }
             }
             // Verifica se o formulário já está aberto e ativo
             if (openForms.ContainsKey(formType) && openForms[formType].form != null && !openForms[formType].form.IsDisposed)
             {
-                openForms[formType].form.Activate();
+                openForms[formType].form.Activate(); // Ativa o formulário já aberto
             }
             else
             {
                 // Se o formulário já estava no dicionário, mas foi fechado, recria a instância
                 if (openForms.ContainsKey(formType) && openForms[formType].form != null && openForms[formType].form.IsDisposed)
                 {
-                    openForms.Remove(formType);
+                    openForms.Remove(formType); // Remove a entrada do dicionário
                 }
-
                 // Configura o evento FormClosed para liberar recursos
                 form.FormClosed += (sender, e) =>
                 {
                     if (!manterAberto)
                     {
-                        openForms.Remove(formType);
+                        openForms.Remove(formType); // Remove do dicionário
                         form.Dispose(); // Libera recursos ao fechar
                     }
                     else
@@ -324,11 +383,11 @@ namespace FestasApp
                     }
                 };
 
-                // Exibe form
+                // Define o formulário como filho MDI e exibe
                 form.MdiParent = this;
                 form.Dock = DockStyle.Fill;
-                form.Show();
-                               
+                form.Show(); // Exibe o formulário
+
                 // Adiciona ou atualiza o formulário no dicionário
                 openForms[formType] = (form, manterAberto);
             }
@@ -352,7 +411,7 @@ namespace FestasApp
                 throw new InvalidOperationException("FormMenuBase.Instance não está inicializada.");
             }
         }
-        // método auxiliar para CreateModalOverlay...
+        // método auxiliar para exibir formularios CreateModalOverlay...
         public static void ShowModalOverlay(Form? frmExibir, Action? mostrarMensagem = null, int opacidade = 60, Color cor = default)
         {
             if (Instance != null)
@@ -366,6 +425,16 @@ namespace FestasApp
             }
         }
 
+        //private void button1_Click(object sender, EventArgs e)
+        //{
+        //    var bd = new clsFestasContext();
+        //    var tipoeventos = bd.FestasTipoEvento.Where(tpv => tpv.tpev_nome.Contains("A")).ToList();
+
+        //    foreach (var item in tipoeventos)
+        //    {
+        //        MessageBox.Show(item.tpev_nome);
+        //    }
+        //}
     } // end class FormMenuBase...
 } // end namespace
 

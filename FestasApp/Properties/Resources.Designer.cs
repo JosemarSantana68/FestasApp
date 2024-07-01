@@ -163,6 +163,16 @@ namespace FestasApp.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap delete_18x18 {
+            get {
+                object obj = ResourceManager.GetObject("delete_18x18", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap delete_36 {
             get {
                 object obj = ResourceManager.GetObject("delete_36", resourceCulture);

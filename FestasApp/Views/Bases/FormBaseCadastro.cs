@@ -54,6 +54,64 @@ namespace FestasApp.Views
             // Fecha o formulário atual
             this.Close();
         }
+        public void AbrirFormCRUDGenerico<T, TForm>(DataGridView dtg,
+                                             int colIdIndex,
+                                             Func<DataGridViewRow, T> mapper,
+                                             Action reloadGrid,
+                                             Func<T, OperacaoCRUD, TForm> formFactory,
+                                             OperacaoCRUD operacao)
+            where T : class
+            where TForm : Form
+        {
+            // Verifique se há uma linha selecionada no DataGridView
+            if (dtg.CurrentRow != null)
+            {
+                // Pegue o índice da linha atual
+                int rowIndex = dtg.CurrentRow.Index;
+
+                // Verifique se a célula da coluna desejada, ID, não é nula
+                if (dtg.Rows[rowIndex].Cells[colIdIndex].Value != null)
+                {
+                    try
+                    {
+                        // Mapear os dados da linha selecionada para o objeto do domínio
+                        T objeto = mapper(dtg.Rows[rowIndex]);
+
+                        // Criar e abrir o formulário CRUD passando o objeto e a operação
+                        using (TForm frm = formFactory(objeto, operacao))
+                        {
+                            // Usar a Modal para exibir o FormCRUD
+                            FormMenuMain.ShowModalOverlay(frm);
+
+                            // Atualizar DataGrid após a operação CRUD
+                            reloadGrid();
+                        }
+                    }
+                    catch (FormatException)
+                    {
+                        FormMenuMain.ShowMyMessageBox("O valor na coluna ID não é um número válido.", "Erro de Formato", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    catch (InvalidCastException)
+                    {
+                        FormMenuMain.ShowMyMessageBox("Não foi possível converter o valor na coluna ID para um número inteiro.", "Erro de Conversão", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    catch (Exception ex)
+                    {
+                        FormMenuMain.ShowMyMessageBox($"Erro ao carregar dados: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                else
+                {
+                    FormMenuMain.ShowMyMessageBox("A célula da coluna ID está vazia.", "Erro de Dados", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+            else
+            {
+                FormMenuMain.ShowMyMessageBox("Nenhuma linha está selecionada.", "Erro de Seleção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        } // end AbrirFormCRUDGenerico()
+
+
 
 
     } // end class

@@ -16,16 +16,57 @@ namespace FestasApp.Utilities.myFunctions
 {
     public static class myFunctions
     {
+        //  
+        // popula comboboxes com id e nome de tabelas
+        public static DataTable GetDataComboBox(string tabela, string campoId, string campoNome)
+        {
+            DataTable dt = new DataTable();
+            // Consulta SQL para selecionar os dados das tabelas
+            string sql = $" SELECT {campoId}, {campoNome} FROM {tabela}";
+            try
+            {
+                using (MySqlConnection cn = new MySqlConnection(ConnMySql.strConnMySql))
+                {
+                    cn.Open();
+                    using (MySqlDataAdapter da = new MySqlDataAdapter(sql, cn))
+                    {
+                        da.Fill(dt);
+                    }
+                    //FormMenuMain.ConexaoAtiva = true; // Atualiza o status da conexão
+                }
+            }
+            catch (MySqlException mysqlEx)
+            {
+                // Trata erros específicos do MySQL
+                // throw trava a aplicação
+                //throw new Exception($"Erro no banco de dados: {mysqlEx.Message}");
+                // FormMenuMain.ConexaoAtiva = false; // Atualiza o status da conexão
+                FormMenuMain.ShowMyMessageBox($"Erro no banco de dados: {mysqlEx.Message}", "Erro myFunctions");
+                //return null; // Retorna null em caso de erro
+            }
+            catch (Exception ex)
+            {
+                // throw trava a aplicação
+                //throw new Exception($"Erro ao obter dados das festas: {ex.Message}");
+                //FormMenuMain.ConexaoAtiva = false; // Atualiza o status da conexão
+                FormMenuMain.ShowMyMessageBox($"Erro ao obter dados das festas: {ex.Message}", "Erro myFunctions");
+                //return null; // Retorna null em caso de erro
+            }
+            // Retorna DataTable
+            return dt;
+        }
         //
         // configurar colunas de datagriviews
         //
-        public static void ConfigurarColuna(DataGridView dtg, 
-                                            int colIndex, 
-                                            string headerText, 
-                                            int width, 
-                                            DataGridViewContentAlignment alignment = DataGridViewContentAlignment.MiddleLeft, 
-                                            Padding? padding = null,
-                                            bool visible = true)
+        public static void ConfigurarColuna(
+                                DataGridView dtg, 
+                                int colIndex, 
+                                string headerText, 
+                                int width, 
+                                DataGridViewContentAlignment alignment = DataGridViewContentAlignment.MiddleLeft, 
+                                Padding? padding = null,
+                                bool visible = true
+                                )
         {
             if (dtg.Columns.Count > colIndex)
             {
@@ -40,6 +81,51 @@ namespace FestasApp.Utilities.myFunctions
             }
         }
         //
+        // configurar colunas de datagriviews
+        //
+        public static void ConfigurarAdicionarColuna(
+                                    DataGridView dtg,
+                                    int colIndex,
+                                    string headerText,
+                                    int width,
+                                    DataGridViewContentAlignment alignment = DataGridViewContentAlignment.MiddleLeft,
+                                    Padding? padding = null,
+                                    bool visible = true
+                                    )
+        {
+            // Verifique se a coluna já existe
+            if (dtg.Columns.Count > colIndex)
+            {
+                dtg.Columns[colIndex].HeaderText = headerText;
+                dtg.Columns[colIndex].Width = width;
+                dtg.Columns[colIndex].DefaultCellStyle.Alignment = alignment; // Atribui alignment diretamente
+                if (padding.HasValue)
+                {
+                    dtg.Columns[colIndex].DefaultCellStyle.Padding = padding.Value;
+                }
+                dtg.Columns[colIndex].Visible = visible;
+            }
+            else
+            {
+                // Adiciona uma nova coluna se não existir
+                var col = new DataGridViewTextBoxColumn
+                {
+                    HeaderText = headerText,
+                    Width = width,
+                    DefaultCellStyle = { Alignment = alignment },
+                    Visible = visible
+                };
+
+                if (padding.HasValue)
+                {
+                    col.DefaultCellStyle.Padding = padding.Value;
+                }
+
+                dtg.Columns.Insert(colIndex, col);
+            }
+        }
+
+        //
         // estatisticas em DataGridViews, Total de Registros, Datas e Somas
         //
         public static void CalcularDataGridDatasSomas(DataGridView dataGridView, int colunaDataIndex, int colunaValorIndex, out int totalRegistros, out DateTime? menorData, out DateTime? maiorData, out decimal somaColuna)
@@ -48,7 +134,6 @@ namespace FestasApp.Utilities.myFunctions
             menorData = null;
             maiorData = null;
             somaColuna = 0;
-
             foreach (DataGridViewRow row in dataGridView.Rows)
             {
                 // Verificar e contar registros

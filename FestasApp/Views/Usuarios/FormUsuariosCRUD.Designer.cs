@@ -41,33 +41,37 @@
             txtUserEmail = new myTextBox();
             txtUserSenha = new myTextBox();
             chkUserAtivo = new CheckBox();
-            pnlTitulo.SuspendLayout();
             pnlCentral.SuspendLayout();
+            ((ISupportInitialize)picLogoCrud).BeginInit();
             tableLayoutPanel1.SuspendLayout();
             SuspendLayout();
             // 
             // pnlTitulo
             // 
-            pnlTitulo.Size = new Size(626, 64);
+            pnlTitulo.Size = new Size(549, 64);
             // 
             // pnlRodape
             // 
             pnlRodape.Location = new Point(3, 332);
-            pnlRodape.Size = new Size(626, 36);
+            pnlRodape.Size = new Size(549, 36);
             // 
             // lblOperacao
             // 
-            lblOperacao.Location = new Point(461, 0);
-            lblOperacao.Size = new Size(165, 64);
+            lblOperacao.Location = new Point(383, 3);
+            lblOperacao.Size = new Size(122, 58);
             // 
             // lblTitulo
             // 
-            lblTitulo.Image = Resources.pessoas_funcionarios_36;
+            lblTitulo.Size = new Size(294, 58);
             // 
             // pnlCentral
             // 
             pnlCentral.Controls.Add(tableLayoutPanel1);
-            pnlCentral.Size = new Size(626, 265);
+            pnlCentral.Size = new Size(549, 265);
+            // 
+            // picLogoCrud
+            // 
+            picLogoCrud.Image = Resources.pessoas_funcionarios_36;
             // 
             // tableLayoutPanel1
             // 
@@ -100,7 +104,7 @@
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 32F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 32F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel1.Size = new Size(626, 265);
+            tableLayoutPanel1.Size = new Size(549, 265);
             tableLayoutPanel1.TabIndex = 1;
             // 
             // label1
@@ -109,7 +113,7 @@
             label1.AutoSize = true;
             label1.Location = new Point(23, 42);
             label1.Name = "label1";
-            label1.Size = new Size(150, 19);
+            label1.Size = new Size(130, 19);
             label1.TabIndex = 0;
             label1.Text = "ID";
             label1.TextAlign = ContentAlignment.MiddleRight;
@@ -120,7 +124,7 @@
             label2.AutoSize = true;
             label2.Location = new Point(23, 74);
             label2.Name = "label2";
-            label2.Size = new Size(150, 19);
+            label2.Size = new Size(130, 19);
             label2.TabIndex = 1;
             label2.Text = "Nome";
             label2.TextAlign = ContentAlignment.MiddleRight;
@@ -131,7 +135,7 @@
             label3.AutoSize = true;
             label3.Location = new Point(23, 106);
             label3.Name = "label3";
-            label3.Size = new Size(150, 19);
+            label3.Size = new Size(130, 19);
             label3.TabIndex = 2;
             label3.Text = "Login";
             label3.TextAlign = ContentAlignment.MiddleRight;
@@ -142,7 +146,7 @@
             label4.AutoSize = true;
             label4.Location = new Point(23, 138);
             label4.Name = "label4";
-            label4.Size = new Size(150, 19);
+            label4.Size = new Size(130, 19);
             label4.TabIndex = 3;
             label4.Text = "Email";
             label4.TextAlign = ContentAlignment.MiddleRight;
@@ -153,7 +157,7 @@
             label5.AutoSize = true;
             label5.Location = new Point(23, 170);
             label5.Name = "label5";
-            label5.Size = new Size(150, 19);
+            label5.Size = new Size(130, 19);
             label5.TabIndex = 4;
             label5.Text = "Senha";
             label5.TextAlign = ContentAlignment.MiddleRight;
@@ -164,7 +168,7 @@
             label6.AutoSize = true;
             label6.Location = new Point(23, 202);
             label6.Name = "label6";
-            label6.Size = new Size(150, 19);
+            label6.Size = new Size(130, 19);
             label6.TabIndex = 5;
             label6.Text = "Ativo";
             label6.TextAlign = ContentAlignment.MiddleRight;
@@ -172,7 +176,7 @@
             // lblID
             // 
             lblID.Anchor = AnchorStyles.Left;
-            lblID.Location = new Point(179, 42);
+            lblID.Location = new Point(159, 42);
             lblID.Name = "lblID";
             lblID.Size = new Size(63, 19);
             lblID.TabIndex = 9;
@@ -184,7 +188,7 @@
             txtUserNome.CharacterCasing = CharacterCasing.Upper;
             txtUserNome.Font = new Font("Segoe UI", 10F);
             txtUserNome.ForeColor = Color.Black;
-            txtUserNome.Location = new Point(179, 71);
+            txtUserNome.Location = new Point(159, 71);
             txtUserNome.Name = "txtUserNome";
             txtUserNome.Size = new Size(237, 25);
             txtUserNome.TabIndex = 10;
@@ -194,7 +198,7 @@
             txtUserLogin.CharacterCasing = CharacterCasing.Upper;
             txtUserLogin.Font = new Font("Segoe UI", 10F);
             txtUserLogin.ForeColor = Color.Black;
-            txtUserLogin.Location = new Point(179, 103);
+            txtUserLogin.Location = new Point(159, 103);
             txtUserLogin.Name = "txtUserLogin";
             txtUserLogin.Size = new Size(237, 25);
             txtUserLogin.TabIndex = 10;
@@ -204,7 +208,7 @@
             txtUserEmail.CharacterCasing = CharacterCasing.Upper;
             txtUserEmail.Font = new Font("Segoe UI", 10F);
             txtUserEmail.ForeColor = Color.Black;
-            txtUserEmail.Location = new Point(179, 135);
+            txtUserEmail.Location = new Point(159, 135);
             txtUserEmail.Name = "txtUserEmail";
             txtUserEmail.Size = new Size(237, 25);
             txtUserEmail.TabIndex = 11;
@@ -214,7 +218,7 @@
             txtUserSenha.CharacterCasing = CharacterCasing.Upper;
             txtUserSenha.Font = new Font("Segoe UI", 10F);
             txtUserSenha.ForeColor = Color.Black;
-            txtUserSenha.Location = new Point(179, 167);
+            txtUserSenha.Location = new Point(159, 167);
             txtUserSenha.Name = "txtUserSenha";
             txtUserSenha.Size = new Size(237, 25);
             txtUserSenha.TabIndex = 12;
@@ -223,7 +227,7 @@
             // 
             chkUserAtivo.AutoSize = true;
             chkUserAtivo.Dock = DockStyle.Left;
-            chkUserAtivo.Location = new Point(179, 199);
+            chkUserAtivo.Location = new Point(159, 199);
             chkUserAtivo.Name = "chkUserAtivo";
             chkUserAtivo.Padding = new Padding(5, 0, 0, 0);
             chkUserAtivo.Size = new Size(63, 26);
@@ -236,11 +240,11 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(632, 371);
+            ClientSize = new Size(555, 371);
             Name = "FormUsuariosCRUD";
             Text = "FormUsuariosCRUD";
-            pnlTitulo.ResumeLayout(false);
             pnlCentral.ResumeLayout(false);
+            ((ISupportInitialize)picLogoCrud).EndInit();
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();
             ResumeLayout(false);

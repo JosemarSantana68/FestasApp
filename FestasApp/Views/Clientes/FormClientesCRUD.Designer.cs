@@ -47,14 +47,14 @@
             txtTelefone2 = new MyFramework.myControls.myMaskedTextBox();
             txtCpf = new MyFramework.myControls.myMaskedTextBox();
             txtCep = new MyFramework.myControls.myMaskedTextBox();
-            pnlTitulo.SuspendLayout();
             pnlCentral.SuspendLayout();
+            ((ISupportInitialize)picLogoCrud).BeginInit();
             tableLayoutPanel1.SuspendLayout();
             SuspendLayout();
             // 
             // pnlTitulo
             // 
-            pnlTitulo.Size = new Size(605, 73);
+            pnlTitulo.Size = new Size(605, 64);
             // 
             // pnlRodape
             // 
@@ -63,20 +63,22 @@
             // 
             // lblOperacao
             // 
-            lblOperacao.Location = new Point(456, 0);
+            lblOperacao.Location = new Point(422, 3);
             lblOperacao.Padding = new Padding(0, 0, 10, 0);
-            lblOperacao.Size = new Size(149, 73);
+            lblOperacao.Size = new Size(139, 58);
             // 
             // lblTitulo
             // 
-            lblTitulo.Image = Resources.pessoas_clientes_36;
-            lblTitulo.Size = new Size(419, 73);
+            lblTitulo.Size = new Size(333, 58);
             // 
             // pnlCentral
             // 
             pnlCentral.Controls.Add(tableLayoutPanel1);
-            pnlCentral.Location = new Point(3, 76);
-            pnlCentral.Size = new Size(605, 307);
+            pnlCentral.Size = new Size(605, 316);
+            // 
+            // picLogoCrud
+            // 
+            picLogoCrud.Image = Resources.pessoas_clientes_36;
             // 
             // tableLayoutPanel1
             // 
@@ -118,14 +120,14 @@
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 32F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 32F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel1.Size = new Size(605, 307);
+            tableLayoutPanel1.Size = new Size(605, 316);
             tableLayoutPanel1.TabIndex = 0;
             // 
             // label1
             // 
             label1.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             label1.AutoSize = true;
-            label1.Location = new Point(23, 15);
+            label1.Location = new Point(23, 20);
             label1.Name = "label1";
             label1.Size = new Size(145, 19);
             label1.TabIndex = 0;
@@ -136,7 +138,7 @@
             // 
             label2.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             label2.AutoSize = true;
-            label2.Location = new Point(23, 47);
+            label2.Location = new Point(23, 52);
             label2.Name = "label2";
             label2.Size = new Size(145, 19);
             label2.TabIndex = 1;
@@ -147,7 +149,7 @@
             // 
             label3.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             label3.AutoSize = true;
-            label3.Location = new Point(23, 79);
+            label3.Location = new Point(23, 84);
             label3.Name = "label3";
             label3.Size = new Size(145, 19);
             label3.TabIndex = 2;
@@ -158,7 +160,7 @@
             // 
             label4.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             label4.AutoSize = true;
-            label4.Location = new Point(23, 111);
+            label4.Location = new Point(23, 116);
             label4.Name = "label4";
             label4.Size = new Size(145, 19);
             label4.TabIndex = 3;
@@ -169,7 +171,7 @@
             // 
             label5.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             label5.AutoSize = true;
-            label5.Location = new Point(23, 143);
+            label5.Location = new Point(23, 148);
             label5.Name = "label5";
             label5.Size = new Size(145, 19);
             label5.TabIndex = 4;
@@ -180,7 +182,7 @@
             // 
             label6.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             label6.AutoSize = true;
-            label6.Location = new Point(23, 175);
+            label6.Location = new Point(23, 180);
             label6.Name = "label6";
             label6.Size = new Size(145, 19);
             label6.TabIndex = 5;
@@ -191,7 +193,7 @@
             // 
             label7.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             label7.AutoSize = true;
-            label7.Location = new Point(23, 207);
+            label7.Location = new Point(23, 212);
             label7.Name = "label7";
             label7.Size = new Size(145, 19);
             label7.TabIndex = 6;
@@ -202,7 +204,7 @@
             // 
             label8.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             label8.AutoSize = true;
-            label8.Location = new Point(23, 239);
+            label8.Location = new Point(23, 244);
             label8.Name = "label8";
             label8.Size = new Size(145, 19);
             label8.TabIndex = 7;
@@ -213,7 +215,7 @@
             // 
             label9.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             label9.AutoSize = true;
-            label9.Location = new Point(23, 271);
+            label9.Location = new Point(23, 276);
             label9.Name = "label9";
             label9.Size = new Size(145, 19);
             label9.TabIndex = 8;
@@ -223,7 +225,7 @@
             // lblID
             // 
             lblID.Anchor = AnchorStyles.Left;
-            lblID.Location = new Point(174, 15);
+            lblID.Location = new Point(174, 20);
             lblID.Name = "lblID";
             lblID.Size = new Size(63, 19);
             lblID.TabIndex = 9;
@@ -235,7 +237,7 @@
             txtNome.CharacterCasing = CharacterCasing.Upper;
             txtNome.Font = new Font("Segoe UI", 10F);
             txtNome.ForeColor = Color.Black;
-            txtNome.Location = new Point(174, 44);
+            txtNome.Location = new Point(174, 49);
             txtNome.MaxLength = 100;
             txtNome.Name = "txtNome";
             txtNome.Size = new Size(320, 25);
@@ -246,7 +248,7 @@
             txtEndereco.CharacterCasing = CharacterCasing.Upper;
             txtEndereco.Font = new Font("Segoe UI", 10F);
             txtEndereco.ForeColor = Color.Black;
-            txtEndereco.Location = new Point(174, 172);
+            txtEndereco.Location = new Point(174, 177);
             txtEndereco.MaxLength = 100;
             txtEndereco.Name = "txtEndereco";
             txtEndereco.Size = new Size(320, 25);
@@ -257,7 +259,7 @@
             txtCidade.CharacterCasing = CharacterCasing.Upper;
             txtCidade.Font = new Font("Segoe UI", 10F);
             txtCidade.ForeColor = Color.Black;
-            txtCidade.Location = new Point(174, 236);
+            txtCidade.Location = new Point(174, 241);
             txtCidade.MaxLength = 100;
             txtCidade.Name = "txtCidade";
             txtCidade.Size = new Size(320, 25);
@@ -268,7 +270,7 @@
             txtUF.CharacterCasing = CharacterCasing.Upper;
             txtUF.Font = new Font("Segoe UI", 10F);
             txtUF.ForeColor = Color.Black;
-            txtUF.Location = new Point(174, 268);
+            txtUF.Location = new Point(174, 273);
             txtUF.MaxLength = 20;
             txtUF.Name = "txtUF";
             txtUF.Size = new Size(63, 25);
@@ -278,7 +280,7 @@
             // 
             txtTelefone1.Font = new Font("Segoe UI", 10F);
             txtTelefone1.ForeColor = Color.Black;
-            txtTelefone1.Location = new Point(174, 76);
+            txtTelefone1.Location = new Point(174, 81);
             txtTelefone1.Mask = "(99) 00000-0000";
             txtTelefone1.Name = "txtTelefone1";
             txtTelefone1.Size = new Size(139, 25);
@@ -289,7 +291,7 @@
             // 
             txtTelefone2.Font = new Font("Segoe UI", 10F);
             txtTelefone2.ForeColor = Color.Black;
-            txtTelefone2.Location = new Point(174, 108);
+            txtTelefone2.Location = new Point(174, 113);
             txtTelefone2.Mask = "(99) 00000-0000";
             txtTelefone2.Name = "txtTelefone2";
             txtTelefone2.Size = new Size(139, 25);
@@ -300,7 +302,7 @@
             // 
             txtCpf.Font = new Font("Segoe UI", 10F);
             txtCpf.ForeColor = Color.Black;
-            txtCpf.Location = new Point(174, 140);
+            txtCpf.Location = new Point(174, 145);
             txtCpf.Mask = "000,000,000-00";
             txtCpf.Name = "txtCpf";
             txtCpf.Size = new Size(139, 25);
@@ -311,7 +313,7 @@
             // 
             txtCep.Font = new Font("Segoe UI", 10F);
             txtCep.ForeColor = Color.Black;
-            txtCep.Location = new Point(174, 204);
+            txtCep.Location = new Point(174, 209);
             txtCep.Mask = "00,000-999";
             txtCep.Name = "txtCep";
             txtCep.Size = new Size(139, 25);
@@ -323,13 +325,12 @@
             AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(611, 422);
-            FormBorderStyle = FormBorderStyle.FixedSingle;
             KeyPreview = true;
             Name = "FormClientesCRUD";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "FormClientesCRUD";
-            pnlTitulo.ResumeLayout(false);
             pnlCentral.ResumeLayout(false);
+            ((ISupportInitialize)picLogoCrud).EndInit();
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();
             ResumeLayout(false);

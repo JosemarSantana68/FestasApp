@@ -20,28 +20,25 @@ namespace FestasApp.Views.Usuarios
         public FormUsuariosCadastro()
         {
             // Configurações iniciais antes da inicialização dos componentes
-
-
             InitializeComponent();
-            
 
             this.SuspendLayout();
-                this.FormBorderStyle = FormBorderStyle.None;
-                ConfigurarForm();
+                SetThisForm();
                 AddToolStripEventHandlers();
             this.ResumeLayout();
         }
         //
         // Configurações iniciais do formulário
-        private void ConfigurarForm()
+        private void SetThisForm()
         {
+            this.FormBorderStyle = FormBorderStyle.None;
             // Adicione aqui as configurações específicas para o formulário
             lblTitulo.Text = "C a d a s t r o  d e  U s u á r i o s";           
             lblTitulo.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
 
             CarregarDtgUsuarios();
         }
-        //----------------------------------------------
+        //
         // adiciona eventos aos stripsButtons...
         private void AddToolStripEventHandlers()
         {
@@ -51,8 +48,8 @@ namespace FestasApp.Views.Usuarios
             this.tstbtnConsultar.Click += TstbtnConsultar_Click;
             this.tstbtnExcluir.Click += TstbtnExcluir_Click;
         }
-        //-----------------------------------------
-        // Evento Click do botão NOVO...
+        //
+        // btn NOVO (CREATE)
         private void TstbtnNovo_Click(object? sender, EventArgs e)
         {
             // incrementar Lógica do evento do botão
@@ -61,27 +58,27 @@ namespace FestasApp.Views.Usuarios
             FormUsuariosCRUD frm = new FormUsuariosCRUD(usuario, operacao);
 
             // Usar a CreateModalOverlay para exibir o FormClientesCRUD
-            FormMenuBase.ShowModalOverlay(frm);
+            FormMenuMain.ShowModalOverlay(frm);
 
             // quando volta do CRUD, atualiza dataGrid com dados da tabela no BD
             CarregarDtgUsuarios();
         }
-        //-----------------------------------------
-        // Evento Click do botão EDITAR
-        private void TstbtnEditar_Click(object? sender, EventArgs e)
-        {
-            OperacaoCRUD operacao = OperacaoCRUD.EDITAR;
-            AbrirFormCRUD(operacao);
-        }
-        //-----------------------------------------
-        // Evento Click do botão CONSULTAR
+        //
+        // btn CONSULTAR (READ)
         private void TstbtnConsultar_Click(object? sender, EventArgs e)
         {
             OperacaoCRUD operacao = OperacaoCRUD.CONSULTAR;
             AbrirFormCRUD(operacao);
         }
         //-----------------------------------------
-        // Evento Click do botão EXCLUIR
+        // btn EDITAR (UPDATE)
+        private void TstbtnEditar_Click(object? sender, EventArgs e)
+        {
+            OperacaoCRUD operacao = OperacaoCRUD.EDITAR;
+            AbrirFormCRUD(operacao);
+        }
+        //-----------------------------------------
+        // btn EXCLUIR (DELETE)
         private void TstbtnExcluir_Click(object? sender, EventArgs e)
         {
             OperacaoCRUD operacao = OperacaoCRUD.EXCLUIR;
@@ -91,69 +88,25 @@ namespace FestasApp.Views.Usuarios
         // Abrir Formulário CRUD
         private void AbrirFormCRUD(OperacaoCRUD operacao)
         {
-            // Declarar o datagrid
-            var dtg = dtgUsuarios;
-
-            // Verifique se há uma linha selecionada no DataGridView
-            if (dtg.CurrentRow != null)
-            {
-                // Pegue o índice da linha atual
-                int rowIndex = dtg.CurrentRow.Index;
-
-                // Verifique se a célula da coluna desejada, ID, não é nula
-                if (dtg.Rows[rowIndex].Cells[0].Value != null)
+            AbrirFormCRUDGenerico(
+                dtg: dtgUsuarios,
+                colIdIndex: ColId,
+                mapper: row => new clsUsuarios //Func<DataGridViewRow, T> mapper,
                 {
-                    try
-                    {
-                        // carrega os dados da linha selecionada no objeto usuario...
-                        clsUsuarios usuario = new clsUsuarios
-                        {
-                            // Tente converter o valor da célula para inteiro
-                            Id = Convert.ToInt32(dtgUsuarios.Rows[rowIndex].Cells[0].Value),
-                            //
-                            Nome = dtg.Rows[rowIndex].Cells[1].Value.ToString(),
-                            Login = dtg.Rows[rowIndex].Cells[2].Value.ToString(),
-                            Email = dtg.Rows[rowIndex].Cells[3].Value.ToString(),
-                            Senha = dtg.Rows[rowIndex].Cells[4].Value.ToString(),
-                            Ativo = Convert.ToInt32(dtg.Rows[rowIndex].Cells[5].Value) == 1 // Aqui convertendo 0 ou 1 para bool
-                        };
-
-                        // Abra o formulárioCRUD para edição passando a calsse e operação
-                        using (FormUsuariosCRUD frm = new FormUsuariosCRUD(usuario, operacao))
-                        {
-                            // Usar a Modal para exibir o FormCRUD
-                            FormMenuBase.ShowModalOverlay(frm);
-
-                            // quando volta do CRUD, atualiza dataGrid com dados da tabela no BD
-                            CarregarDtgUsuarios();
-                        }
-                    }
-                    catch (FormatException)
-                    {
-                        FormMenuBase.ShowMyMessageBox("O valor na primeira coluna não é um número válido.", "Erro de Formato", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                    catch (InvalidCastException)
-                    {
-                        FormMenuBase.ShowMyMessageBox("Não foi possível converter o valor na primeira coluna para um número inteiro.", "Erro de Conversão", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                    catch (Exception ex)
-                    {
-                        FormMenuBase.ShowMyMessageBox("Erro ao carregar dados do cliente: " + ex.Message);
-                    }
-                }
-                else
-                {
-                    FormMenuBase.ShowMyMessageBox("A célula da primeira coluna está vazia.", "Erro de Dados", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-            }
-            else
-            {
-                FormMenuBase.ShowMyMessageBox("Nenhuma linha está selecionada.", "Erro de Seleção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-
-        } // end AbrirFormCRUD
+                    user_id = Convert.ToInt32(row.Cells[0].Value),
+                    user_nome = row.Cells[ColNomeUser].Value.ToString(),
+                    user_login = row.Cells[ColLogin].Value.ToString(),
+                    user_email = row.Cells[ColEmail].Value.ToString(),
+                    user_senha = row.Cells[ColSenha].Value.ToString(),
+                    user_ativo = Convert.ToInt32(row.Cells[ColAtivo].Value) == 1 // Aqui convertendo 0 ou 1 para bool
+                },
+                reloadGrid: CarregarDtgUsuarios,
+                formFactory: (usuario, op) => new FormUsuariosCRUD(usuario, op),
+                operacao: operacao
+            );
+        }
         //-------------------------------
-        // carregar dataGrid com dados da tabela tblusuarios do banco de dados
+        // carregar/atualizar dataGrid com dados da tabela tblusuarios do banco de dados
         private DataTable dtUsuarios = new DataTable();
         private void CarregarDtgUsuarios()
         {
@@ -166,26 +119,39 @@ namespace FestasApp.Views.Usuarios
                 {
                     dtgUsuarios.DataSource = dtUsuarios;
                     ConfigurarColunasDtgUsuarios();
+                    TratarControles(desabilitar: false); // Habilita botões de CRUD
                 }
                 else
                 {
-                    FormMenuBase.ShowMyMessageBox("Nenhum Usuário encontrado.", "Carregar Usuário", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    FormMenuMain.ShowMyMessageBox("Nenhum Usuário encontrado.", "Carregar Usuário", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    TratarControles(true); // Desabilita botões de CRUD
                 }
             }
             catch (MySqlException mysqlEx)
             {
                 // Trata erros específicos do MySQL
-                FormMenuBase.ShowMyMessageBox($"Erro no banco de dados: {mysqlEx.Message}", "SQL exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                FormMenuMain.ShowMyMessageBox($"Erro no banco de dados: {mysqlEx.Message}", "SQL exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                TratarControles(true); // Desabilita botões de CRUD em caso de erro
             }
             catch (Exception ex)
             {
                 // Trata outros tipos de exceções
-                FormMenuBase.ShowMyMessageBox($"Erro: {ex.Message}", "Erro no Banco de Dados", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                FormMenuMain.ShowMyMessageBox($"Erro: {ex.Message}", "Erro no Banco de Dados", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                TratarControles(true); // Desabilita botões de CRUD em caso de erro
             }
         }
+
+        private void TratarControles(bool desabilitar)
+        {
+            // controles deste form
+            //if (txtPesquisaCliente != null) txtPesquisaCliente.Enabled = !desabilitar;
+            // controles do formBase
+            TratarBtnCrud(desabilitar);
+        }
+
         //--------------------------------------------
         // DataGridViews
-        //
+        // constantes
         private const int ColId = 0;
         private const int ColNomeUser = 1;
         private const int ColLogin = 2;
@@ -194,14 +160,11 @@ namespace FestasApp.Views.Usuarios
         private const int ColAtivo = 5;
         private void ConfigurarColunasDtgUsuarios()
         {
-            //-----------------------------------------
-            // Colunas
-            //
             DataGridView dtg = dtgUsuarios;
             // configurar colunas
             myFunctions.ConfigurarColuna(dtg, ColId, "ID", 30, DataGridViewContentAlignment.MiddleCenter);
             myFunctions.ConfigurarColuna(dtg, ColNomeUser, "Nome Usuário", 200, padding: new Padding(5, 0, 0, 0));
-            myFunctions.ConfigurarColuna(dtg, ColLogin, "Login", 12);
+            myFunctions.ConfigurarColuna(dtg, ColLogin, "Login", 120);
             myFunctions.ConfigurarColuna(dtg, ColEmail, "Email", 120);
             myFunctions.ConfigurarColuna(dtg, ColSenha, "Senha", 100);
             myFunctions.ConfigurarColuna(dtg, ColAtivo, "Ativo", 100, DataGridViewContentAlignment.MiddleCenter);

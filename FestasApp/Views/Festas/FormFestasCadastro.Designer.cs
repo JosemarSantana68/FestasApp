@@ -28,6 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
@@ -35,10 +38,7 @@
             pnlItensFestas = new Panel();
             tblItensFestas = new TableLayoutPanel();
             lblItensFestas = new Label();
-            dtgItensFestas = new DataGridView();
-            Column1 = new DataGridViewTextBoxColumn();
-            Column2 = new DataGridViewTextBoxColumn();
-            Column3 = new DataGridViewTextBoxColumn();
+            dtgItensFestas = new myDataGridView();
             pnlDetalhesFesta = new Panel();
             tblDetalhesFestas = new TableLayoutPanel();
             label1 = new Label();
@@ -150,8 +150,8 @@
             // tblItensFestas
             // 
             tblItensFestas.ColumnCount = 2;
-            tblItensFestas.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 68.30189F));
-            tblItensFestas.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 31.6981125F));
+            tblItensFestas.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 360F));
+            tblItensFestas.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             tblItensFestas.Controls.Add(lblItensFestas, 0, 0);
             tblItensFestas.Controls.Add(dtgItensFestas, 0, 1);
             tblItensFestas.Dock = DockStyle.Fill;
@@ -170,37 +170,47 @@
             lblItensFestas.ForeColor = Color.Black;
             lblItensFestas.Location = new Point(3, 0);
             lblItensFestas.Name = "lblItensFestas";
-            lblItensFestas.Size = new Size(359, 25);
+            lblItensFestas.Size = new Size(354, 25);
             lblItensFestas.TabIndex = 3;
             lblItensFestas.Text = "Itens Adicionais da Festa:";
             lblItensFestas.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // dtgItensFestas
             // 
+            dtgItensFestas.AllowUserToAddRows = false;
+            dtgItensFestas.AllowUserToDeleteRows = false;
+            dtgItensFestas.AllowUserToOrderColumns = true;
+            dtgItensFestas.AllowUserToResizeRows = false;
+            dataGridViewCellStyle4.BackColor = Color.LightGoldenrodYellow;
+            dtgItensFestas.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle4;
             dtgItensFestas.BackgroundColor = Color.White;
+            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.BottomCenter;
+            dataGridViewCellStyle5.BackColor = Color.DarkGoldenrod;
+            dataGridViewCellStyle5.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            dataGridViewCellStyle5.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle5.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.True;
+            dtgItensFestas.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
             dtgItensFestas.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dtgItensFestas.Columns.AddRange(new DataGridViewColumn[] { Column1, Column2, Column3 });
+            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = SystemColors.Window;
+            dataGridViewCellStyle6.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle6.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle6.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.False;
+            dtgItensFestas.DefaultCellStyle = dataGridViewCellStyle6;
             dtgItensFestas.Dock = DockStyle.Fill;
-            dtgItensFestas.Location = new Point(0, 25);
-            dtgItensFestas.Margin = new Padding(0);
+            dtgItensFestas.Location = new Point(3, 28);
+            dtgItensFestas.MultiSelect = false;
             dtgItensFestas.Name = "dtgItensFestas";
-            dtgItensFestas.Size = new Size(365, 153);
-            dtgItensFestas.TabIndex = 0;
-            // 
-            // Column1
-            // 
-            Column1.HeaderText = "Itens";
-            Column1.Name = "Column1";
-            // 
-            // Column2
-            // 
-            Column2.HeaderText = "Qtde";
-            Column2.Name = "Column2";
-            // 
-            // Column3
-            // 
-            Column3.HeaderText = "Valor";
-            Column3.Name = "Column3";
+            dtgItensFestas.ReadOnly = true;
+            dtgItensFestas.RowHeadersVisible = false;
+            dtgItensFestas.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dtgItensFestas.Size = new Size(354, 147);
+            dtgItensFestas.TabIndex = 4;
+            dtgItensFestas.TabStop = false;
             // 
             // pnlDetalhesFesta
             // 
@@ -772,9 +782,6 @@
         private Panel pnlItensFestas;
         private TableLayoutPanel tblItensFestas;
         private Label lblItensFestas;
-        private DataGridView dtgItensFestas;
-        private DataGridViewTextBoxColumn Column1;
-        private DataGridViewTextBoxColumn Column2;
-        private DataGridViewTextBoxColumn Column3;
+        private myDataGridView dtgItensFestas;
     }
 }

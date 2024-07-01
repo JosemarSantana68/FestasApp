@@ -11,33 +11,34 @@
 //
 //************************************************************
 
+// campos da tabela
+// cli_id           int NOT NULL auto_increment,
+// cli_nome         varchar(100) NOT NULL,
+// cli_telefone1    varchar(11) NOT NULL,
+// cli_telefone2    varchar(11),
+// cli_cpf          varchar(11),
+// cli_endereco     varchar(100),
+// cli_cep          varchar(10),
+// cli_cidade       varchar(50),
+// cli_uf           varchar(20),
+// primary key(cli_id)
+
 namespace FestasApp.Models
 {
+    [Table("tblclientes")]
     public class clsClientes
     {
-
-        // campos da tabela
-        // cli_id           int NOT NULL auto_increment,
-        // cli_nome         varchar(100) NOT NULL,
-        // cli_telefone1    varchar(11) NOT NULL,
-        // cli_telefone2    varchar(11),
-        // cli_cpf          varchar(11),
-        // cli_endereco     varchar(100),
-        // cli_cep          varchar(10),
-        // cli_cidade       varchar(50),
-        // cli_uf           varchar(20),
-        // primary key(cli_id)
-
         // Propriedades correspondentes aos campos da tabela `tblclientes`
-        public int Id { get; set; }
-        public string? Nome { get; set; }
-        public string? Telefone1 { get; set; }
-        public string? Telefone2 { get; set; }
-        public string? CPF { get; set; }
-        public string? Endereco { get; set; }
-        public string? CEP { get; set; }
-        public string? Cidade { get; set; }
-        public string? UF { get; set; }
+        [Key]
+        public int cli_id { get; set; }
+        public string? cli_nome { get; set; }
+        public string? cli_telefone1 { get; set; }
+        public string? cli_telefone2 { get; set; }
+        public string? cli_cpf { get; set; }
+        public string? cli_endereco { get; set; }
+        public string? cli_cep { get; set; }
+        public string? cli_cidade { get; set; }
+        public string? cli_uf { get; set; }
 
         // Construtor padrão
         public clsClientes() { }
@@ -53,15 +54,15 @@ namespace FestasApp.Models
                         string cidade,
                         string uf)
         {
-            Id = id;
-            Nome = nome;
-            Telefone1 = telefone1;
-            Telefone2 = telefone2;
-            CPF = cpf;
-            Endereco = endereco;
-            CEP = cep;
-            Cidade = cidade;
-            UF = uf;
+            cli_id = id;
+            cli_nome = nome;
+            cli_telefone1 = telefone1;
+            cli_telefone2 = telefone2;
+            cli_cpf = cpf;
+            cli_endereco = endereco;
+            cli_cep = cep;
+            cli_cidade = cidade;
+            cli_uf = uf;
         }
         //------------------------------------------------------------
         // Método para inserir um novo cliente na tabela `tblclientes`
@@ -90,20 +91,20 @@ namespace FestasApp.Models
                     cn.Open();
                     using (MySqlCommand cmd = new MySqlCommand(sql, cn))
                     {
-                        cmd.Parameters.AddWithValue("@Nome", Nome);
-                        cmd.Parameters.AddWithValue("@Telefone1", Telefone1);
-                        cmd.Parameters.AddWithValue("@Telefone2", Telefone2);
-                        cmd.Parameters.AddWithValue("@CPF", CPF);
-                        cmd.Parameters.AddWithValue("@Endereco", Endereco);
-                        cmd.Parameters.AddWithValue("@CEP", CEP);
-                        cmd.Parameters.AddWithValue("@Cidade", Cidade);
-                        cmd.Parameters.AddWithValue("@UF", UF);
+                        cmd.Parameters.AddWithValue("@Nome", cli_nome);
+                        cmd.Parameters.AddWithValue("@Telefone1", cli_telefone1);
+                        cmd.Parameters.AddWithValue("@Telefone2", cli_telefone2);
+                        cmd.Parameters.AddWithValue("@CPF", cli_cpf);
+                        cmd.Parameters.AddWithValue("@Endereco", cli_endereco);
+                        cmd.Parameters.AddWithValue("@CEP", cli_cep);
+                        cmd.Parameters.AddWithValue("@Cidade", cli_cidade);
+                        cmd.Parameters.AddWithValue("@UF", cli_uf);
 
                         cmd.ExecuteNonQuery();
 
                         // Para recuperar o ID do cliente inserido
                         cmd.CommandText = "SELECT LAST_INSERT_ID()";
-                        Id = Convert.ToInt32(cmd.ExecuteScalar());
+                        cli_id = Convert.ToInt32(cmd.ExecuteScalar());
                     }
                 }
                 return true;
@@ -147,15 +148,15 @@ namespace FestasApp.Models
                             {
                                 // Atribuindo valores das colunas do dr às propriedades da classe
                                 //this.Id = Convert.ToInt32(dr["cli_id"]);
-                                this.Id = IdCliente;
-                                this.Nome = dr["cli_nome"] != DBNull.Value ? dr["cli_nome"].ToString() : null;
-                                this.Telefone1 = dr["cli_telefone1"].ToString();
-                                this.Telefone2 = dr["cli_telefone2"].ToString();
-                                this.CPF = dr["cli_cpf"].ToString();
-                                this.Endereco = dr["cli_endereco"].ToString();
-                                this.CEP = dr["cli_cep"].ToString();
-                                this.Cidade = dr["cli_cidade"].ToString();
-                                this.UF = dr["cli_uf"].ToString();
+                                this.cli_id = IdCliente;
+                                this.cli_nome = dr["cli_nome"] != DBNull.Value ? dr["cli_nome"].ToString() : null;
+                                this.cli_telefone1 = dr["cli_telefone1"].ToString();
+                                this.cli_telefone2 = dr["cli_telefone2"].ToString();
+                                this.cli_cpf = dr["cli_cpf"].ToString();
+                                this.cli_endereco = dr["cli_endereco"].ToString();
+                                this.cli_cep = dr["cli_cep"].ToString();
+                                this.cli_cidade = dr["cli_cidade"].ToString();
+                                this.cli_uf = dr["cli_uf"].ToString();
                             }
                         }
                     }
@@ -240,15 +241,15 @@ namespace FestasApp.Models
                     cn.Open();
                     using (MySqlCommand cmd = new MySqlCommand(sql, cn))
                     {
-                        cmd.Parameters.AddWithValue("@Id", Id);
-                        cmd.Parameters.AddWithValue("@Nome", Nome);
-                        cmd.Parameters.AddWithValue("@Telefone1", Telefone1);
-                        cmd.Parameters.AddWithValue("@Telefone2", Telefone2);
-                        cmd.Parameters.AddWithValue("@CPF", CPF);
-                        cmd.Parameters.AddWithValue("@Endereco", Endereco);
-                        cmd.Parameters.AddWithValue("@CEP", CEP);
-                        cmd.Parameters.AddWithValue("@Cidade", Cidade);
-                        cmd.Parameters.AddWithValue("@UF", UF);
+                        cmd.Parameters.AddWithValue("@Id", cli_id);
+                        cmd.Parameters.AddWithValue("@Nome", cli_nome);
+                        cmd.Parameters.AddWithValue("@Telefone1", cli_telefone1);
+                        cmd.Parameters.AddWithValue("@Telefone2", cli_telefone2);
+                        cmd.Parameters.AddWithValue("@CPF", cli_cpf);
+                        cmd.Parameters.AddWithValue("@Endereco", cli_endereco);
+                        cmd.Parameters.AddWithValue("@CEP", cli_cep);
+                        cmd.Parameters.AddWithValue("@Cidade", cli_cidade);
+                        cmd.Parameters.AddWithValue("@UF", cli_uf);
 
                         cmd.ExecuteNonQuery();
                     }
@@ -279,7 +280,7 @@ namespace FestasApp.Models
                     cn.Open();
                     using (MySqlCommand cmd = new MySqlCommand(sql, cn))
                     {
-                        cmd.Parameters.AddWithValue("@Id", Id);
+                        cmd.Parameters.AddWithValue("@Id", cli_id);
                         cmd.ExecuteNonQuery();
                     }
                 }

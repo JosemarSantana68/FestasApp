@@ -31,32 +31,51 @@ namespace FestasApp.Views.Usuarios
 
             SuspendLayout();
                 ConfigurarFormBaseCrud("U s u á r i o s", operacao);
-            ConfigurarControles();
-            PopularControlesComUsuario();
-
-            this.ResumeLayout();
-
+                SetThisForm();
+                SetControls();
+                AddToolStripEventHandlers();
+                PopularControlesComUsuario();
+            ResumeLayout();
+        }
+        //
+        private void AddToolStripEventHandlers()
+        {
             this.tstbtnSalvar.Click += TstbtnSalvar_Click;
+        }
+        //
+        // Configura o formulário com base na operação
+        private void SetThisForm()
+        {
+            // Testa a operacao e configura os controles...
+            switch (operacao)
+            {
+                case OperacaoCRUD.NOVO:
+                    break;
+                case OperacaoCRUD.EDITAR:
+                    break;
+                case OperacaoCRUD.EXCLUIR:
+                    //TravarControles();
+                    break;
+                case OperacaoCRUD.CONSULTAR:
+                    //TravarControles();
+                    break;
+            }
         }
         //
         // btn SALVAR
         private void TstbtnSalvar_Click(object? sender, EventArgs e)
         {
-            if (ValidarControles()) // Valida os controles antes de continuar
+            if (operacao == OperacaoCRUD.NOVO)
             {
-                AtualizaUsuario();
-                if (operacao == OperacaoCRUD.NOVO)
-                {
-                    SalvarUsuario();
-                }
-                else if (operacao == OperacaoCRUD.EDITAR)
-                {
-                    EditarUsuario();
-                }
-                else if (operacao == OperacaoCRUD.EXCLUIR)
-                {
-                    DeletarUsuario();
-                }
+                SalvarNovoUsuario();
+            }
+            else if (operacao == OperacaoCRUD.EDITAR)
+            {
+                EditarUsuario();
+            }
+            else if (operacao == OperacaoCRUD.EXCLUIR)
+            {
+                DeletarUsuario();
             }
         }
         //
@@ -66,7 +85,13 @@ namespace FestasApp.Views.Usuarios
             try
             {
                 // Exibe a mensagem de confirmação usando MessageBox.Show
-                var result = myUtilities.myMessageBox(this, $"Deseja Excluir o usuário {usuario.Nome}?\nEsta ação não poderá ser desfeita.", "Excluir Usuário", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                var message = $"""
+                        Deseja Excluir o usuário
+                        {usuario.user_nome}?
+                        
+                        Esta ação não poderá ser desfeita!
+                        """;
+                var result = myUtilities.myMessageBox(this, message, "Excluir Usuário", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
                 if (result == DialogResult.Yes)
                 {
@@ -74,7 +99,7 @@ namespace FestasApp.Views.Usuarios
                     if (usuario.DeleteUsuario())
                     {
                         // Exibe a mensagem de sucesso usando a nova função myMessageBox
-                        myUtilities.myMessageBox(this, "Usuário excluído com sucesso!", "E x c l u i r", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        //myUtilities.myMessageBox(this, "Usuário excluído com sucesso!", "E x c l u i r", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         this.Close(); // Fecha o formulário após excluir
                     }
                     else
@@ -99,10 +124,23 @@ namespace FestasApp.Views.Usuarios
         {
             try
             {
+                // Verifica se houve mudança nos dados do usuário
+                if (!ValidarClsUsuario())
+                {
+                    myUtilities.myMessageBox(this, "Não houve nenhuma mudança nos dados do usuário.", "Informação", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+
+                // Verifica se os controles são válidos
+                if (!ValidarControles())
+                    return;
+
+                AtualizarClsUsuario();
+
                 if (usuario.UpdateUsuario())
                 {
                     // Exibe a mensagem de sucesso usando a nova função myMessageBox
-                    myUtilities.myMessageBox(this, $"Usuário {usuario.Nome} alterado com sucesso!", "A l t e r a r", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    myUtilities.myMessageBox(this, $"Usuário {usuario.user_nome} alterado com sucesso!", "A l t e r a r", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     this.Close(); // Fecha o formulário após salvar 
                 }
             }
@@ -117,14 +155,20 @@ namespace FestasApp.Views.Usuarios
         }
         //
         // NOVO usuário
-        private void SalvarUsuario()
+        private void SalvarNovoUsuario()
         {
             try
             {
+                // Verifica se os controles são válidos
+                if (!ValidarControles())
+                    return;
+
+                AtualizarClsUsuario();
+
                 if (usuario.CreateUsuario())
                 {
                     // Exibe a mensagem de sucesso usando a nova função myMessageBox
-                    myUtilities.myMessageBox(this, $"Novo Usuário {usuario.Nome} criado com sucesso!", "A d i c i o n a r", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    myUtilities.myMessageBox(this, $"Novo Usuário {usuario.user_nome} criado com sucesso!", "A d i c i o n a r", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     this.Close(); // Fecha o formulário após salvar 
                 }
             }
@@ -138,31 +182,44 @@ namespace FestasApp.Views.Usuarios
             }
         }
         //
+        private bool ValidarClsUsuario()
+        {
+            if (usuario.user_nome != txtUserNome.Text ||
+            usuario.user_login != txtUserLogin.Text ||
+            usuario.user_email != txtUserEmail.Text ||
+            usuario.user_senha != txtUserSenha.Text ||
+            usuario.user_ativo != chkUserAtivo.Checked)
+            {
+                return true;
+            }
+            return false;
+        }
+        //
         // ATUALIZA classe usuario com valores dos controles
-        private void AtualizaUsuario()
+        private void AtualizarClsUsuario()
         {
             //usuario.Id = Convert.ToInt32(lblID.Text);
-            usuario.Nome = txtUserNome.Text;
-            usuario.Login = txtUserLogin.Text;
-            usuario.Email = txtUserEmail.Text;
-            usuario.Senha = txtUserSenha.Text;
-            usuario.Ativo = chkUserAtivo.Checked; // grava Ativo bool true ou false
+            usuario.user_nome = txtUserNome.Text;
+            usuario.user_login = txtUserLogin.Text;
+            usuario.user_email = txtUserEmail.Text;
+            usuario.user_senha = txtUserSenha.Text;
+            usuario.user_ativo = chkUserAtivo.Checked; // grava Ativo bool true ou false
         }
         //
         // carrega controles com dados da classe usuario
         private void PopularControlesComUsuario()
         {
-            lblID.Text = usuario.Id.ToString();
-            txtUserNome.Text = usuario.Nome;
-            txtUserLogin.Text = usuario.Login;
-            txtUserEmail.Text = usuario.Email;
-            txtUserSenha.Text = usuario.Senha;
-            chkUserAtivo.Checked = usuario.Ativo;
+            lblID.Text = usuario.user_id.ToString();
+            txtUserNome.Text = usuario.user_nome;
+            txtUserLogin.Text = usuario.user_login;
+            txtUserEmail.Text = usuario.user_email;
+            txtUserSenha.Text = usuario.user_senha;
+            chkUserAtivo.Checked = usuario.user_ativo;
             ConfiguraChkUserAtivo();
         }
         //
         // Configurações dos controles do formulário
-        private void ConfigurarControles()
+        private void SetControls()
         {
             txtUserNome.MaxLength = 100;
             txtUserLogin.MaxLength = 50;
@@ -245,7 +302,6 @@ namespace FestasApp.Views.Usuarios
             // Se todas as validações passarem, retorna verdadeiro
             return true;
         }
-
 
     } // class FormUsuariosCRUD
 } // namespace FestasApp.Views.Usuarios

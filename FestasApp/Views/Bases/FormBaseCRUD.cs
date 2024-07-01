@@ -27,7 +27,6 @@ namespace FestasApp.ViewModels
         {
             lblTitulo.Text = $"C a d a s t r o   d e   {nomeform}";
             lblOperacao.Text = string.Empty;
-
             // Testa a operacao e preenche o Text da Label...
             switch (operacao)
             {
@@ -49,6 +48,7 @@ namespace FestasApp.ViewModels
                     break;
             }
         }
+        //
         // btn consultar
         public void ConfigurarBotaoCancelar()
         {
@@ -57,6 +57,7 @@ namespace FestasApp.ViewModels
             tstbtnSalvar.Visible = false;
             tstSeparadorSalvar.Visible = false;
         }
+        //
         // btn excluir
         public void ConfigurarBotaoExcluir()
         {
@@ -64,6 +65,7 @@ namespace FestasApp.ViewModels
             tstbtnSalvar.ToolTipText = "Excluir";
             tstbtnSalvar.Image = Properties.Resources.delete;
         }
+        //
         // btn cancelar
         private void tstbtnCancel_Click(object sender, EventArgs e)
         {

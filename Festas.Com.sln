@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Itens de Solução", "Itens
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyFramework", "..\..\MyFramework\MyFramework\MyFramework.csproj", "{9E4401D4-90F1-4743-AB42-5BFDFB0237B1}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EstoqueComEF5", "..\..\codigos-de-terceiros\EstoqueComEF5\EstoqueComEF5\EstoqueComEF5.csproj", "{52B4AD9F-7361-40C1-A015-2F005BBFBC50}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{9E4401D4-90F1-4743-AB42-5BFDFB0237B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9E4401D4-90F1-4743-AB42-5BFDFB0237B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9E4401D4-90F1-4743-AB42-5BFDFB0237B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52B4AD9F-7361-40C1-A015-2F005BBFBC50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52B4AD9F-7361-40C1-A015-2F005BBFBC50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52B4AD9F-7361-40C1-A015-2F005BBFBC50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52B4AD9F-7361-40C1-A015-2F005BBFBC50}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

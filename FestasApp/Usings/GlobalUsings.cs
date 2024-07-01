@@ -22,6 +22,9 @@ global using System.Data;
 global using System.Runtime.InteropServices;
 global using System.Globalization;
 global using System.Drawing.Drawing2D;
+global using System.ComponentModel.DataAnnotations.Schema;
+global using System.ComponentModel.DataAnnotations;
+global using Microsoft.EntityFrameworkCore;
 
 // FestasApp namespaces
 global using FestasApp.Properties;
@@ -37,6 +40,7 @@ global using FestasApp.Views.Clientes;
 global using FestasApp.Views.Calendario;
 global using FestasApp.Views.Usuarios;
 global using FestasApp.Views.Festas;
+global using FestasApp.Views.Bases;
 
 // MyFrameWork namespaces
 global using MyFramework.myControls.myButtons;
