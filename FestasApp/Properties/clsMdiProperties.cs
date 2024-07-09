@@ -1,16 +1,13 @@
-﻿//***********************************************************
-//
+﻿//-------------------------------------------------------------
 //   Festa.Com - Aplicativo para Controle de Festas & Eventos
 //   Autor: Josemar Santana
 //   Linguagem: C#
 //
 //   Inicio: 23/05/2024
 //   Ultima Alteração: 12/06/2024
-//
 //   
 //   CLASSE CLSMDIPROPERTIES
-//
-//************************************************************
+//-------------------------------------------------------------
 
 using System.Runtime.InteropServices;
 
