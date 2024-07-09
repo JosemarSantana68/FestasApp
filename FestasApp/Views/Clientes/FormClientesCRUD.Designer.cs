@@ -63,13 +63,13 @@
             // 
             // lblOperacao
             // 
-            lblOperacao.Location = new Point(422, 3);
+            lblOperacao.Location = new Point(436, 3);
             lblOperacao.Padding = new Padding(0, 0, 10, 0);
-            lblOperacao.Size = new Size(139, 58);
+            lblOperacao.Size = new Size(145, 58);
             // 
             // lblTitulo
             // 
-            lblTitulo.Size = new Size(333, 58);
+            lblTitulo.Size = new Size(347, 58);
             // 
             // pnlCentral
             // 
@@ -278,6 +278,7 @@
             // 
             // txtTelefone1
             // 
+            txtTelefone1.CutCopyMaskFormat = MaskFormat.ExcludePromptAndLiterals;
             txtTelefone1.Font = new Font("Segoe UI", 10F);
             txtTelefone1.ForeColor = Color.Black;
             txtTelefone1.Location = new Point(174, 81);
@@ -289,6 +290,7 @@
             // 
             // txtTelefone2
             // 
+            txtTelefone2.CutCopyMaskFormat = MaskFormat.ExcludePromptAndLiterals;
             txtTelefone2.Font = new Font("Segoe UI", 10F);
             txtTelefone2.ForeColor = Color.Black;
             txtTelefone2.Location = new Point(174, 113);
@@ -329,6 +331,7 @@
             Name = "FormClientesCRUD";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "FormClientesCRUD";
+            Load += FormClientesCRUD_Load;
             pnlCentral.ResumeLayout(false);
             ((ISupportInitialize)picLogoCrud).EndInit();
             tableLayoutPanel1.ResumeLayout(false);

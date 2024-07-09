@@ -126,7 +126,7 @@ namespace FestasApp.Models
                          "@Valor)";
             try
             {
-                using (MySqlConnection cn = new MySqlConnection(ConnMySql.strConnMySql))
+                using (MySqlConnection cn = new MySqlConnection(myConnMySql.strConnMySql))
                 {
                     cn.Open();
                     using (MySqlCommand cmd = new MySqlCommand(sql, cn))
@@ -165,7 +165,7 @@ namespace FestasApp.Models
             string sql = "SELECT * FROM tblfestas WHERE fest_id = @IdFesta";
             try
             {
-                using (MySqlConnection cn = new MySqlConnection(ConnMySql.strConnMySql))
+                using (MySqlConnection cn = new MySqlConnection(myConnMySql.strConnMySql))
                 {
                     cn.Open();
                     using (MySqlCommand cmd = new MySqlCommand(sql, cn))
@@ -228,7 +228,7 @@ namespace FestasApp.Models
                         JOIN tblfestastipoevento ev ON f.fest_tpEv_id = ev.tpev_id";
             try
             {
-                using (MySqlConnection cn = new MySqlConnection(ConnMySql.strConnMySql))
+                using (MySqlConnection cn = new MySqlConnection(myConnMySql.strConnMySql))
                 {
                     cn.Open();
                     using (MySqlDataAdapter da = new MySqlDataAdapter(sql, cn))
@@ -277,7 +277,7 @@ namespace FestasApp.Models
                         "JOIN tblfestasespacos esp ON f.fest_espc_id = esp.espc_id  ";
             try
             {
-                using (MySqlConnection cn = new MySqlConnection(ConnMySql.strConnMySql))
+                using (MySqlConnection cn = new MySqlConnection(myConnMySql.strConnMySql))
                 {
                     cn.Open();
                     using (MySqlDataAdapter da = new MySqlDataAdapter(sql, cn))
@@ -317,7 +317,7 @@ namespace FestasApp.Models
                          "WHERE fest_id = @Id";
             try
             {
-                using (MySqlConnection cn = new MySqlConnection(ConnMySql.strConnMySql))
+                using (MySqlConnection cn = new MySqlConnection(myConnMySql.strConnMySql))
                 {
                     cn.Open();
                     using (MySqlCommand cmd = new MySqlCommand(sql, cn))
@@ -359,7 +359,7 @@ namespace FestasApp.Models
             string sql = "DELETE FROM tblfestas WHERE fest_id = @Id";
             try
             {
-                using (MySqlConnection cn = new MySqlConnection(ConnMySql.strConnMySql))
+                using (MySqlConnection cn = new MySqlConnection(myConnMySql.strConnMySql))
                 {
                     cn.Open();
                     using (MySqlCommand cmd = new MySqlCommand(sql, cn))

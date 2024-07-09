@@ -5,7 +5,7 @@
 //   Linguagem: C#
 //
 //   Inicio: 23/05/2024
-//   Ultima Alteração: 12/06/2024
+//   Ultima Alteração: 06/07/2024
 //   
 //   FORMULÁRIO DE FESTAS
 //
@@ -14,15 +14,16 @@
 namespace FestasApp.Views
 {
     public partial class FormFestasCadastro : FormBaseCadastro
-    {    
+    {
+        // DataGridFestas
+        private DataTable dtFestas = new DataTable();
         // dependências: instancia objetos das classes...
-        private clsFestasDetalhes festasDetalhes = new clsFestasDetalhes();
         private clsFestas festa = new clsFestas();
         private clsFestasContext _context = new clsFestasContext();
+        private clsFestasDetalhes festasDetalhes = new clsFestasDetalhes();
 
-        
 
-        // criação - construtor
+        // criação - construtor - no ...new Form();
         public FormFestasCadastro()
         {
             /* Aqui é o lugar ideal para configurar:
@@ -30,37 +31,33 @@ namespace FestasApp.Views
             2.Event Handlers: Associação de eventos aos seus respectivos manipuladores, como clique de botão, alteração de texto, etc.
             3.Definição de propriedades estáticas: Propriedades que não vão depender de nenhuma lógica dinâmica ou de dados que precisam ser carregados de fontes externas.
              */
-
             SuspendLayout();
             InitializeComponent();
-            
-            //_context = context;
             SetThisForm();
-            SetControls();
-
             AddToolStripEventHandlers();
-            CarregarDtgFestasEF();
-
             ResumeLayout(false);
         }
-        // carregamento
-        private void FormFestas_Load(object sender, EventArgs e)
+         // carregamento - no .Show();
+        private void FormFestasCadastro_Load(object sender, EventArgs e)
         {
             /* Aqui é o lugar ideal para configurar:
             1.Carregamento de dados: Busca e carregamento de dados de fontes externas, como bancos de dados ou arquivos.
             2.Inicialização de lógica de negócio: Qualquer lógica de inicialização que dependa de dados ou estado do sistema.
             3.Configuração dinâmica: Configuração de controles com base em dados carregados dinamicamente ou estado da aplicação.
              */
-            
+            SuspendLayout();
+            SetControls();
+            CarregarDtgFestasEF();
+            ResumeLayout(false);
         }
         //
         // Configurações iniciais do formulário de cliente
         private void SetThisForm()
         {
-            // Adicione aqui as configurações específicas para o formulário de cliente
+            // Adicione aqui as configurações específicas para o formulário
             this.FormBorderStyle = FormBorderStyle.None;
             lblTitulo.Text = "C a d a s t r o  d e  F e s t a s";
-            lblTitulo.Font = new Font("Segoe UI", 12F, FontStyle.Bold);           
+            lblTitulo.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
         }
         private void SetControls()
         {
@@ -68,68 +65,101 @@ namespace FestasApp.Views
             ConfigurarColunasDtgItensFestas();
         }
         //
-        // DataGridFestas
-        private DataTable dtFestas = new DataTable();
-        //
         private void TratarControles(bool desabilitar)
         {
             // controles deste form
-            
+
             //if (txtPesquisaCliente != null) txtPesquisaCliente.Enabled = !desabilitar;
             // controles do formBase
             TratarBtnCrud(desabilitar);
         }
         //
+        
+        //
         // ENTITY FRAMEWORK
         private void CarregarDtgFestasEF()
         {
+            // testa a conexão
+            if (!myConnMySql.TestarConexao())
+            {
+                if (tstbtnNovo != null) tstbtnNovo.Enabled = false;
+                TratarControles(true); // Desabilita botões de CRUD em caso de erro
+                return;
+            }
+
             DataGridView dtg = dtgFestas;
-            dtg.Rows.Clear(); // Limpa linhas existentes no DataGridView
+            dtg.Rows.Clear();
+
             try
             {
-                var festas = _context.Festas
-                    .Include(f => f.Cliente)
-                    .Include(f => f.Pacote)
-                    .Include(f => f.Tema)
-                    .Include(f => f.Espaco)
-                    .Include(f => f.Status)
-                    .Include(f => f.TipoEvento)
-                    .Include(f => f.Usuario)
-                    .ToList();
+                // carregar dados do clsFestaContext : DbSet
+                var listaFestas = repFestasEF.GetFestasEF();
 
-                foreach (var festa in festas)
+                if (listaFestas != null)
                 {
-                    dtg.Rows.Add(
-                        festa.fest_id,
-                        festa.fest_dtFesta?.ToString("dd/MM/yyyy"),
-                        festa.Cliente?.cli_nome,
-                        festa.Pacote?.pct_nome,
-                        festa.Tema?.tema_nome,
-                        festa.Espaco?.espc_nome,
-                        festa.Status?.stt_status,
-                        festa.TipoEvento?.tpev_nome,
-                        festa.fest_valor,
-                        festa.Usuario?.user_nome,
-                        festa.fest_dtVenda?.ToString("dd/MM/yyyy")
-                    );
-                }
+                    foreach (var festa in listaFestas)
+                    {
+                        dtg.Rows.Add(
+                            festa.fest_id,
+                            festa.fest_dtFesta?.ToString("dd/MM/yyyy"),
+                            festa.Cliente?.cli_nome,
+                            festa.Pacote?.pct_nome,
+                            festa.Tema?.tema_nome,
+                            festa.Espaco?.espc_nome,
+                            festa.Status?.stt_status,
+                            festa.TipoEvento?.tpev_nome,
+                            festa.fest_valor,
+                            festa.Usuario?.user_nome,
+                            festa.fest_dtVenda?.ToString("dd/MM/yyyy")
+                        );
+                    }
+                    CalcularDataGridEF();
+                }            
             }
             catch (MySqlException mysqlEx)
             {
                 // Trata erros específicos do MySQL
                 FormMenuMain.ShowMyMessageBox($"Erro no banco de dados: {mysqlEx.Message}\nCarregarDtgFestasEF", "SQL exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
                 if (tstbtnNovo != null) tstbtnNovo.Enabled = false;
                 TratarControles(true); // Desabilita botões de CRUD em caso de erro
             }
             catch (Exception ex)
             {
                 FormMenuMain.ShowMyMessageBox($"Erro ao carregar festas: {ex.Message}\nCarregarDtgFestasEF", "Erro de Conexão");
+
                 if (tstbtnNovo != null) tstbtnNovo.Enabled = false;
                 TratarControles(true); // Desabilita botões de CRUD em caso de erro
             }
         }
+        private void CalcularDataGridEF()
+        {
+            using (var context = new clsFestasContext())
+            {
+                // Total de registros
+                int totalRegistros = context.Festas.Count();
+
+                // Menor data de festa
+                DateTime? menorData = context.Festas.Min(f => (DateTime?)f.fest_dtFesta);
+
+                // Maior data de festa
+                DateTime? maiorData = context.Festas.Max(f => (DateTime?)f.fest_dtFesta);
+
+                // Soma do valor das festas
+                decimal somaColuna = context.Festas.Sum(f => (decimal?)(f.fest_valor) ?? 0);
+
+                // Exibir os resultados em labels
+                lblTotalFestas.Text = totalRegistros.ToString();
+
+                lblPeriodoFestas.Text = menorData.HasValue && maiorData.HasValue
+                    ? $"{menorData.Value.ToString("dd/MM/yyyy")} à {maiorData.Value.ToString("dd/MM/yyyy")}" : "N/A";
+
+                lblValorTotalFestas.Text = somaColuna.ToString("C", new CultureInfo("pt-BR"));
+            }
+        }
+
         //--------------------------------------------
-        // DataGridViews
+        // DataGridFestas
         // constantes com Numeros das colunas
         private const int ColId = 0;            // recebe clsFestas.Id
         private const int ColDataFesta = 1;     // clsFestas.DataFesta
@@ -160,6 +190,7 @@ namespace FestasApp.Views
             myFunctions.ConfigurarAdicionarColuna(dtg, ColValor, "Valor Total", 120, DataGridViewContentAlignment.MiddleRight);
             myFunctions.ConfigurarAdicionarColuna(dtg, ColUserNome, "Vendedor", 120, padding: new Padding(5, 0, 0, 0));
             myFunctions.ConfigurarAdicionarColuna(dtg, ColDataVenda, "Data da Venda", 120, DataGridViewContentAlignment.MiddleCenter);
+            
             // Ordenar datagrid
             dtg.Sort(dtg.Columns[ColDataFesta], ListSortDirection.Ascending);
             dtg.Columns[ColValor].DefaultCellStyle.Format = "C2";
@@ -183,18 +214,6 @@ namespace FestasApp.Views
         }
         //
         // Uso do método CalcularDataGridDatasSomas
-        private void CalcularDataGrid()
-        {
-            myFunctions.CalcularDataGridDatasSomas(dtgFestas, ColDataFesta, ColValor, out int totalRegistros, out DateTime? menorData, out DateTime? maiorData, out decimal somaColuna);
-            // Exibir os resultados em labels
-            lblTotalFestas.Text = totalRegistros.ToString();
-
-            lblPeriodoFestas.Text = menorData.HasValue && maiorData.HasValue
-                 ? $"{menorData.Value.ToString("dd/MM/yyyy")} à {maiorData.Value.ToString("dd/MM/yyyy")}" : "N/A";
-
-            //lblValorTotalFestas.Text = somaColuna.ToString("N2"); // Exibir a soma com separadores de milhar e duas casas decimais
-            lblValorTotalFestas.Text = somaColuna.ToString("C", new CultureInfo("pt-BR"));
-        }
         //
         // adiciona eventos aos stripsButtons...
         private void AddToolStripEventHandlers()
@@ -204,6 +223,8 @@ namespace FestasApp.Views
             this.tstbtnEditar.Click += TstbtnEditar_Click;
             this.tstbtnConsultar.Click += TstbtnConsultar_Click;
             this.tstbtnExcluir.Click += TstbtnExcluir_Click;
+            this.Load += FormFestasCadastro_Load!;
+
             // para o datagrid
             this.dtgFestas.SelectionChanged += DtgFestas_SelectionChanged;
         }
@@ -217,14 +238,8 @@ namespace FestasApp.Views
                 var selectedRow = dtgFestas.SelectedRows[0]; // Obtém a linha selecionada
                 festaId = Convert.ToInt32(selectedRow.Cells[ColId].Value); // obtém o valor do Id da Festa da linha selecionada
                 
+                LimparCamposDetalhesEF();
                 SetControlsDetalhesFestaEF();
-                //mostra em dtgItensFestas os itens da festa
-                //CarregarDtgItensFestaEF();
-
-                // método anterior a EF
-                //festasDetalhes.ReadOnlyOne(IdFesta); // carrega os detalhes da festa da tabela em clsFestasDetalhes
-                //SetControlsDetalhesFesta(); // mostra no form os dados dos detalhes carregados
-                //CarregarDtgItensFesta(IdFesta); //mostra em dtgItensFestas os itens da festa
             }
             else
             {
@@ -232,7 +247,7 @@ namespace FestasApp.Views
             }
         }
         //
-        // DataGridViews
+        // DataGridItens
         // constantes com Numeros das colunas
         private const int ItemNome = 0;
         private const int ItemQtde = 1;
@@ -256,38 +271,58 @@ namespace FestasApp.Views
             // Formatar coluna Valor como moeda
             dtgItem.Columns[ItemNome].DefaultCellStyle.Font = new Font("Segoe UI", 9, FontStyle.Bold);
             dtgItem.Columns[ItemValor].DefaultCellStyle.Format = "C2";
+            //
+            // Configuração da altura geral das linhas
+            dtgItem.RowTemplate.Height = 25;
         }
         //
         // método utiliza entity framework para popular controles dos detalhes da festa no form
-        private void SetControlsDetalhesFestaEF()
+        private async void SetControlsDetalhesFestaEF()
         {
             if (festaId.HasValue)
             {
                 // cria nova entidade context
                 using (var context = new clsFestasContext())
                 {
-                    // atribui a var os detalhes da festa selecionada
-                    var detalhesFesta = context.Detalhes
-                        .FirstOrDefault(d => d.detfest_fest_id == festaId.Value);
+                    // Carrega a festa com os detalhes e as entidades relacionadas
+                    var festa = context.Festas
+                        .Include(f => f.TipoEvento)
+                        .Include(f => f.Status)
+                        .Include(f => f.Detalhes)
+                        .FirstOrDefault(f => f.fest_id == festaId.Value);
 
                     // se encontrar registros na tabela para a festa
-                    if (detalhesFesta != null)
+                    if (festa != null)
                     {
                         // nome do cliente direto do dtgFestas.
                         lblNomeCliente.Text = dtgFestas.SelectedRows[0].Cells[ColClienteNome].Value?.ToString() ?? string.Empty;
                         lblNomeCliente.ForeColor = Color.DarkGoldenrod;
 
-                        lblHoraInicio.Text = detalhesFesta.detfest_iniciohora?.ToString(@"hh\:mm") ?? "Não especificado";
-                        lblHoraFim.Text = detalhesFesta.detfest_fimhora?.ToString(@"hh\:mm") ?? "Não especificado";
-                        lblCriancasPagantes.Text = detalhesFesta.detfest_criancaspagantes?.ToString() ?? "0";
-                        lblCriancasNaoPagantes.Text = detalhesFesta.detfest_criancasnaopagantes?.ToString() ?? "0";
-                        lblAdultos.Text = detalhesFesta.detfest_adultos?.ToString() ?? "0";
-                        lblTotalPessoa.Text = detalhesFesta.detfest_totalpessoas?.ToString() ?? "0";
-                        lblContratoModelo.Text = detalhesFesta.detfest_contratomodelo?.ToString() ?? "Não especificado";
-                        lblObservacaoFestas.Text = detalhesFesta.detfest_observacao ?? "Sem observações";
-                        // Pessoas a mais
-                        //lblPessoasAMais.Text = detalhesFesta.detfest_pessoasamais?.ToString() ?? "0";
+                        // Atribui os valores às labels
+                        lblTipoEvento.Text = festa.TipoEvento?.tpev_nome ?? string.Empty;
+                        lblStatusFesta.Text = festa.Status?.stt_status ?? string.Empty;
 
+                        // Verifica se existem detalhes da festa
+                        var detalhesFesta = festa.Detalhes?.FirstOrDefault();
+                        if (detalhesFesta != null)
+                        {
+                            lblHoraInicio.Text = myDateTime.FormatTimeForDisplay(detalhesFesta.detfest_iniciohora);
+                            lblHoraFim.Text = myDateTime.FormatTimeForDisplay(detalhesFesta.detfest_fimhora);
+                            lblCriancasPagantes.Text = detalhesFesta.detfest_criancaspagantes?.ToString() ?? string.Empty;
+                            lblCriancasNaoPagantes.Text = detalhesFesta.detfest_criancasnaopagantes?.ToString() ?? string.Empty;
+                            lblAdultos.Text = detalhesFesta.detfest_adultos?.ToString() ?? string.Empty;
+                            lblTotalPessoa.Text = detalhesFesta.detfest_totalpessoas?.ToString() ?? string.Empty;
+                            lblObservacaoFestas.Text = detalhesFesta.detfest_observacao ?? string.Empty;
+                            lblPessoasAMais.Text = detalhesFesta.detfest_pessoasamais?.ToString() ?? string.Empty;
+
+                            // contrato
+                            var contrato = await context.Contratos.FirstOrDefaultAsync(c => c.ctt_id == detalhesFesta.detfest_ctt_id);
+                            if (contrato != null)
+                            {
+                                lblContratoModelo.Text = contrato.ctt_nome; // ERRO TRATAR
+                            }
+
+                        }
                         //mostra em dtgItensFestas os itens da festa
                         CarregarDtgItensFestaEF();
                     }
@@ -308,52 +343,72 @@ namespace FestasApp.Views
         // método utiliza entity framework para popular dtgItensFestas
         private void CarregarDtgItensFestaEF()
         {
+            // informações do dtgItensFesta
+            // altura de cada linha = 25
+            // altura maxima do dtgItensFesta height = 140
+            int alturaLinha = 25;
+            int alturaMaxima = 140;
+
             if (festaId.HasValue)
             {
                 // cria nova entidade context
                 using (var context = new clsFestasContext())
                 {
                     // Obtém os adicionais da festa selecionada, incluindo os itens relacionados
-                    var adicionaisFesta = context.Adicionais // tblFestasAdicionais
-                        .Include(a => a.ItensFestas)    // tblFestasItens        
-                        .Where(a => a.add_fest_id == festaId.Value) // filtra adicionais do id da festa
-                        .ToList();
-
-                    //var dataSource = adicionaisFesta.Select(a => new
-                    //{
-                    //    ItemNome = a.ItensFestas.itensfest_nome ?? "N/A",
-                    //    ItemQtde = a.add_qtde,
-                    //    ItemValor = a.add_valor
-                    //}).ToList();
-                    //dtgItensFestas.DataSource = dataSource;
-
+                    var adicionaisFesta = repFestasEF.GetItensFestaEF(festaId.Value);
+                   
                     // Limpa os dados existentes no DataGridView
                     dtgItensFestas.Rows.Clear();
-                    foreach (var adicional in adicionaisFesta)
+
+                    if (adicionaisFesta != null)
                     {
-                        // Adiciona uma nova linha ao DataGridView
-                        int rowIndex = dtgItensFestas.Rows.Add();
-                        // Popula as células da linha com os dados dos itens adicionais
-                        dtgItensFestas.Rows[rowIndex].Cells[ItemNome].Value = adicional.ItensFestas != null ? adicional.ItensFestas.itensfest_nome ?? "N/A" : "N/A";
-                        dtgItensFestas.Rows[rowIndex].Cells[ItemQtde].Value = adicional.add_qtde;
-                        dtgItensFestas.Rows[rowIndex].Cells[ItemValor].Value = adicional.add_valor;
+                        foreach (var adicional in adicionaisFesta)
+                        {
+                            // Adiciona uma nova linha ao DataGridView
+                            int rowIndex = dtgItensFestas.Rows.Add();
+                            // Popula as células da linha com os dados dos itens adicionais
+
+                            dtgItensFestas.Rows[rowIndex].Cells[ItemNome].Value = adicional.ItensFestas != null ? adicional.ItensFestas.itensfest_nome ?? "N/A" : "N/A";
+                            dtgItensFestas.Rows[rowIndex].Cells[ItemQtde].Value = adicional.add_qtde;
+
+                            dtgItensFestas.Rows[rowIndex].Cells[ItemValor].Value = adicional.add_valor;
+                        }
+                        // Desmarcar seleção
+                        dtgItensFestas.ClearSelection();
+
+                        // Calcula a altura necessária
+                        int alturaNecessaria = (adicionaisFesta.Count * alturaLinha) + 25; // acrescentar 25 do cabeçalho
+                        // Define a altura do DataGridView
+                        if (alturaNecessaria <= alturaMaxima)
+                        {
+                            //dtgItensFestas.Height = alturaNecessaria < alturaLinha ? alturaLinha : alturaNecessaria;
+                            dtgItensFestas.Height = alturaNecessaria;
+                        }
+                        else
+                        {
+                            dtgItensFestas.Height = alturaMaxima;
+                            dtgItensFestas.ScrollBars = ScrollBars.Vertical;
+                        }
                     }
                 }
             }
-        }       
+        }
         //
         private void LimparCamposDetalhesEF()
         {
-            lblNomeCliente.Text = string.Empty; //"Não especificado";
-            lblHoraInicio.Text = "Não especificado";
-            lblHoraFim.Text = "Não especificado";
-            lblCriancasPagantes.Text = "0";
-            lblCriancasNaoPagantes.Text = "0";
-            lblAdultos.Text = "0";
-            lblTotalPessoa.Text = "0";
-            lblContratoModelo.Text = "Não especificado";
-            lblObservacaoFestas.Text = "Sem observações";
-            //lblPessoasAMais.Text = "0";
+            lblNomeCliente.Text = string.Empty;
+            lblTipoEvento.Text = string.Empty;
+            lblHoraInicio.Text = string.Empty;
+            lblHoraFim.Text = string.Empty;
+            lblCriancasPagantes.Text = string.Empty;
+            lblCriancasNaoPagantes.Text = string.Empty;
+            lblAdultos.Text = string.Empty;
+            lblTotalPessoa.Text = string.Empty;
+            lblContratoModelo.Text = string.Empty;
+            lblObservacaoFestas.Text = string.Empty;
+            lblPessoasAMais.Text = string.Empty;
+            // Limpa os dados existentes no DataGridView
+            dtgItensFestas.Rows.Clear();
         }
         //
         // botão EXCLUIR...
@@ -374,7 +429,7 @@ namespace FestasApp.Views
         private void TstbtnEditar_Click(object? sender, EventArgs e)
         {
             OperacaoCRUD operacao = OperacaoCRUD.EDITAR;
-            AbrirFormCRUDEF(operacao); 
+            AbrirFormCRUDEF(operacao);
         }
         //
         // botão NOVO...
@@ -382,35 +437,25 @@ namespace FestasApp.Views
         {
             OperacaoCRUD operacao = OperacaoCRUD.NOVO;
             AbrirFormCRUDEF(operacao);
-
-            //// Se estiver criando uma nova festa, passe um ID inválido, como -1
-            //int novoFestaId = -1;
-            //FormFestasCRUD frm = new FormFestasCRUD(novoFestaId, operacao); // erro CS1503
-            //// Usar a CreateModalOverlay para exibir o FormClientesCRUD
-            //FormMenuMain.ShowModalOverlay(frm);
-            //// quando volta do CRUD, atualiza dataGrid com dados da tabela no BD
-            //CarregarDtgFestasEF();
         }
         //
         // 
         private void AbrirFormCRUDEF(OperacaoCRUD operacao)
         {
             // Verifique se há uma festaId selecionada no DataGridView
-            if (festaId.HasValue)
+            if (festaId.HasValue || operacao == OperacaoCRUD.NOVO)
             {
                 try
                 {
                     // Converta festaId para int
-                    int festaIdInt = operacao == OperacaoCRUD.NOVO ? -1 :festaId.Value;
-                    
-                    // Determina o valor de festaIdInt com base na operação
-                    //int festaIdInt = operacao == OperacaoCRUD.NOVO ? -1 : festaId.HasValue ? festaId.Value : throw new InvalidOperationException("Nenhuma festa selecionada.");
+                    int festaIdInt = operacao == OperacaoCRUD.NOVO ? -1 : festaId!.Value;
 
                     // Abra o formulário CRUD para edição passando o ID da festa e a operação
                     using (FormFestasCRUD frm = new FormFestasCRUD(festaIdInt, operacao))
                     {
                         // Usar a Modal para exibir o FormCRUD
                         FormMenuMain.ShowModalOverlay(frm);
+
                         // quando volta do CRUD, atualiza dataGrid com dados da tabela no BD
                         CarregarDtgFestasEF();
                     }
@@ -470,7 +515,7 @@ namespace FestasApp.Views
             lblCriancasNaoPagantes.Text = festasDetalhes.detfest_criancasnaopagantes?.ToString() ?? "N/A";
             lblAdultos.Text = festasDetalhes.detfest_adultos?.ToString() ?? "N/A";
             lblTotalPessoa.Text = festasDetalhes.detfest_totalpessoas?.ToString() ?? "N/A";
-            lblContratoModelo.Text = festasDetalhes.detfest_contratomodelo?.ToString() ?? "N/A";
+            lblContratoModelo.Text = festasDetalhes.detfest_ctt_id?.ToString() ?? "N/A";
             lblObservacaoFestas.Text = festasDetalhes.detfest_observacao ?? "N/A";
             // pessoas a mais????
         }
@@ -479,7 +524,7 @@ namespace FestasApp.Views
             try
             {
                 // Verifica se a conexão está ativa antes de tentar carregar os dados
-                if (FormMenuMain.ConexaoAtiva)
+                if (!myConnMySql.TestarConexao())
                 {
                     // Carrega os dados da tabela de festas
                     dtFestas = clsFestas.ReadAllFestas();
@@ -517,6 +562,18 @@ namespace FestasApp.Views
                 if (tstbtnNovo != null) tstbtnNovo.Enabled = false;
                 TratarControles(true); // Desabilita botões de CRUD em caso de erro
             }
+        }
+        private void CalcularDataGrid()
+        {
+            myFunctions.CalcularDataGridDatasSomas(dtgFestas, ColDataFesta, ColValor, out int totalRegistros, out DateTime? menorData, out DateTime? maiorData, out decimal somaColuna);
+            // Exibir os resultados em labels
+            lblTotalFestas.Text = totalRegistros.ToString();
+
+            lblPeriodoFestas.Text = menorData.HasValue && maiorData.HasValue
+                 ? $"{menorData.Value.ToString("dd/MM/yyyy")} à {maiorData.Value.ToString("dd/MM/yyyy")}" : "N/A";
+
+            //lblValorTotalFestas.Text = somaColuna.ToString("N2"); // Exibir a soma com separadores de milhar e duas casas decimais
+            lblValorTotalFestas.Text = somaColuna.ToString("C", new CultureInfo("pt-BR"));
         }
         private void CarregarDtgItensFestaEFSEMUSO(int festaId)
         {
@@ -641,7 +698,6 @@ namespace FestasApp.Views
                 operacao: operacao
             );
         }
-
 
     } // end class FormFestas
 } // end namespace

@@ -17,7 +17,7 @@
   `detfest_fest_id`             int     NOT NULL,
   `detfest_iniciohora`          time    DEFAULT NULL,
   `detfest_fimhora`             time    DEFAULT NULL,
-  `detfest_contratomodelo`      tinyint     DEFAULT NULL,
+  `detfest_ctt_id `      tinyint     DEFAULT NULL,
   `detfest_totalpessoas`        smallint DEFAULT NULL,
   `detfest_adultos`             smallint DEFAULT NULL,
   `detfest_criancaspagantes`    smallint DEFAULT NULL,
@@ -41,7 +41,10 @@ namespace FestasApp.Models
         //
         public TimeSpan? detfest_iniciohora { get; set; }
         public TimeSpan? detfest_fimhora { get; set; }
-        public int? detfest_contratomodelo { get; set; }
+        //
+        [ForeignKey("Contratos")]
+        public int? detfest_ctt_id { get; set; }
+        //
         public int? detfest_totalpessoas { get; set; }
         public int? detfest_adultos { get; set; }
         public int? detfest_criancaspagantes { get; set; }
@@ -51,17 +54,18 @@ namespace FestasApp.Models
 
         // relação com clsFestas
         public clsFestas? Festas { get; set; }
+        public clsFestasContratos? Contratos { get; set; }
 
         // Construtor padrão
         public clsFestasDetalhes() { }
         // Construtor com parâmetros
-        public clsFestasDetalhes(int detfest_id, int detfest_fest_id, TimeSpan? detfest_iniciohora, TimeSpan? detfest_fimhora, int? detfest_contratomodelo, int? detfest_totalpessoas, int? detfest_adultos, int? detfest_criancaspagantes, int? detfest_criancasnaopagantes, int? detfest_pessoasamais, string detfest_observacao)
+        public clsFestasDetalhes(int detfest_id, int detfest_fest_id, TimeSpan? detfest_iniciohora, TimeSpan? detfest_fimhora, int? detfest_ctt_id , int? detfest_totalpessoas, int? detfest_adultos, int? detfest_criancaspagantes, int? detfest_criancasnaopagantes, int? detfest_pessoasamais, string detfest_observacao)
         {
             this.detfest_id = detfest_id;
             this.detfest_fest_id = detfest_fest_id;
             this.detfest_iniciohora = detfest_iniciohora;
             this.detfest_fimhora = detfest_fimhora;
-            this.detfest_contratomodelo = detfest_contratomodelo;
+            this.detfest_ctt_id  = detfest_ctt_id ;
             this.detfest_totalpessoas = detfest_totalpessoas;
             this.detfest_adultos = detfest_adultos;
             this.detfest_criancaspagantes = detfest_criancaspagantes;
@@ -74,11 +78,11 @@ namespace FestasApp.Models
         // Implementação do método CRUD (Create) seguindo o mesmo padrão de estrutura
         public bool Create()
         {
-            string sql = "INSERT INTO tblfestasdetalhes (detfest_fest_id, detfest_iniciohora, detfest_fimhora, detfest_contratomodelo, detfest_totalpessoas, detfest_adultos, detfest_criancaspagantes, detfest_criancasnaopagantes, detfest_pessoasamais, detfest_observacao)" +
+            string sql = "INSERT INTO tblfestasdetalhes (detfest_fest_id, detfest_iniciohora, detfest_fimhora, detfest_ctt_id , detfest_totalpessoas, detfest_adultos, detfest_criancaspagantes, detfest_criancasnaopagantes, detfest_pessoasamais, detfest_observacao)" +
                          "VALUES (@FestId, @InicioHora, @FimHora, @ContratoModeloId, @TotalPessoas, @Adultos, @CriancasPagantes, @CriancasNaoPagantes, @PessoasAMais, @Observacao)";
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(ConnMySql.strConnMySql))
+                using (MySqlConnection conn = new MySqlConnection(myConnMySql.strConnMySql))
                 {
                     conn.Open();
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
@@ -86,7 +90,7 @@ namespace FestasApp.Models
                         cmd.Parameters.AddWithValue("@FestId", detfest_fest_id);
                         cmd.Parameters.AddWithValue("@InicioHora", detfest_iniciohora);
                         cmd.Parameters.AddWithValue("@FimHora", detfest_fimhora);
-                        cmd.Parameters.AddWithValue("@ContratoModeloId", detfest_contratomodelo);
+                        cmd.Parameters.AddWithValue("@ContratoModeloId", detfest_ctt_id );
                         cmd.Parameters.AddWithValue("@TotalPessoas", detfest_totalpessoas);
                         cmd.Parameters.AddWithValue("@Adultos", detfest_adultos);
                         cmd.Parameters.AddWithValue("@CriancasPagantes", detfest_criancaspagantes);
@@ -115,7 +119,7 @@ namespace FestasApp.Models
             string sql = "SELECT * FROM tblfestasdetalhes WHERE detfest_fest_id = @Idfesta";
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(ConnMySql.strConnMySql))
+                using (MySqlConnection conn = new MySqlConnection(myConnMySql.strConnMySql))
                 {
                     conn.Open();
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
@@ -128,7 +132,7 @@ namespace FestasApp.Models
                                 detfest_fest_id = IdFesta;
                                 detfest_iniciohora = dr["detfest_iniciohora"] as TimeSpan?;
                                 detfest_fimhora = dr["detfest_fimhora"] as TimeSpan?;
-                                detfest_contratomodelo = dr["detfest_contratomodelo"] != DBNull.Value ? (int?)(sbyte)dr["detfest_contratomodelo"] : null;
+                                detfest_ctt_id  = dr["detfest_ctt_id "] != DBNull.Value ? (int?)(sbyte)dr["detfest_ctt_id "] : null;
                                 detfest_totalpessoas = dr["detfest_totalpessoas"] != DBNull.Value ? (int?)Convert.ToInt32(dr["detfest_totalpessoas"]) : null;
                                 detfest_adultos = dr["detfest_adultos"] != DBNull.Value ? (int?)Convert.ToInt32(dr["detfest_adultos"]) : null;
                                 detfest_criancaspagantes = dr["detfest_criancaspagantes"] != DBNull.Value ? (int?)Convert.ToInt32(dr["detfest_criancaspagantes"]) : null;
@@ -157,7 +161,7 @@ namespace FestasApp.Models
             DataTable dt = new DataTable();
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(ConnMySql.strConnMySql))
+                using (MySqlConnection conn = new MySqlConnection(myConnMySql.strConnMySql))
                 {
                     conn.Open();
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
@@ -183,10 +187,10 @@ namespace FestasApp.Models
         // Implementação do método CRUD (Update) seguindo o mesmo padrão de estrutura
         public bool Update()
         {
-            string sql = "UPDATE tblfestasdetalhes SET detfest_fest_id = @FestId, detfest_iniciohora = @InicioHora, detfest_fimhora = @FimHora, detfest_contratomodelo = @ContratoModeloId, detfest_totalpessoas = @TotalPessoas, detfest_adultos = @Adultos, detfest_criancaspagantes = @CriancasPagantes, detfest_criancasnaopagantes = @CriancasNaoPagantes, detfest_pessoasamais = @PessoasAMais, detfest_observacao = @Observacao WHERE detfest_id = @Id";
+            string sql = "UPDATE tblfestasdetalhes SET detfest_fest_id = @FestId, detfest_iniciohora = @InicioHora, detfest_fimhora = @FimHora, detfest_ctt_id  = @ContratoModeloId, detfest_totalpessoas = @TotalPessoas, detfest_adultos = @Adultos, detfest_criancaspagantes = @CriancasPagantes, detfest_criancasnaopagantes = @CriancasNaoPagantes, detfest_pessoasamais = @PessoasAMais, detfest_observacao = @Observacao WHERE detfest_id = @Id";
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(ConnMySql.strConnMySql))
+                using (MySqlConnection conn = new MySqlConnection(myConnMySql.strConnMySql))
                 {
                     conn.Open();
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
@@ -195,7 +199,7 @@ namespace FestasApp.Models
                         cmd.Parameters.AddWithValue("@FestId", detfest_fest_id);
                         cmd.Parameters.AddWithValue("@InicioHora", detfest_iniciohora);
                         cmd.Parameters.AddWithValue("@FimHora", detfest_fimhora);
-                        cmd.Parameters.AddWithValue("@ContratoModeloId", detfest_contratomodelo);
+                        cmd.Parameters.AddWithValue("@ContratoModeloId", detfest_ctt_id );
                         cmd.Parameters.AddWithValue("@TotalPessoas", detfest_totalpessoas);
                         cmd.Parameters.AddWithValue("@Adultos", detfest_adultos);
                         cmd.Parameters.AddWithValue("@CriancasPagantes", detfest_criancaspagantes);
@@ -223,7 +227,7 @@ namespace FestasApp.Models
             string sql = "DELETE FROM tblfestasdetalhes WHERE detfest_id = @Id";
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(ConnMySql.strConnMySql))
+                using (MySqlConnection conn = new MySqlConnection(myConnMySql.strConnMySql))
                 {
                     conn.Open();
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))

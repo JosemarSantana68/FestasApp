@@ -6,7 +6,7 @@
 //
 //   Inicio: 23/05/2024
 //   Criação do Módulo: 21/06/2024
-//   Ultima Alteração: 22/06/2024
+//   Ultima Alteração: 06/07/2024
 //   
 //   Referências globais, namespaces que serão automaticamente incluídos em todos os arquivos do projeto
 //
@@ -31,7 +31,9 @@ global using FestasApp.Properties;
 global using FestasApp.Controllers;
 global using FestasApp.Models;
 global using FestasApp.Enums;
+global using FestasApp.Utilities;
 global using FestasApp.Utilities.myFunctions;
+global using FestasApp.Repositories;
 
 // FestasApp Formulários
 global using FestasApp.Views;

@@ -25,7 +25,7 @@ namespace FestasApp.Utilities.myFunctions
             string sql = $" SELECT {campoId}, {campoNome} FROM {tabela}";
             try
             {
-                using (MySqlConnection cn = new MySqlConnection(ConnMySql.strConnMySql))
+                using (MySqlConnection cn = new MySqlConnection(myConnMySql.strConnMySql))
                 {
                     cn.Open();
                     using (MySqlDataAdapter da = new MySqlDataAdapter(sql, cn))

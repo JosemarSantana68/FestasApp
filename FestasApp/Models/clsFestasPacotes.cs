@@ -32,10 +32,13 @@ namespace FestasApp.Models
         // propriedades
         [Key]
         public int pct_id { get; set; }
+
+        [Required]
         public string pct_nome { get; set; } = string.Empty;
-        public string? pct_descricao { get; set; } = string.Empty;
-        public string? pct_duracao { get; set; } = string.Empty;
-        public double pct_valor { get; set; }
+
+        public string? pct_descricao { get; set; }
+        public string? pct_duracao { get; set; }
+        public double? pct_valor { get; set; }
 
         // Construtor padrão
         public clsFestasPacotes()
@@ -62,7 +65,7 @@ namespace FestasApp.Models
             try
             {
                 // conexão
-                using (MySqlConnection conn = new MySqlConnection(ConnMySql.strConnMySql))
+                using (MySqlConnection conn = new MySqlConnection(myConnMySql.strConnMySql))
                 {
                     // abrir conexão
                     conn.Open();
@@ -101,7 +104,7 @@ namespace FestasApp.Models
 
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(ConnMySql.strConnMySql))
+                using (MySqlConnection conn = new MySqlConnection(myConnMySql.strConnMySql))
                 {
                     conn.Open();
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
@@ -150,7 +153,7 @@ namespace FestasApp.Models
             string sql = "DELETE FROM tblfestaspacotes WHERE pct_id = @Id";
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(ConnMySql.strConnMySql))
+                using (MySqlConnection conn = new MySqlConnection(myConnMySql.strConnMySql))
                 {
                     conn.Open();
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))

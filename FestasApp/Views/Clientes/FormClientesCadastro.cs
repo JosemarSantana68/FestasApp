@@ -11,27 +11,28 @@
 //
 //************************************************************
 
-using MySqlX.XDevAPI;
-
 namespace FestasApp.Views
 {
     public partial class FormClientesCadastro : FormBaseCadastro
     {
+        private clsParam clienteId = new clsParam(); 
         private DataTable dtClientes = new DataTable();
         public FormClientesCadastro()
         {
             InitializeComponent();
             SuspendLayout();
-            SetThisForm();
-            AddToolStripEventHandlers();
+                SetThisForm();
+                SetControls();
+                AddToolStripEventHandlers();
             ResumeLayout(false);
-        }
+        }    
+
         //
         // Evento disparado quando o formulário de cliente é carregado
-        private void FormCliente_Load(object sender, EventArgs e)
+        private void FormClientesCadastro_Load(object? sender, EventArgs e)
         {
             // Configurações adicionais podem ser feitas aqui
-
+            CarregarDtgClientesEF();
         }
         //
         // Configurações iniciais do formulário de cliente
@@ -42,8 +43,12 @@ namespace FestasApp.Views
             this.FormBorderStyle = FormBorderStyle.None;
             lblTitulo.Text = "C a d a s t r o  d e  C l i e n t e s";
             lblTitulo.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-
-            CarregarDtgClientes();
+        }
+        //
+        private void SetControls()
+        {
+            // Configurar as colunas do DataGridView
+            ConfigurarColunasDtgClientes();
         }
         //----------------------------------------------
         // adiciona eventos aos stripsButtons...
@@ -54,99 +59,137 @@ namespace FestasApp.Views
             this.tstbtnEditar.Click += TstbtnEditar_Click;
             this.tstbtnConsultar.Click += TstbtnConsultar_Click;
             this.tstbtnExcluir.Click += TstbtnExcluir_Click;
+            this.Load += FormClientesCadastro_Load;
+            dtgClientes.SelectionChanged += DtgClientes_SelectionChanged;
+        }
+        //
+        private void DtgClientes_SelectionChanged(object? sender, EventArgs e)
+        {
+            if (dtgClientes.SelectedRows.Count > 0)
+            {
+                var selectedRow = dtgClientes.SelectedRows[0]; // Obtém a linha selecionada
+                clienteId.Id = Convert.ToInt32(selectedRow.Cells[ColId].Value); // obtém o valor do Id da Festa da linha selecionada
+            }
+            else
+            {
+                clienteId.Id = 0; // Define como 0 se nenhuma linha estiver selecionada
+            }
         }
         //-----------------------------------------
         // btn NOVO...
         private void TstbtnNovo_Click(object? sender, EventArgs e)
         {
-            // incrementar Lógica do evento do botão
-            clsClientes cliente = new clsClientes(); // cliente para passar
             OperacaoCRUD operacao = OperacaoCRUD.NOVO;
-            FormClientesCRUD frm = new FormClientesCRUD(cliente, operacao);
-
-            // Usar a CreateModalOverlay para exibir o FormClientesCRUD
-            FormMenuMain.ShowModalOverlay(frm);
-
-            // quando volta do CRUD, atualiza dataGrid com dados da tabela no BD
-            CarregarDtgClientes();
+            //clsParam clienteId = new clsParam(0);
+            clienteId.Id = 0;
+            AbrirFormCRUDEF(operacao);
         }
         //-----------------------------------------
-        // Evento Click do botão EDITAR
+        // btn EDITAR
         private void TstbtnEditar_Click(object? sender, EventArgs e)
         {
             OperacaoCRUD operacao = OperacaoCRUD.EDITAR;
-            AbrirFormClientesCRUD(operacao);
+            AbrirFormCRUDEF(operacao);
         }
         //-----------------------------------------
-        // Evento Click do botão CONSULTAR
+        // btn CONSULTAR
         private void TstbtnConsultar_Click(object? sender, EventArgs e)
         {
             OperacaoCRUD operacao = OperacaoCRUD.CONSULTAR;
-            AbrirFormClientesCRUD(operacao);
+            AbrirFormCRUDEF(operacao);
         }
         //-----------------------------------------
-        // Evento Click do botão EXCLUIR
+        // btn EXCLUIR
         private void TstbtnExcluir_Click(object? sender, EventArgs e)
         {
             OperacaoCRUD operacao = OperacaoCRUD.EXCLUIR;
-            AbrirFormClientesCRUD(operacao);
+            AbrirFormCRUDEF(operacao);
         }
-        //---------------------------------------------------------------
-        private void AbrirFormClientesCRUD(OperacaoCRUD operacao)
-        {
-            AbrirFormCRUDGenerico(
-            dtg: dtgClientes,
-            colIdIndex: ColId,
-            mapper: row => new clsClientes //Func<DataGridViewRow, T> mapper,
-            {
-                // Tente converter o valor da célula para inteiro
-                cli_id = Convert.ToInt32(row.Cells[ColId].Value),
-                // carrega os dados do datagrid no objeto clsCliente
-                cli_nome = row.Cells[ColNomeCliente].Value.ToString(),
-                cli_telefone1 = row.Cells[ColTelefone1].Value.ToString(),
-                cli_telefone2 = row.Cells[ColTelefone2].Value.ToString(),
-                cli_cpf = row.Cells[ColCpf].Value.ToString(),
-                cli_endereco = row.Cells[ColEndereco].Value.ToString(),
-                cli_cep = row.Cells[ColCep].Value.ToString(),
-                cli_cidade = row.Cells[Colcidade].Value.ToString(),
-                cli_uf = row.Cells[ColUf].Value.ToString()
-            },
-            reloadGrid: CarregarDtgClientes,
-            formFactory: (cliente, op) => new FormClientesCRUD(cliente, op),
-            operacao: operacao
-            );
-        } // end AbrirFormClientesCRUD
         //
-        // carregar dataGrid com dados da tabela tblclientes do banco de dados
-        public void CarregarDtgClientes()
+        private void AbrirFormCRUDEF(OperacaoCRUD operacao)
         {
+            // Verifique se há uma festaId selecionada no DataGridView
+            if (clienteId.IsValid())
+            {
+                try
+                {
+                    // Abre o formulário CRUD para edição passando o ID do cliente e a operação
+                    // AQUI aciona o construtor com InitializeComponent...
+                    using (FormClientesCRUD frm = new FormClientesCRUD(clienteId, operacao))
+                    {
+                        FormMenuMain.ShowModalOverlay(frm); // Usar a Modal para exibir o FormCRUD
+                        CarregarDtgClientesEF(); // quando volta do CRUD, atualiza dataGrid
+                    }
+                }
+                catch (Exception ex)
+                {
+                    FormMenuMain.ShowMyMessageBox($"Erro ao carregar dados do cliente: {ex.Message}\nAbrirFormCRUDEF", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else
+            {
+                FormMenuMain.ShowMyMessageBox("Nenhuma linha está selecionada.\nAbrirFormCRUDEF", "Erro de Seleção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+        //
+        // carregar dataGrid com dados da tabela tblclientes do banco de dados usando LINQ e EF
+        private void CarregarDtgClientesEF()
+        {
+            // testa a conexão
+            if (!myConnMySql.TestarConexao())
+            {
+                if (tstbtnNovo != null) tstbtnNovo.Enabled = false;
+                TratarControles(true); // Desabilita botões de CRUD em caso de erro
+                return;
+            }
+
+            DataGridView dtg = dtgClientes;
+            dtg.Rows.Clear();
+
             try
             {
-                // carrega o datagrid com dados do banco de dados...
-                dtClientes = clsClientes.ReadAllClientes();
+                // Carregar os dados do DbSet<T>
+                var listaClientes = repClientesEF.GetClientesEF();
 
-                if (dtClientes != null && dtClientes.Rows.Count > 0)
+                //dtg.DataSource = listaClientes;
+                if (listaClientes != null)
                 {
-                    dtgClientes.DataSource = dtClientes;
-                    ConfigurarColunasDtgClientes();
-                    TratarControles(desabilitar: false); // Habilita botões de CRUD
+                    foreach (var clientes in listaClientes)
+                    {
+                        dtg.Rows.Add(
+                            clientes.cli_id,
+                            clientes.cli_nome,
+                            clientes.cli_telefone1,
+                            clientes.cli_telefone2,
+                            clientes.cli_cpf,
+                            clientes.cli_endereco,
+                            clientes.cli_cep,
+                            clientes.cli_cidade,
+                            clientes.cli_uf
+                            );
+                    }
                 }
-                else
+                // a listaClientes já vem em ordem por nome
+                //dtg.Sort(dtg.Columns[ColNomeCliente], ListSortDirection.Ascending);
+
+                // Seleciona a primeira linha se houver linhas no DataGridView
+                if (dtg.Rows.Count > 0)
                 {
-                    FormMenuMain.ShowMyMessageBox("Nenhum cliente encontrado.", "Informação", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    TratarControles(true); // Desabilita botões de CRUD
+                    dtg.Rows[0].Selected = true;
+                    // Opcional: Pode rolar até a primeira linha para garantir que está visível
+                    dtg.FirstDisplayedScrollingRowIndex = 0;
                 }
             }
             catch (MySqlException mysqlEx)
             {
                 // Trata erros específicos do MySQL
-                FormMenuMain.ShowMyMessageBox($"Erro no banco de dados: {mysqlEx.Message}", "SQL exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                FormMenuMain.ShowMyMessageBox($"Erro no banco de dados: {mysqlEx.Message}\nCarregarDtgClientesEF", "SQL exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 TratarControles(true); // Desabilita botões de CRUD em caso de erro
             }
             catch (Exception ex)
             {
                 // Trata outros tipos de exceções
-                FormMenuMain.ShowMyMessageBox($"Erro: {ex.Message}", "Erro no Banco de Dados", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                FormMenuMain.ShowMyMessageBox($"Erro: {ex.Message}\nCarregarDtgClientesEF", "Erro no Banco de Dados", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 TratarControles(true); // Desabilita botões de CRUD em caso de erro
             }
         }
@@ -168,24 +211,29 @@ namespace FestasApp.Views
         private const int ColCpf = 4;
         private const int ColEndereco = 5;
         private const int ColCep = 6;
-        private const int Colcidade = 7;
+        private const int ColCidade = 7;
         private const int ColUf = 8;
         private void ConfigurarColunasDtgClientes()
         {
             DataGridView dtg = dtgClientes;
+            //dtg.Columns.Clear();
+
             // configurar colunas
-            myFunctions.ConfigurarColuna(dtg, ColId, "ID", 30, DataGridViewContentAlignment.MiddleCenter);
-            myFunctions.ConfigurarColuna(dtg, ColNomeCliente, "Nome Cliente", 220, padding: new Padding(5, 0, 0, 0));
-            myFunctions.ConfigurarColuna(dtg, ColTelefone1, "Telefone-1", 120, DataGridViewContentAlignment.MiddleCenter);
-            myFunctions.ConfigurarColuna(dtg, ColTelefone2, "Telefone-2", 120, DataGridViewContentAlignment.MiddleCenter);
-            myFunctions.ConfigurarColuna(dtg, ColCpf, "CPF", 100, DataGridViewContentAlignment.MiddleCenter);
-            myFunctions.ConfigurarColuna(dtg, ColEndereco, "Endereço", 220);
-            myFunctions.ConfigurarColuna(dtg, ColCep, "CEP", 80, DataGridViewContentAlignment.MiddleCenter);
-            myFunctions.ConfigurarColuna(dtg, Colcidade, "Cidade", 120);
-            myFunctions.ConfigurarColuna(dtg, ColUf, "UF", 80, DataGridViewContentAlignment.MiddleCenter);
+            myFunctions.ConfigurarAdicionarColuna(dtg, ColId, "ID", 30, DataGridViewContentAlignment.MiddleCenter);
+            myFunctions.ConfigurarAdicionarColuna(dtg, ColNomeCliente, "Nome Cliente", 220, padding: new Padding(5, 0, 0, 0));
+            myFunctions.ConfigurarAdicionarColuna(dtg, ColTelefone1, "Telefone-1", 120, DataGridViewContentAlignment.MiddleCenter);
+            myFunctions.ConfigurarAdicionarColuna(dtg, ColTelefone2, "Telefone-2", 120, DataGridViewContentAlignment.MiddleCenter);
+            myFunctions.ConfigurarAdicionarColuna(dtg, ColCpf, "CPF", 100, DataGridViewContentAlignment.MiddleCenter);
+            myFunctions.ConfigurarAdicionarColuna(dtg, ColEndereco, "Endereço", 220);
+            myFunctions.ConfigurarAdicionarColuna(dtg, ColCep, "CEP", 80, DataGridViewContentAlignment.MiddleCenter);
+            myFunctions.ConfigurarAdicionarColuna(dtg, ColCidade, "Cidade", 120);
+            myFunctions.ConfigurarAdicionarColuna(dtg, ColUf, "UF", 80, DataGridViewContentAlignment.MiddleCenter);
             //
-            // ordenar datagrid - Nome
-            dtgClientes.Sort(dtgClientes.Columns[ColNomeCliente], ListSortDirection.Ascending);
+            //// Ordenar DataGridView pela coluna "Nome Cliente"
+            //if (dtgClientes.Columns.Count > ColNomeCliente)
+            //{
+            //    dtgClientes.Sort(dtgClientes.Columns[ColNomeCliente], ListSortDirection.Ascending);
+            //}
 
             // Adiciona o evento CellFormatting para formatação dos dados
             dtgClientes.CellFormatting += DtgClientes_CellFormatting;
@@ -283,6 +331,5 @@ namespace FestasApp.Views
                 FormMenuMain.ShowMyMessageBox("Erro ao filtrar clientes: " + ex.Message, "Pesquisa Clientes", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         } // end FiltrarClientes
-
     } // end class
 } // end namespace

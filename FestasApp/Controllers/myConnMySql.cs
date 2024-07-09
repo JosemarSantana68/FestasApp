@@ -13,7 +13,7 @@
 
 namespace FestasApp.Controllers
 {
-    static class ConnMySql
+    static class myConnMySql
     {
         private const string servidor = "localhost";
         private const string bancoDados = "festasapp";

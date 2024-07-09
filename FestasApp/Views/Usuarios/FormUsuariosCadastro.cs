@@ -113,7 +113,7 @@ namespace FestasApp.Views.Usuarios
             try
             {
                 // carrega datagrid com dados da tabela
-                dtUsuarios = clsUsuarios.ReadAllUsuario();
+                dtUsuarios = repUsuarios.ReadAllUsuario();
 
                 if (dtUsuarios != null && dtUsuarios.Rows.Count > 0)
                 {

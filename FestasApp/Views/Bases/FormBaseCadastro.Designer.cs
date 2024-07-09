@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            toolStrip1 = new ToolStrip();
+            tstpMenuTop = new ToolStrip();
             tstbtnFechar = new ToolStripButton();
             toolStripSeparator1 = new ToolStripSeparator();
             tstbtnNovo = new ToolStripButton();
@@ -46,22 +46,22 @@
             pnlCabecalho = new Panel();
             pnlTopo = new Panel();
             pnlMeio = new Panel();
-            toolStrip1.SuspendLayout();
+            tstpMenuTop.SuspendLayout();
             pnlTitulo.SuspendLayout();
             pnlCabecalho.SuspendLayout();
             SuspendLayout();
             // 
-            // toolStrip1
+            // tstpMenuTop
             // 
-            toolStrip1.AutoSize = false;
-            toolStrip1.BackColor = SystemColors.Control;
-            toolStrip1.Font = new Font("Segoe UI", 10F);
-            toolStrip1.Items.AddRange(new ToolStripItem[] { tstbtnFechar, toolStripSeparator1, tstbtnNovo, toolStripSeparator2, tstbtnEditar, toolStripSeparator4, tstbtnConsultar, toolStripSeparator3, tstbtnExcluir, toolStripSeparator5 });
-            toolStrip1.Location = new Point(0, 0);
-            toolStrip1.Name = "toolStrip1";
-            toolStrip1.Size = new Size(958, 50);
-            toolStrip1.TabIndex = 0;
-            toolStrip1.Text = "toolStrip1";
+            tstpMenuTop.AutoSize = false;
+            tstpMenuTop.BackColor = SystemColors.Control;
+            tstpMenuTop.Font = new Font("Segoe UI", 10F);
+            tstpMenuTop.Items.AddRange(new ToolStripItem[] { tstbtnFechar, toolStripSeparator1, tstbtnNovo, toolStripSeparator2, tstbtnEditar, toolStripSeparator4, tstbtnConsultar, toolStripSeparator3, tstbtnExcluir, toolStripSeparator5 });
+            tstpMenuTop.Location = new Point(0, 0);
+            tstpMenuTop.Name = "tstpMenuTop";
+            tstpMenuTop.Size = new Size(958, 50);
+            tstpMenuTop.TabIndex = 0;
+            tstpMenuTop.Text = "toolStrip1";
             // 
             // tstbtnFechar
             // 
@@ -210,13 +210,13 @@
             ClientSize = new Size(958, 538);
             Controls.Add(pnlMeio);
             Controls.Add(pnlCabecalho);
-            Controls.Add(toolStrip1);
+            Controls.Add(tstpMenuTop);
             Controls.Add(pnlRodape);
             Font = new Font("Segoe UI", 10F);
             Name = "FormBaseCadastro";
             Text = "FormCadastro";
-            toolStrip1.ResumeLayout(false);
-            toolStrip1.PerformLayout();
+            tstpMenuTop.ResumeLayout(false);
+            tstpMenuTop.PerformLayout();
             pnlTitulo.ResumeLayout(false);
             pnlCabecalho.ResumeLayout(false);
             ResumeLayout(false);
@@ -227,7 +227,7 @@
         public Panel pnlTitulo;
         public Label lblTitulo;
         private Panel panel1;
-        public ToolStrip toolStrip1;
+        public ToolStrip tstpMenuTop;
         public ToolStripButton tstbtnNovo;
         public ToolStripButton tstbtnConsultar;
         public ToolStripButton tstbtnExcluir;

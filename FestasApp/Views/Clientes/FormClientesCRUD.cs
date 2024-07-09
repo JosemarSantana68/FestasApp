@@ -17,15 +17,16 @@ namespace FestasApp.Views.Clientes
     public partial class FormClientesCRUD : FormBaseCRUD
     {
         // objeto cliente instanciado da classe...
-        private clsClientes cliente;
+        private clsClientes cliente = new clsClientes();
         private OperacaoCRUD operacao;
+        private int? clienteId;
         //
         // Construtor que aceita um objeto clsClientes e a operação
-        public FormClientesCRUD(clsClientes _cliente, OperacaoCRUD _operacao)
+        public FormClientesCRUD(clsParam _clienteId, OperacaoCRUD _operacao)
         {
             InitializeComponent();
             // Recebe o cliente e a operação passados por parâmetro
-            this.cliente = _cliente;
+            this.clienteId = _clienteId.Id;
             this.operacao = _operacao;
 
             SuspendLayout();
@@ -33,14 +34,13 @@ namespace FestasApp.Views.Clientes
                 SetThisForm();
                 SetControls();
                 AddToolStripEventHandlers();
-                PreencherControlesComDadosCliente();
             ResumeLayout(false);
         }
         // LOAD...
         // Associa o evento KeyDown ao formulário
         private void FormClientesCRUD_Load(object sender, EventArgs e)
         {
-            
+            MostraDadosClienteEF();
         }
         //
         // Configura o formulário com base na operação
@@ -61,13 +61,19 @@ namespace FestasApp.Views.Clientes
                     break;
             }
         }
-         private void SetControls()
+        //
+        private void SetControls()
         {
             txtNome.MaxLength = 100;
             txtEndereco.MaxLength = 100;
             txtCidade.MaxLength = 100;
             txtUF.MaxLength = 20;
+            txtTelefone1.CutCopyMaskFormat = MaskFormat.ExcludePromptAndLiterals;
+            txtTelefone2.CutCopyMaskFormat = MaskFormat.ExcludePromptAndLiterals;
+            txtCpf.CutCopyMaskFormat = MaskFormat.ExcludePromptAndLiterals;
+            txtCep.CutCopyMaskFormat = MaskFormat.ExcludePromptAndLiterals;
         }
+        //
         private void TravarControles()
         {
             txtNome.ReadOnly = true;
@@ -80,21 +86,37 @@ namespace FestasApp.Views.Clientes
             txtUF.ReadOnly = true;
         }
         //
-        // Método para carregar os dados do cliente(recebido no parâmetro) nos controles do formulário
-        private void PreencherControlesComDadosCliente()
+        // Método para carregar os dados do cliente nos controles do formulário
+        private void MostraDadosClienteEF()
         {
-            if (cliente != null)
+            try
             {
-                // Preenche os controles do formulário com os dados do cliente
-                lblID.Text = cliente.cli_id.ToString();
-                txtNome.Text = cliente.cli_nome;
-                txtTelefone1.Text = cliente.cli_telefone1;
-                txtTelefone2.Text = cliente.cli_telefone2;
-                txtCpf.Text = cliente.cli_cpf;
-                txtEndereco.Text = cliente.cli_endereco;
-                txtCep.Text = cliente.cli_cep;
-                txtCidade.Text = cliente.cli_cidade;
-                txtUF.Text = cliente.cli_uf;
+                // instancia uma nova entidade...
+                var cliente = new repClientesEF();
+                var clienteEncontrado = cliente.GetCliente(clienteId!.Value);
+
+                if (clienteEncontrado != null)
+                {
+                    // Preenche os controles do formulário com os dados do cliente
+                    lblID.Text = clienteEncontrado.cli_id.ToString();
+                    txtNome.Text = clienteEncontrado.cli_nome;
+                    txtTelefone1.Text = clienteEncontrado.cli_telefone1;
+                    txtTelefone2.Text = clienteEncontrado.cli_telefone2;
+                    txtCpf.Text = clienteEncontrado.cli_cpf;
+                    txtEndereco.Text = clienteEncontrado.cli_endereco;
+                    txtCep.Text = clienteEncontrado.cli_cep;
+                    txtCidade.Text = clienteEncontrado.cli_cidade;
+                    txtUF.Text = clienteEncontrado.cli_uf;
+                }
+                else
+                {
+                    lblID.Text = clienteId.ToString();
+                    //myUtilities.myMessageBox(this, "Cliente não encontrado.\nMostraDadosClienteEF");
+                }
+            }
+            catch (Exception ex)
+            {
+                myUtilities.myMessageBox(this, $"Erro ao preencher dados do cliente: {ex.Message}\nMostraDadosClienteEF");
             }
         }
         //
@@ -109,11 +131,12 @@ namespace FestasApp.Views.Clientes
         {
             if (operacao == OperacaoCRUD.NOVO)
             {
-                SalvarNovoCliente();
+                SalvarClienteEF();
             }
             else if (operacao == OperacaoCRUD.EDITAR)
             {
-                EditarCliente();
+                SalvarClienteEF();
+                //EditarCliente();
             }
             else if (operacao == OperacaoCRUD.EXCLUIR)
             {
@@ -122,24 +145,37 @@ namespace FestasApp.Views.Clientes
         }
         //
         // NOVO cliente
-        private void SalvarNovoCliente()
+        private void SalvarClienteEF()
         {
             try
             {
+
+
+                // Verifica se houve mudança nos dados do cliente
+                if (operacao == OperacaoCRUD.EDITAR && !VerificarCliente())
+                {
+                    myUtilities.myMessageBox(this, "Não houve nenhuma mudança nos dados do cliente.", "Informação", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+
                 // Verifica se os controles são válidos
                 if (!ValidarControles())
                     return;
 
-                // Grava os dados do cliente
+                // Grava os dados no cliente
                 AtualizarClsCliente();
 
-                // Tenta inserir o novo cliente
-                if (cliente.CreateCliente())
+                // Salvar usando EF
+                if (repClientesEF.SaveCliente(cliente))
                 {
-                    // Exibe a mensagem de sucesso usando a nova função myMessageBox
-                    myUtilities.myMessageBox(this, $"Cliente {cliente.cli_nome}\n salvo com sucesso!", "A d i c i o n a r", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                    this.Close(); // Fecha o formulário após salvar
+                    // Exibe mensagem de sucesso
+                    myUtilities.myMessageBox(this, "Cliente salvo com sucesso!", "Novo Cliente", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    this.Close();
+                }
+                else
+                {
+                    // Exibe mensagem de erro
+                    myUtilities.myMessageBox(this, "Falha ao Salvar Cliente!", "Novo Cliente", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
             catch (MySqlException mysqlEx)
@@ -152,46 +188,19 @@ namespace FestasApp.Views.Clientes
             }
         }
         //
-        // EDITAR cliente
-        private void EditarCliente()
+        // Atualiza os dados do cliente com base nos controles do formulário
+        private void AtualizarClsCliente()
         {
-            try
-            {
-                // Verifica se houve mudança nos dados do cliente
-                if (!ValidarCliente())
-                {
-                    myUtilities.myMessageBox(this, "Não houve nenhuma mudança nos dados do cliente.", "Informação", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return;
-                }
-
-                // Verifica se os controles são válidos
-                if (!ValidarControles())
-                    return;
-
-                // Grava os dados do cliente
-                AtualizarClsCliente();
-
-                // Tenta salvar o cliente e exibe mensagem de sucesso se bem-sucedido
-                if (cliente.UpdateCliente())
-                {
-                    // Exibe a mensagem de sucesso usando a nova função myMessageBox
-                    var message = $"""
-                                Cliente {cliente.cli_nome}
-
-                                Alterado com sucesso!
-                                """;
-                    myUtilities.myMessageBox(this, message, "A l t e r a r", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    this.Close(); // Fecha o formulário após salvar 
-                }
-            }
-            catch (MySqlException mysqlEx)
-            {
-                myUtilities.myMessageBox(this, $"Erro no banco de dados: {mysqlEx.Message}", "Erro SQL", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            catch (Exception ex)
-            {
-                myUtilities.myMessageBox(this, ex.Message, "Cliente Alterar", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            // Transfere os dados dos controles para o objeto clsCliente
+            cliente.cli_id = clienteId!.Value; // o Id passado como parametro do FormCadastro
+            cliente.cli_nome = txtNome.Text;
+            cliente.cli_telefone1 = txtTelefone1.Text;
+            cliente.cli_telefone2 = txtTelefone2.Text;
+            cliente.cli_cpf = txtCpf.Text;
+            cliente.cli_endereco = txtEndereco.Text;
+            cliente.cli_cep = txtCep.Text;
+            cliente.cli_cidade = txtCidade.Text;
+            cliente.cli_uf = txtUF.Text;
         }
         //
         // DELETAR cliente
@@ -199,10 +208,13 @@ namespace FestasApp.Views.Clientes
         {
             try
             {
+                // Grava os dados no cliente
+                AtualizarClsCliente();
+
                 // Exibe a mensagem de confirmação usando MessageBox.Show
                 var message = $"""
                         Deseja Excluir o cliente
-                        {cliente.cli_nome}?
+                        {cliente.cli_nome} ?
                         
                         Esta ação não poderá ser desfeita!
                         """;
@@ -210,8 +222,10 @@ namespace FestasApp.Views.Clientes
 
                 if (result == DialogResult.Yes)
                 {
+                    
+
                     // Chama o método para excluir o cliente
-                    if (cliente.DeleteCliente())
+                    if (repClientesEF.DeleteClienteEF(cliente))
                     {
                         // Exibe a mensagem de sucesso usando a nova função myMessageBox
                         //myUtilities.myMessageBox(this, "Cliente excluído com sucesso!", "E x c l u i r", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -233,132 +247,6 @@ namespace FestasApp.Views.Clientes
             {
                 myUtilities.myMessageBox(this, ex.Message, "Cliente Excluir", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-        //***********************************************************************
-        private void TstbtnSalvar_ClickSEMUSO(object? sender, EventArgs e)
-        {
-            // Verifica a operação: NOVO, EDITAR ou EXCLUIR
-            if (operacao == OperacaoCRUD.NOVO || operacao == OperacaoCRUD.EDITAR)
-            {
-                try
-                {
-                    //
-                    // Se a operação for "NOVO"
-                    if (operacao == OperacaoCRUD.NOVO)
-                    {
-                        // Verifica se os controles são válidos
-                        if (!ValidarControles())
-                            return;
-
-                        // Grava os dados do cliente
-                        AtualizarClsCliente();
-
-                        // Tenta inserir o novo cliente
-                        if (cliente.CreateCliente())
-                        {
-                            // Exibe a mensagem de sucesso usando a nova função myMessageBox
-                            myUtilities.myMessageBox(this, $"Cliente {cliente.cli_nome}\n salvo com sucesso!", "A d i c i o n a r", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            
-                            this.Close(); // Fecha o formulário após salvar
-                        }
-                    }
-                    //
-                    // Se a operação for "EDITAR"
-                    else if (operacao == OperacaoCRUD.EDITAR)
-                    {
-                        // Verifica se houve mudança nos dados do cliente
-                        if (!ValidarCliente())
-                        {
-                            myUtilities.myMessageBox(this,"Não houve nenhuma mudança nos dados do cliente.", "Informação", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            return;
-                        }
-
-                        // Verifica se os controles são válidos
-                        if (!ValidarControles())
-                            return;
-
-                        // Grava os dados do cliente
-                        AtualizarClsCliente();
-
-                        // Tenta salvar o cliente e exibe mensagem de sucesso se bem-sucedido
-                        if (cliente.UpdateCliente())
-                        {
-                            // Exibe a mensagem de sucesso usando a nova função myMessageBox
-                            var message = $"""
-                                Cliente {cliente.cli_nome}
-
-                                Salvo com sucesso!
-                                """;
-
-                            myUtilities.myMessageBox(this, message, "S a l v a r", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                            this.Close(); // Fecha o formulário após salvar 
-                            //return;
-                        }
-                    }
-                }
-                catch (MySqlException mysqlEx)
-                {
-                    myUtilities.myMessageBox(this, $"Erro no banco de dados: {mysqlEx.Message}", "Erro SQL", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                catch (Exception ex)
-                {
-                    myUtilities.myMessageBox(this, ex.Message, "Cliente Salvar", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            // Se a operação for "EXCLUIR"
-            else if (operacao == OperacaoCRUD.EXCLUIR)
-            {
-                try
-                {
-                    // Exibe a mensagem de confirmação usando MessageBox.Show
-                    var message = $"""
-                        Deseja Excluir o cliente
-                        {cliente.cli_nome}?
-                        
-                        Esta ação não poderá ser desfeita."
-                        """;
-                    var result = myUtilities.myMessageBox(this, message, "Excluir Cliente", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-
-                    if (result == DialogResult.Yes)
-                    {
-                        // Chama o método para excluir o cliente
-                        if (cliente.DeleteCliente())
-                        {
-                            // Exibe a mensagem de sucesso usando a nova função myMessageBox
-                            //myUtilities.myMessageBox(this, "Cliente excluído com sucesso!", "E x c l u i r", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                            this.Close(); // Fecha o formulário após excluir
-                            return;
-                        }
-                        else
-                        {
-                            // Exibe a mensagem de erro se a exclusão falhar
-                            myUtilities.myMessageBox(this, "Erro ao excluir cliente!", "E r r o", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    // Trata outras exceções e exibe mensagem de erro
-                    myUtilities.myMessageBox(this, $"Erro: {ex.Message}", "E r r o", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-        }
-        //
-        // Atualiza os dados do cliente com base nos controles do formulário
-        private void AtualizarClsCliente()
-        {
-            // Transfere os dados dos controles para o objeto clsCliente
-            //cliente.Id = Convert.ToInt32(lblID.Text);
-            cliente.cli_nome    = txtNome.Text;
-            cliente.cli_telefone1 = txtTelefone1.Text;
-            cliente.cli_telefone2 = txtTelefone2.Text;
-            cliente.cli_cpf = txtCpf.Text;
-            cliente.cli_endereco = txtEndereco.Text;
-            cliente.cli_cep = txtCep.Text;
-            cliente.cli_cidade = txtCidade.Text;
-            cliente.cli_uf = txtUF.Text;
         }
         //
         // Método para validar os controles antes de salvar ou alterar
@@ -392,7 +280,7 @@ namespace FestasApp.Views.Clientes
         }
         //
         // Método para validar se houve alguma alteração nos dados do clsCliente
-        private bool ValidarCliente()
+        private bool VerificarCliente()
         {
             // Compara os dados do cliente com os controles do formulário
             if (cliente.cli_nome != txtNome.Text ||

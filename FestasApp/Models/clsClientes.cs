@@ -86,7 +86,7 @@ namespace FestasApp.Models
                                  "@UF)";
             try
             {
-                using (MySqlConnection cn = new MySqlConnection(ConnMySql.strConnMySql))
+                using (MySqlConnection cn = new MySqlConnection(myConnMySql.strConnMySql))
                 {
                     cn.Open();
                     using (MySqlCommand cmd = new MySqlCommand(sql, cn))
@@ -133,7 +133,7 @@ namespace FestasApp.Models
             try
             {
                 // Usando 'using' para garantir o fechamento da conexão e liberar recursos
-                using (MySqlConnection cn = new MySqlConnection(ConnMySql.strConnMySql))
+                using (MySqlConnection cn = new MySqlConnection(myConnMySql.strConnMySql))
                 {
                     cn.Open();
 
@@ -192,7 +192,7 @@ namespace FestasApp.Models
 
             try
             {
-                using (MySqlConnection cn = new MySqlConnection(ConnMySql.strConnMySql))
+                using (MySqlConnection cn = new MySqlConnection(myConnMySql.strConnMySql))
                 {
                     cn.Open();
                     using (MySqlDataAdapter da = new MySqlDataAdapter(sql, cn))
@@ -236,7 +236,7 @@ namespace FestasApp.Models
                                 "WHERE cli_id=@Id";
             try
             {
-                using (MySqlConnection cn = new MySqlConnection(ConnMySql.strConnMySql))
+                using (MySqlConnection cn = new MySqlConnection(myConnMySql.strConnMySql))
                 {
                     cn.Open();
                     using (MySqlCommand cmd = new MySqlCommand(sql, cn))
@@ -275,7 +275,7 @@ namespace FestasApp.Models
             string sql = "DELETE FROM tblclientes WHERE cli_id=@Id";
             try
             {
-                using (MySqlConnection cn = new MySqlConnection(ConnMySql.strConnMySql))
+                using (MySqlConnection cn = new MySqlConnection(myConnMySql.strConnMySql))
                 {
                     cn.Open();
                     using (MySqlCommand cmd = new MySqlCommand(sql, cn))

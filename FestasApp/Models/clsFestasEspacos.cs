@@ -54,7 +54,7 @@ namespace FestasApp.Models
             try
             {
                 // Usando bloco using para garantir que a conexão será fechada corretamente
-                using (MySqlConnection conn = new(ConnMySql.strConnMySql))
+                using (MySqlConnection conn = new(myConnMySql.strConnMySql))
                 {
                     // Abrir conexão com o banco de dados
                     conn.Open();

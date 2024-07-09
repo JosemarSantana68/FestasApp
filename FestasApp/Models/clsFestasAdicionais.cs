@@ -38,8 +38,8 @@ namespace FestasApp.Models
         public int add_itensfest_id { get; set; }
         //
       
-        public int add_qtde {  get; set; }
-        public double add_valor { get; set; }
+        public int? add_qtde {  get; set; }
+        public double? add_valor { get; set; }
 
         // relação com clsFestas
         public clsFestas? Festas { get; set; }
@@ -76,7 +76,7 @@ namespace FestasApp.Models
                             WHERE a.add_fest_id = @festId";
             try
             {
-                using (MySqlConnection cn = new MySqlConnection(ConnMySql.strConnMySql))
+                using (MySqlConnection cn = new MySqlConnection(myConnMySql.strConnMySql))
                 {
                     cn.Open();
                     using (MySqlDataAdapter da = new MySqlDataAdapter(sql, cn))

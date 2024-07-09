@@ -95,8 +95,9 @@ namespace FestasApp.Views.Usuarios
 
                 if (result == DialogResult.Yes)
                 {
-                    // Chama o método para excluir o cliente
-                    if (usuario.DeleteUsuario())
+                    // Chama o método para excluir o usuário
+                    repUsuarios repUser = new repUsuarios();
+                    if (repUser.DeleteUsuario(usuario.user_id))
                     {
                         // Exibe a mensagem de sucesso usando a nova função myMessageBox
                         //myUtilities.myMessageBox(this, "Usuário excluído com sucesso!", "E x c l u i r", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -137,7 +138,8 @@ namespace FestasApp.Views.Usuarios
 
                 AtualizarClsUsuario();
 
-                if (usuario.UpdateUsuario())
+                repUsuarios repUser = new repUsuarios();
+                if (repUser.UpdateUsuario(usuario))
                 {
                     // Exibe a mensagem de sucesso usando a nova função myMessageBox
                     myUtilities.myMessageBox(this, $"Usuário {usuario.user_nome} alterado com sucesso!", "A l t e r a r", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -165,7 +167,8 @@ namespace FestasApp.Views.Usuarios
 
                 AtualizarClsUsuario();
 
-                if (usuario.CreateUsuario())
+                repUsuarios repUser = new repUsuarios();
+                if (repUser.CreateUsuario(usuario))
                 {
                     // Exibe a mensagem de sucesso usando a nova função myMessageBox
                     myUtilities.myMessageBox(this, $"Novo Usuário {usuario.user_nome} criado com sucesso!", "A d i c i o n a r", MessageBoxButtons.OK, MessageBoxIcon.Information);

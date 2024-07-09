@@ -28,9 +28,11 @@ namespace FestasApp.Models
         public DbSet<clsFestasDetalhes> Detalhes { get; set; }
         public DbSet<clsFestasAdicionais> Adicionais { get; set; }
         public DbSet<clsFestasItens> ItensFestas { get; set; }
+        public DbSet<clsFestasContratos> Contratos { get; set; }
 
         // construtor
         //public clsFestasContext(DbContextOptions<clsFestasContext> options) : base(options) { }
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -39,115 +41,137 @@ namespace FestasApp.Models
             {
                 if (!optionsBuilder.IsConfigured)
                 {
-                    var conexaoStr = ConnMySql.strConnMySql;
+                    var conexaoStr = myConnMySql.strConnMySql;
                     optionsBuilder.UseMySql(conexaoStr, ServerVersion.AutoDetect(conexaoStr));
                 }
             }
-            catch (MySqlException ex)
+            catch (Exception)
             {
-            //    FormMenuMain.ShowMyMessageBox($"Falha na conexão com banco de dados: {ex.Message}\nOnConfiguring", "Falha MySql");
-            }
-            catch (Exception ex)
-            {
-            //    FormMenuMain.ShowMyMessageBox($"Erro inesperado: {ex.Message}\nOnConfiguring", "Erro");
             }
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Definições de relacionamentos
+            // Definições de relacionamentos com tblfestas
             modelBuilder.Entity<clsFestas>()
-                .HasOne(f => f.Cliente)
+                .HasOne(f => f.Cliente) 
                 .WithMany()
-                .HasForeignKey(f => f.fest_cli_id);
-
+                .HasForeignKey(f => f.fest_cli_id); // tblclientes
+            
+            // Usuarios
             modelBuilder.Entity<clsFestas>()
-                .HasOne(f => f.Usuario)
+                .HasOne(f => f.Usuario) 
                 .WithMany()
-                .HasForeignKey(f => f.fest_user_id);
+                .HasForeignKey(f => f.fest_user_id); // tblusuarios
+            
             // Pacotes
             modelBuilder.Entity<clsFestas>()
                 .HasOne(f => f.Pacote)
                 .WithMany()
-                .HasForeignKey(f => f.fest_pct_id);
+                .HasForeignKey(f => f.fest_pct_id); // tblfestapacotes
 
             modelBuilder.Entity<clsFestasPacotes>()
                 .Property(p => p.pct_descricao)
-                .HasDefaultValue("Não Especificado");
+                .HasDefaultValue("Não Especificado")
+                .IsRequired(false); // Propriedade anulável
 
             modelBuilder.Entity<clsFestasPacotes>()
                 .Property(p => p.pct_duracao)
-                .HasDefaultValue("Não Especificado");
+                .HasDefaultValue("Não Especificado")
+                .IsRequired(false); // Propriedade anulável
 
             modelBuilder.Entity<clsFestasPacotes>()
                 .Property(p => p.pct_valor)
-                .HasDefaultValue(0);
-            // Temas --------------------------------
+                    //.HasDefaultValue(0)
+                    .IsRequired(false); // Propriedade anulável
+           
+            // Temas
             modelBuilder.Entity<clsFestas>()
                 .HasOne(f => f.Tema)
                 .WithMany()
-                .HasForeignKey(f => f.fest_tema_id);
+                .HasForeignKey(f => f.fest_tema_id); // tblfestastemas
 
             modelBuilder.Entity<clsFestasTemas>()
                 .Property(t => t.tema_descricao)
-                .HasDefaultValue("Não Especificado");
-            //----------------------------------------
+                .HasDefaultValue("Não Especificado")
+                .IsRequired(false); // Propriedade anulável
+            
+            // Espacos
             modelBuilder.Entity<clsFestas>()
                 .HasOne(f => f.Espaco)
                 .WithMany()
-                .HasForeignKey(f => f.fest_espc_id);
+                .HasForeignKey(f => f.fest_espc_id); // tblfestasespacos
 
+            // Status
             modelBuilder.Entity<clsFestas>()
                 .HasOne(f => f.Status)
                 .WithMany()
-                .HasForeignKey(f => f.fest_stt_id);
+                .HasForeignKey(f => f.fest_stt_id); // tblfestasstatus
 
+            // TipoEvento
             modelBuilder.Entity<clsFestas>()
                 .HasOne(f => f.TipoEvento)
                 .WithMany()
-                .HasForeignKey(f => f.fest_tpEv_id);
+                .HasForeignKey(f => f.fest_tpEv_id); // tblfestastipoevento
 
-            // Definições de relacionamentos para clsFestasDetalhes
+            // Detalhes
             modelBuilder.Entity<clsFestasDetalhes>()
                 .HasOne(d => d.Festas)
                 .WithMany(f => f.Detalhes)
-                .HasForeignKey(d => d.detfest_fest_id);
-            
-            //
-            // Definições de relacionamentos para clsFestasAdicionais
-            //
+                .HasForeignKey(d => d.detfest_fest_id); // tblfestasdetalhes
+           
+            modelBuilder.Entity<clsFestasDetalhes>()
+                .HasOne(c => c.Contratos)
+                .WithMany()
+                .HasForeignKey(d => d.detfest_ctt_id); // tblfestascontratos
+
+            modelBuilder.Entity<clsFestasDetalhes>()
+                .Property(a => a.detfest_iniciohora)
+                    //.HasDefaultValue(0)
+                    .IsRequired(false); // Propriedade anulável
+
+            modelBuilder.Entity<clsFestasDetalhes>()
+                .Property(a => a.detfest_fimhora)
+                    //.HasDefaultValue(0)
+                    .IsRequired(false); // Propriedade anulável
+
+
+            // Adicionais
             modelBuilder.Entity<clsFestasAdicionais>()
                 .HasOne(a => a.Festas)
                 .WithMany(f => f.Adicionais)
-                .HasForeignKey(a => a.add_fest_id);
+                .HasForeignKey(a => a.add_fest_id); // tblfestasadicionais
 
             modelBuilder.Entity<clsFestasAdicionais>()
                 .Property(a => a.add_qtde)
-                .HasDefaultValue(0);
+                    //.HasDefaultValue(0)
+                    .IsRequired(false); // Propriedade anulável
 
             modelBuilder.Entity<clsFestasAdicionais>()
                 .Property(a => a.add_valor)
-                .HasDefaultValue(0);
-            //-----------------------------------------------
-            // FestasItens ----------------------------------
+                //.HasDefaultValue(0)
+                .IsRequired(false); // Propriedade anulável
+
+            // ItensFestas
             modelBuilder.Entity<clsFestasAdicionais>()
                 .HasOne(a => a.ItensFestas)
                 .WithMany()
-                .HasForeignKey(a => a.add_itensfest_id);
+                .HasForeignKey(a => a.add_itensfest_id); // tblfestasitens
 
             modelBuilder.Entity<clsFestasItens>()
                 .Property(i => i.itensfest_tipo)
-                .HasDefaultValue("Não Especificado");
-
-
+                .HasDefaultValue("Não Especificado")
+                .IsRequired(false); // Propriedade anulável
 
             modelBuilder.Entity<clsFestasItens>()
                 .Property(i => i.itensfest_descricao)
-                .HasDefaultValue("Não Especificado");
+                .HasDefaultValue("Não Especificado")
+                .IsRequired(false); // Propriedade anulável
 
             modelBuilder.Entity<clsFestasItens>()
                 .Property(i => i.itensfest_valor)
-                .HasDefaultValue(0);
-            //-----------------------------------------------
+                //.HasDefaultValue(0)
+                .IsRequired(false); // Propriedade anulável
+
         }
         //
     } // end class clsFestasContext

@@ -31,10 +31,12 @@ namespace FestasApp.Models
         [Key]
         public int itensfest_id { get; set; }
 
-        public string itensfest_tipo { get; set; } = string.Empty;
+        [Required]
         public string itensfest_nome { get; set; } = string.Empty;
-        public string itensfest_descricao { get; set; } = string.Empty;
-        public double itensfest_valor { get; set; }
+
+        public string? itensfest_tipo { get; set; } = string.Empty;
+        public string? itensfest_descricao { get; set; } = string.Empty;
+        public double? itensfest_valor { get; set; }
 
 
         public clsFestasItens() { }

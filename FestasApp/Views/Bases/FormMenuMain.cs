@@ -53,22 +53,21 @@ namespace FestasApp
              */
 
         }
-
         // Método para atualizar o status da conexão
-        public static bool ConexaoAtiva { get; private set; }
+        //public static bool ConexaoAtiva { get; private set; }
         private void AtualizarStatusConexao()
         {
-            if (ConnMySql.TestarConexao())
+            if (myConnMySql.TestarConexao())
             {
                 lblStatusConn.Text = "Connection On";
                 lblStatusConn.ForeColor = Color.Green;
-                ConexaoAtiva = true; // Conexão está ativa
+                //ConexaoAtiva = true; // Conexão está ativa
             }
             else
             {
                 lblStatusConn.Text = "Connection Off";
                 lblStatusConn.ForeColor = Color.Red;
-                ConexaoAtiva = false; // Conexão está inativa
+                //ConexaoAtiva = false; // Conexão está inativa
             }
         }
         //
