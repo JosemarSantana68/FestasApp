@@ -1,4 +1,4 @@
-﻿//***********************************************************
+﻿//----------------------------------------------------------------
 //
 //   Festa.Com - Aplicativo para Controle de Festas & Eventos
 //   Autor: Josemar Santana
@@ -10,7 +10,8 @@
 //   
 //   CLASSE DE USUARIOS - C.R.U.D
 //
-//************************************************************
+//----------------------------------------------------------------
+
 // TABLE `tblusuarios` 
 //  `user_id`       int NOT NULL AUTO_INCREMENT,
 //  `user_nome`     varchar(100)    NOT NULL,
@@ -31,7 +32,7 @@ namespace FestasApp.Models
         public string? user_login { get; set; }
         public string? user_email { get; set; }
         public string? user_senha { get; set; }
-        public bool user_ativo { get; set; }
+        public bool user_ativo { get; set; } // = true; // default = true
 
         // Construtor padrão
         public clsUsuarios() { }

@@ -21,4 +21,5 @@ namespace FestasApp.Enums
         EXCLUIR,
         CONSULTAR
     }
+
 }

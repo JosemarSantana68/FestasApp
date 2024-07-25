@@ -31,9 +31,8 @@ namespace FestasApp.Models
         
         // construtores
         public clsFestasTipoEvento() { }
-        public clsFestasTipoEvento(int id, string nome)
+        public clsFestasTipoEvento(string nome)
         {
-            tpev_id = id;
             tpev_nome = nome;
         }
 

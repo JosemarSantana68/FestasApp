@@ -29,9 +29,8 @@ namespace FestasApp.Models
         public int stt_id { get; set; }
         public string stt_status { get; set; } = string.Empty;
         public clsFestasStatus() { }
-        public clsFestasStatus(int id, string status)
+        public clsFestasStatus(string status)
         {
-            stt_id = id;
             stt_status = status;
         }
     }

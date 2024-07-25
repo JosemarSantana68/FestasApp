@@ -1,15 +1,19 @@
-//***********************************************************
+//---------------------------------------------------------------
 //
 //   Festa.Com - Aplicativo para Controle de Festas & Eventos
 //   Autor: Josemar Santana
-//   Linguagem: C#
+//   Linguagem: C# .NET
 //
 //   Inicio: 23/05/2024
+//   Criação deste Módulo: 23/05/2024
 //   Ultima Alteração: 18/06/2024
 //   
 //   FORMULÁRIO PRINCIPAL
 //
-//************************************************************
+//----------------------------------------------------------------
+
+using MyFramework.Views;
+using System.Windows.Forms;
 
 namespace FestasApp
 {
@@ -55,19 +59,23 @@ namespace FestasApp
         }
         // Método para atualizar o status da conexão
         //public static bool ConexaoAtiva { get; private set; }
+        //
         private void AtualizarStatusConexao()
         {
-            if (myConnMySql.TestarConexao())
+            myConnMySql.TestarConexao();
+        }
+        //
+        public void SetLabelStatusConexao(bool Online)
+        {
+            if (Online)
             {
                 lblStatusConn.Text = "Connection On";
                 lblStatusConn.ForeColor = Color.Green;
-                //ConexaoAtiva = true; // Conexão está ativa
             }
             else
             {
                 lblStatusConn.Text = "Connection Off";
                 lblStatusConn.ForeColor = Color.Red;
-                //ConexaoAtiva = false; // Conexão está inativa
             }
         }
         //
@@ -108,7 +116,7 @@ namespace FestasApp
             AssociarPicEventosMouse(picFechar);
         }
         //
-        // Associa os eventos MouseEnter e MouseLeave ao controle
+        // Associa os eventos MouseEnter e MouseLeave aos controles icones do formulario
         private void AssociarPicEventosMouse(PictureBox picture)
         {
             picture.MouseEnter += Pic_MouseEnter;
@@ -152,6 +160,7 @@ namespace FestasApp
                 }
             }
         }
+        //
         // Evento MouseLeave para restaurar a cor de fundo original...
         private void Pic_MouseLeave(object? sender, EventArgs e)
         {
@@ -274,43 +283,42 @@ namespace FestasApp
             }
         }
         #endregion menu lateral e sub menu finaceiro responsivo
-        //
         // 
         // btn FESTAS...
-        //
         private void btnFestas_Click(object sender, EventArgs e)
         {
-            //using (var context = new clsFestasContext())
-            //{
             AbrirFormulario(new FormFestasCadastro(), manterAberto: true);
-            //}
         }
         //
         // CLIENTES...
-        //
         private void btnCliente_Click(object sender, EventArgs e)
         {
             AbrirFormulario(new FormClientesCadastro(), manterAberto: true);
         }
         //
         // CALENDARIO...
-        //
         private void btnCalendario_Click(object sender, EventArgs e)
         {
             AbrirFormulario(new FormCalendario(), manterAberto: true);
         }
         //
         // FORNECEDOR
-        //
         private void btnFornecedor_Click(object sender, EventArgs e)
         {
             // chamar form fornecedor
         }
         //
-        // USUARIOS...
+        // PACOTES / TABELAS AUXILIARES...
+        private void btnPacotesFestas_Click(object sender, EventArgs e)
+        {
+            AbrirFormulario(new FormAuxiliaresMain(), manterAberto: false);
+        }
         //
+        // USUARIOS...
         private void btnUsuarios_Click(object sender, EventArgs e)
         {
+            //AbrirFormulario(new FormUsuariosCadastro(), manterAberto: false);
+
             Form frm = new FormUsuariosCadastro();
 
             // Verifica se o formulário FormUsuariosCadastro já está aberto antes de abrir um novo
@@ -321,6 +329,7 @@ namespace FestasApp
             }
             else
             {
+                frm.TopMost = true;
                 frm.Activate();
             }
         }
@@ -345,59 +354,82 @@ namespace FestasApp
         private void AbrirFormulario(Form form, bool manterAberto = false)
         {
             Type formType = form.GetType();
+            
+            // Cria e mostra o FormLoading
+            using (FormLoading formLoading = new FormLoading(5000))
+            {
+                formLoading.SetMessage("Carregando...");
+                formLoading.StartTimer();
 
-            // Fecha todos os formulários que não precisam ser mantidos abertos
-            foreach (var key in new List<Type>(openForms.Keys))
-            {
-                if (!openForms[key].manterAberto && openForms[key].form != null)
+                //formLoading.MdiParent = this;
+                formLoading.TopMost = true;
+                formLoading.Show();
+
+                // Fecha todos os formulários que não precisam ser mantidos abertos
+                foreach (var key in new List<Type>(openForms.Keys))
                 {
-                    openForms[key].form.Close(); // Fecha o formulário
-                    openForms.Remove(key); // Remove do dicionário
-                }
-            }
-            // Verifica se o formulário já está aberto e ativo
-            if (openForms.ContainsKey(formType) && openForms[formType].form != null && !openForms[formType].form.IsDisposed)
-            {
-                openForms[formType].form.Activate(); // Ativa o formulário já aberto
-            }
-            else
-            {
-                // Se o formulário já estava no dicionário, mas foi fechado, recria a instância
-                if (openForms.ContainsKey(formType) && openForms[formType].form != null && openForms[formType].form.IsDisposed)
-                {
-                    openForms.Remove(formType); // Remove a entrada do dicionário
-                }
-                // Configura o evento FormClosed para liberar recursos
-                form.FormClosed += (sender, e) =>
-                {
-                    if (!manterAberto)
+                    if (!openForms[key].manterAberto && openForms[key].form != null)
                     {
-                        openForms.Remove(formType); // Remove do dicionário
-                        form.Dispose(); // Libera recursos ao fechar
+                        openForms[key].form.Close(); // Fecha o formulário
+                        openForms.Remove(key); // Remove do dicionário
                     }
-                    else
+                }
+
+                // Verifica se o formulário já está aberto e ativo
+                if (openForms.ContainsKey(formType) && openForms[formType].form != null && !openForms[formType].form.IsDisposed)
+                {
+                    openForms[formType].form.Activate(); // Ativa o formulário já aberto
+                }
+                else
+                {
+                    // Se o formulário já estava no dicionário, mas foi fechado, recria a instância
+                    if (openForms.ContainsKey(formType) && openForms[formType].form != null && openForms[formType].form.IsDisposed)
                     {
-                        // Atualiza o dicionário para refletir que o formulário foi fechado
-                        openForms[formType] = (null!, true); // Usa null-forgiving operator (!) para indicar que o valor pode ser null
+                        openForms.Remove(formType); // Remove a entrada do dicionário
                     }
-                };
 
-                // Define o formulário como filho MDI e exibe
-                form.MdiParent = this;
-                form.Dock = DockStyle.Fill;
-                form.Show(); // Exibe o formulário
+                    // Configura o evento FormClosed para liberar recursos
+                    form.FormClosed += (sender, e) =>
+                    {
+                        if (!manterAberto)
+                        {
+                            openForms.Remove(formType); // Remove do dicionário
+                            form.Dispose(); // Libera recursos ao fechar
+                        }
+                        else
+                        {
+                            // Atualiza o dicionário para refletir que o formulário foi fechado
+                            openForms[formType] = (null!, true); // Usa null-forgiving operator (!) para indicar que o valor pode ser null
+                        }
+                    };
 
-                // Adiciona ou atualiza o formulário no dicionário
-                openForms[formType] = (form, manterAberto);
+                    // Define o formulário como filho MDI e exibe
+                    form.MdiParent = this;
+                    form.Dock = DockStyle.Fill;
+
+                    // Adiciona um handler para o evento Shown
+                    form.Shown += (sender, e) =>
+                    {
+                        // Fecha o FormLoading após o formulário estar completamente montado
+                        formLoading.Close();
+                    };
+
+                    form.Show(); // Exibe o formulário
+                    //formLoading.Close();
+
+                    // Adiciona ou atualiza o formulário no dicionário
+                    openForms[formType] = (form, manterAberto);
+                }
             }
         }
-
+        //
         //***********************************************************************************************************
         // Para evitar a necessidade de verificar a nulidade de FormMenuBase.Instance repetidamente
         // antes de chamar myUtilities.myMessageBox,
         // criar um método auxiliar dentro da classe FormMenuBase que encapsule essa verificação.
         // Dessa forma, centraliza a verificação em um único lugar e simplifica o código em outras partes do programa.
         //***********************************************************************************************************
+        //
         public static void ShowMyMessageBox(string mensagem, string titulo = "Mensagem", MessageBoxButtons botoes = MessageBoxButtons.OK, MessageBoxIcon icone = MessageBoxIcon.Information, int opacidade = 60, Color cor = default)
         {
             if (Instance != null)
@@ -410,12 +442,18 @@ namespace FestasApp
                 throw new InvalidOperationException("FormMenuBase.Instance não está inicializada.");
             }
         }
+        //
         // método auxiliar para exibir formularios CreateModalOverlay...
-        public static void ShowModalOverlay(Form? frmExibir, Action? mostrarMensagem = null, int opacidade = 60, Color cor = default)
+        public static void ShowModalOverlay(Form? frmExibir, 
+                                            Action? mostrarMensagem = null, 
+                                            int opacidade = 60, 
+                                            Color cor = default,
+                                            int delay = 1000)
         {
             if (Instance != null)
             {
-                myUtilities.CreateModalOverlay(Instance, mostrarMensagem, frmExibir, opacidade, cor);
+                // Mostra o formulário a ser carregado
+                myUtilities.CreateModalOverlay(Instance, mostrarMensagem, frmExibir, opacidade, cor, delay);
             }
             else
             {
@@ -424,16 +462,6 @@ namespace FestasApp
             }
         }
 
-        //private void button1_Click(object sender, EventArgs e)
-        //{
-        //    var bd = new clsFestasContext();
-        //    var tipoeventos = bd.FestasTipoEvento.Where(tpv => tpv.tpev_nome.Contains("A")).ToList();
-
-        //    foreach (var item in tipoeventos)
-        //    {
-        //        MessageBox.Show(item.tpev_nome);
-        //    }
-        //}
     } // end class FormMenuBase...
 } // end namespace
 

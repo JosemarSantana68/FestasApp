@@ -15,10 +15,10 @@
 
 namespace FestasApp.Repositories
 {
-    public class repFestasDetalhesEF : clsFestasDetalhes
+    public class repDetalhesEF : clsFestasDetalhes
     {
         // construtor
-        public repFestasDetalhesEF() { }
+        public repDetalhesEF() { }
         //
         // carrega um objeto com detalhes de uma festa, passado o id
         public clsFestasDetalhes? GetDetalhesFestaEF(int festaId)

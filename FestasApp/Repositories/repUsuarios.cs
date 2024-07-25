@@ -1,5 +1,4 @@
-﻿//***********************************************************
-//
+﻿//--------------------------------------------------------------------------
 //   Festa.Com - Aplicativo para Controle de Festas & Eventos
 //   Autor: Josemar Santana
 //   Linguagem: C#
@@ -10,20 +9,61 @@
 //   
 //   CLASSE repUsuarios herda de clsUsuarios, criada para conter os metodos
 //  C.R.U.D, utilizando comandos SQL em MySql - banco de dados.
-//
-//************************************************************
+//--------------------------------------------------------------------------
 
 namespace FestasApp.Repositories
 {
     public class repUsuarios : clsUsuarios
     {
         // construtor
-        public repUsuarios() {}
+        public repUsuarios() { }
+        //
+        // Método para testar a conexão
+        private static bool TestarConexao()
+        {
+            if (!myConnMySql.TestarConexao())
+            {
+                myLogger.LogInfo("Conexão com o banco de dados falhou.");
+                return false;
+            }
+            return true;
+        }
+
+        // retorna uma lista com todos os clientes
+        public static List<clsUsuarios> GetUsuariosEF()
+        {
+            // testa a conexão
+            if (!TestarConexao())
+                //return []; // Retornando uma lista vazia em vez de null
+                return new List<clsUsuarios>(); // Retornando uma lista vazia em vez de null
+
+            try
+            {
+                using (clsFestasContext context = new())
+                {
+                    var listaUsuarios = context.Usuarios.OrderBy(u => u.user_nome).ToList();
+                    return listaUsuarios;
+                }
+            }
+            catch (MySqlException mysqlEx)
+            {
+                myLogger.LogError("Erro ao carregar a lista de usuários.", mysqlEx);
+            }
+            catch (Exception ex)
+            {
+                myLogger.LogError("Erro ao carregar a lista de usuários.", ex);
+            }
+            return [];
+        }
         //
         // CREATE.R.U.D.
         // Método para inserir um novo usuário na tabela `tblUsuarios`
         public bool CreateUsuario(clsUsuarios usuario)
         {
+            // Testa a conexão
+            if (!TestarConexao())
+                return false; 
+
             string sql = "INSERT INTO tblusuarios (" +
                                         "user_nome, " +
                                         "user_login, " +
@@ -113,13 +153,18 @@ namespace FestasApp.Repositories
         public static DataTable ReadAllUsuario()
         {
             DataTable dt = new DataTable();
+
+            // Testa a conexão
+            if (!TestarConexao())
+                return dt;
+
             string sql = "SELECT * FROM tblusuarios";
             try
             {
-                using (MySqlConnection cn = new MySqlConnection(myConnMySql.strConnMySql))
+                using (MySqlConnection cn = new(myConnMySql.strConnMySql))
                 {
                     cn.Open();
-                    using (MySqlDataAdapter da = new MySqlDataAdapter(sql, cn))
+                    using (MySqlDataAdapter da = new(sql, cn))
                     {
                         da.Fill(dt);
                     }
@@ -142,6 +187,10 @@ namespace FestasApp.Repositories
         // Método para atualizar os dados de um usuário na tabela `tblUsuarios`
         public bool UpdateUsuario(clsUsuarios usuarios)
         {
+            // Testa a conexão
+            if (!TestarConexao())
+                return false;
+
             string sql = "UPDATE tblusuarios SET user_nome = @Nome, user_login = @Login, " +
                          "user_email = @Email, user_senha = @Senha, user_ativo = @Ativo " +
                          "WHERE user_id = @Id";
@@ -181,6 +230,10 @@ namespace FestasApp.Repositories
         // Método para excluir um usuário da tabela `tblUsuarios`
         public bool DeleteUsuario(int Id)
         {
+            // Testa a conexão
+            if (!TestarConexao())
+                return false;
+
             string sql = "DELETE FROM tblusuarios WHERE user_id = @Id";
             try
             {
@@ -206,6 +259,6 @@ namespace FestasApp.Repositories
                 throw new Exception($"Erro ao excluir usuário: {ex.Message}");
             }
         }
-
-    }
-}
+        //
+    } // end class repUsuarios : clsUsuarios
+} // end namespace FestasApp.Repositories

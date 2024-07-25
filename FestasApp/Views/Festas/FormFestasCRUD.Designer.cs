@@ -336,7 +336,7 @@
             cbbTipoEvento.BackColor = Color.White;
             cbbTipoEvento.DropDownStyle = ComboBoxStyle.DropDownList;
             cbbTipoEvento.FormattingEnabled = true;
-            cbbTipoEvento.Location = new Point(163, 41);
+            cbbTipoEvento.Location = new Point(163, 40);
             cbbTipoEvento.Name = "cbbTipoEvento";
             cbbTipoEvento.Size = new Size(197, 25);
             cbbTipoEvento.Sorted = true;
@@ -512,7 +512,7 @@
             cbbEspaco.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             cbbEspaco.DropDownStyle = ComboBoxStyle.DropDownList;
             cbbEspaco.FormattingEnabled = true;
-            cbbEspaco.Location = new Point(163, 72);
+            cbbEspaco.Location = new Point(163, 73);
             cbbEspaco.Name = "cbbEspaco";
             cbbEspaco.Size = new Size(197, 25);
             cbbEspaco.Sorted = true;
@@ -523,7 +523,7 @@
             cbbTema.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             cbbTema.DropDownStyle = ComboBoxStyle.DropDownList;
             cbbTema.FormattingEnabled = true;
-            cbbTema.Location = new Point(163, 104);
+            cbbTema.Location = new Point(163, 105);
             cbbTema.Name = "cbbTema";
             cbbTema.Size = new Size(197, 25);
             cbbTema.Sorted = true;
@@ -534,7 +534,7 @@
             cbbPacote.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             cbbPacote.DropDownStyle = ComboBoxStyle.DropDownList;
             cbbPacote.FormattingEnabled = true;
-            cbbPacote.Location = new Point(559, 8);
+            cbbPacote.Location = new Point(559, 9);
             cbbPacote.Name = "cbbPacote";
             cbbPacote.Size = new Size(159, 25);
             cbbPacote.Sorted = true;
@@ -545,7 +545,7 @@
             cbbStatus.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             cbbStatus.DropDownStyle = ComboBoxStyle.DropDownList;
             cbbStatus.FormattingEnabled = true;
-            cbbStatus.Location = new Point(559, 104);
+            cbbStatus.Location = new Point(559, 105);
             cbbStatus.Name = "cbbStatus";
             cbbStatus.Size = new Size(159, 25);
             cbbStatus.Sorted = true;

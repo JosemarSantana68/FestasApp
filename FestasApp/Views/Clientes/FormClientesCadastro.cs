@@ -15,18 +15,20 @@ namespace FestasApp.Views
 {
     public partial class FormClientesCadastro : FormBaseCadastro
     {
+        // declaração de instâncias
         private clsParam clienteId = new clsParam(); 
         private DataTable dtClientes = new DataTable();
+        //
+        // construtor
         public FormClientesCadastro()
         {
             InitializeComponent();
             SuspendLayout();
                 SetThisForm();
                 SetControls();
-                AddToolStripEventHandlers();
+                AddEventHandlers();
             ResumeLayout(false);
         }    
-
         //
         // Evento disparado quando o formulário de cliente é carregado
         private void FormClientesCadastro_Load(object? sender, EventArgs e)
@@ -50,9 +52,9 @@ namespace FestasApp.Views
             // Configurar as colunas do DataGridView
             ConfigurarColunasDtgClientes();
         }
-        //----------------------------------------------
+        //
         // adiciona eventos aos stripsButtons...
-        private void AddToolStripEventHandlers()
+        private void AddEventHandlers()
         {
             // Adiciona o manipulador de eventos para os botões do ToolStrip
             this.tstbtnNovo.Click += TstbtnNovo_Click;
@@ -75,7 +77,7 @@ namespace FestasApp.Views
                 clienteId.Id = 0; // Define como 0 se nenhuma linha estiver selecionada
             }
         }
-        //-----------------------------------------
+        //
         // btn NOVO...
         private void TstbtnNovo_Click(object? sender, EventArgs e)
         {
@@ -84,21 +86,21 @@ namespace FestasApp.Views
             clienteId.Id = 0;
             AbrirFormCRUDEF(operacao);
         }
-        //-----------------------------------------
+        //
         // btn EDITAR
         private void TstbtnEditar_Click(object? sender, EventArgs e)
         {
             OperacaoCRUD operacao = OperacaoCRUD.EDITAR;
             AbrirFormCRUDEF(operacao);
         }
-        //-----------------------------------------
+        //
         // btn CONSULTAR
         private void TstbtnConsultar_Click(object? sender, EventArgs e)
         {
             OperacaoCRUD operacao = OperacaoCRUD.CONSULTAR;
             AbrirFormCRUDEF(operacao);
         }
-        //-----------------------------------------
+        //
         // btn EXCLUIR
         private void TstbtnExcluir_Click(object? sender, EventArgs e)
         {
@@ -108,13 +110,12 @@ namespace FestasApp.Views
         //
         private void AbrirFormCRUDEF(OperacaoCRUD operacao)
         {
-            // Verifique se há uma festaId selecionada no DataGridView
+            // Verifique se há uma ClientId selecionada no DataGridView
             if (clienteId.IsValid())
             {
                 try
                 {
                     // Abre o formulário CRUD para edição passando o ID do cliente e a operação
-                    // AQUI aciona o construtor com InitializeComponent...
                     using (FormClientesCRUD frm = new FormClientesCRUD(clienteId, operacao))
                     {
                         FormMenuMain.ShowModalOverlay(frm); // Usar a Modal para exibir o FormCRUD
@@ -139,10 +140,10 @@ namespace FestasApp.Views
             if (!myConnMySql.TestarConexao())
             {
                 if (tstbtnNovo != null) tstbtnNovo.Enabled = false;
-                TratarControles(true); // Desabilita botões de CRUD em caso de erro
+                TratarControles(habilitar: false); // Desabilita botões de CRUD em caso de erro
                 return;
             }
-
+            //
             DataGridView dtg = dtgClientes;
             dtg.Rows.Clear();
 
@@ -169,9 +170,6 @@ namespace FestasApp.Views
                             );
                     }
                 }
-                // a listaClientes já vem em ordem por nome
-                //dtg.Sort(dtg.Columns[ColNomeCliente], ListSortDirection.Ascending);
-
                 // Seleciona a primeira linha se houver linhas no DataGridView
                 if (dtg.Rows.Count > 0)
                 {
@@ -184,22 +182,22 @@ namespace FestasApp.Views
             {
                 // Trata erros específicos do MySQL
                 FormMenuMain.ShowMyMessageBox($"Erro no banco de dados: {mysqlEx.Message}\nCarregarDtgClientesEF", "SQL exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                TratarControles(true); // Desabilita botões de CRUD em caso de erro
+                TratarControles(habilitar: false); // Desabilita botões de CRUD em caso de erro
             }
             catch (Exception ex)
             {
                 // Trata outros tipos de exceções
                 FormMenuMain.ShowMyMessageBox($"Erro: {ex.Message}\nCarregarDtgClientesEF", "Erro no Banco de Dados", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                TratarControles(true); // Desabilita botões de CRUD em caso de erro
+                TratarControles(habilitar: false); // Desabilita botões de CRUD em caso de erro
             }
         }
         //
-        private void TratarControles(bool desabilitar)
+        private void TratarControles(bool habilitar)
         {
             // controles deste form
-            if (txtPesquisaCliente != null) txtPesquisaCliente.Enabled = !desabilitar;
+            if (txtPesquisaCliente != null) txtPesquisaCliente.Enabled = habilitar;
             // controles do formBase
-            TratarBtnCrud(desabilitar);
+            TratarBtnCrud(habilitar);
         }
         //
         // Configura o DataGridView para exibir os clientes.
@@ -216,24 +214,18 @@ namespace FestasApp.Views
         private void ConfigurarColunasDtgClientes()
         {
             DataGridView dtg = dtgClientes;
-            //dtg.Columns.Clear();
+            dtg.Columns.Clear();
 
             // configurar colunas
-            myFunctions.ConfigurarAdicionarColuna(dtg, ColId, "ID", 30, DataGridViewContentAlignment.MiddleCenter);
+            myFunctions.ConfigurarAdicionarColuna(dtg, ColId, "ID", 30, alignment: DataGridViewContentAlignment.MiddleCenter);
             myFunctions.ConfigurarAdicionarColuna(dtg, ColNomeCliente, "Nome Cliente", 220, padding: new Padding(5, 0, 0, 0));
-            myFunctions.ConfigurarAdicionarColuna(dtg, ColTelefone1, "Telefone-1", 120, DataGridViewContentAlignment.MiddleCenter);
-            myFunctions.ConfigurarAdicionarColuna(dtg, ColTelefone2, "Telefone-2", 120, DataGridViewContentAlignment.MiddleCenter);
-            myFunctions.ConfigurarAdicionarColuna(dtg, ColCpf, "CPF", 100, DataGridViewContentAlignment.MiddleCenter);
+            myFunctions.ConfigurarAdicionarColuna(dtg, ColTelefone1, "Telefone-1", 120, alignment: DataGridViewContentAlignment.MiddleCenter);
+            myFunctions.ConfigurarAdicionarColuna(dtg, ColTelefone2, "Telefone-2", 120, alignment: DataGridViewContentAlignment.MiddleCenter);
+            myFunctions.ConfigurarAdicionarColuna(dtg, ColCpf, "CPF", 100, alignment: DataGridViewContentAlignment.MiddleCenter);
             myFunctions.ConfigurarAdicionarColuna(dtg, ColEndereco, "Endereço", 220);
-            myFunctions.ConfigurarAdicionarColuna(dtg, ColCep, "CEP", 80, DataGridViewContentAlignment.MiddleCenter);
+            myFunctions.ConfigurarAdicionarColuna(dtg, ColCep, "CEP", 80, alignment: DataGridViewContentAlignment.MiddleCenter);
             myFunctions.ConfigurarAdicionarColuna(dtg, ColCidade, "Cidade", 120);
-            myFunctions.ConfigurarAdicionarColuna(dtg, ColUf, "UF", 80, DataGridViewContentAlignment.MiddleCenter);
-            //
-            //// Ordenar DataGridView pela coluna "Nome Cliente"
-            //if (dtgClientes.Columns.Count > ColNomeCliente)
-            //{
-            //    dtgClientes.Sort(dtgClientes.Columns[ColNomeCliente], ListSortDirection.Ascending);
-            //}
+            myFunctions.ConfigurarAdicionarColuna(dtg, ColUf, "UF", 80, alignment: DataGridViewContentAlignment.MiddleCenter);
 
             // Adiciona o evento CellFormatting para formatação dos dados
             dtgClientes.CellFormatting += DtgClientes_CellFormatting;

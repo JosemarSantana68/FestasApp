@@ -36,7 +36,7 @@ namespace FestasApp.Models
         public bool IsValid()
         {
             // Permite que o Id seja nulo ou maior-igual que 0
-            return !Id.HasValue || Id.Value >= 0;
+            return !Id.HasValue || Id.Value >= 0; //|| Id == null;
         }
     }
 }

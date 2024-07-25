@@ -80,6 +80,7 @@
             tblRodape = new TableLayoutPanel();
             label12 = new Label();
             label11 = new Label();
+            panel4 = new Panel();
             pnlRodape.SuspendLayout();
             pnlTitulo.SuspendLayout();
             pnlCabecalho.SuspendLayout();
@@ -97,6 +98,7 @@
             tableLayoutPanel1.SuspendLayout();
             ((ISupportInitialize)dtgFestas).BeginInit();
             tblRodape.SuspendLayout();
+            panel4.SuspendLayout();
             SuspendLayout();
             // 
             // pnlRodape
@@ -127,7 +129,7 @@
             // pnlMeio
             // 
             pnlMeio.BackColor = Color.Transparent;
-            pnlMeio.Controls.Add(dtgFestas);
+            pnlMeio.Controls.Add(panel4);
             pnlMeio.Controls.Add(pnlContainerDetalhesFesta);
             pnlMeio.Size = new Size(1166, 575);
             // 
@@ -697,7 +699,6 @@
             dataGridViewCellStyle1.BackColor = Color.LightGoldenrodYellow;
             dtgFestas.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             dtgFestas.BackgroundColor = Color.White;
-            dtgFestas.BorderStyle = BorderStyle.None;
             dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.BottomCenter;
             dataGridViewCellStyle2.BackColor = Color.DarkGoldenrod;
             dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
@@ -716,13 +717,13 @@
             dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
             dtgFestas.DefaultCellStyle = dataGridViewCellStyle3;
             dtgFestas.Dock = DockStyle.Fill;
-            dtgFestas.Location = new Point(0, 0);
+            dtgFestas.Location = new Point(5, 0);
             dtgFestas.MultiSelect = false;
             dtgFestas.Name = "dtgFestas";
             dtgFestas.ReadOnly = true;
             dtgFestas.RowHeadersVisible = false;
             dtgFestas.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dtgFestas.Size = new Size(1166, 281);
+            dtgFestas.Size = new Size(1156, 276);
             dtgFestas.TabIndex = 9;
             // 
             // lblValorTotalFestas
@@ -809,6 +810,16 @@
             label11.Text = "Período";
             label11.TextAlign = ContentAlignment.MiddleCenter;
             // 
+            // panel4
+            // 
+            panel4.Controls.Add(dtgFestas);
+            panel4.Dock = DockStyle.Fill;
+            panel4.Location = new Point(0, 0);
+            panel4.Name = "panel4";
+            panel4.Padding = new Padding(5, 0, 5, 5);
+            panel4.Size = new Size(1166, 281);
+            panel4.TabIndex = 10;
+            // 
             // FormFestasCadastro
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
@@ -835,6 +846,7 @@
             tableLayoutPanel1.ResumeLayout(false);
             ((ISupportInitialize)dtgFestas).EndInit();
             tblRodape.ResumeLayout(false);
+            panel4.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -885,5 +897,6 @@
         private Label lblTipoEvento;
         private Label label14;
         private Label lblPessoasAMais;
+        private Panel panel4;
     }
 }

@@ -41,11 +41,11 @@ namespace FestasApp.Views
         /// Ajusta o estado dos botões de CRUD
         /// </summary>
         /// <param name="desabilitar">True para desabilitar os botões, False para habilitar</param>
-        public void TratarBtnCrud(bool desabilitar)
+        public void TratarBtnCrud(bool habilitado)
         {
-            if (tstbtnEditar != null) tstbtnEditar.Enabled = !desabilitar;
-            if (tstbtnConsultar != null) tstbtnConsultar.Enabled = !desabilitar;
-            if (tstbtnExcluir != null) tstbtnExcluir.Enabled = !desabilitar;
+            if (tstbtnEditar != null) tstbtnEditar.Enabled = habilitado;
+            if (tstbtnConsultar != null) tstbtnConsultar.Enabled = habilitado;
+            if (tstbtnExcluir != null) tstbtnExcluir.Enabled = habilitado;
         }
         //
         // Evento disparado ao clicar no botão de fechar
@@ -59,7 +59,8 @@ namespace FestasApp.Views
                                              Func<DataGridViewRow, T> mapper,
                                              Action reloadGrid,
                                              Func<T, OperacaoCRUD, TForm> formFactory,
-                                             OperacaoCRUD operacao)
+                                             OperacaoCRUD operacao,
+                                             int delay = 1000)
             where T : class
             where TForm : Form
         {
@@ -81,7 +82,7 @@ namespace FestasApp.Views
                         using (TForm frm = formFactory(objeto, operacao))
                         {
                             // Usar a Modal para exibir o FormCRUD
-                            FormMenuMain.ShowModalOverlay(frm);
+                            FormMenuMain.ShowModalOverlay(frm, delay: delay);
 
                             // Atualizar DataGrid após a operação CRUD
                             reloadGrid();

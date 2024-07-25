@@ -30,7 +30,6 @@ namespace FestasApp.Views.Clientes
             this.operacao = _operacao;
 
             SuspendLayout();
-                ConfigurarFormBaseCrud("C l i e n t e s", operacao);
                 SetThisForm();
                 SetControls();
                 AddToolStripEventHandlers();
@@ -38,7 +37,7 @@ namespace FestasApp.Views.Clientes
         }
         // LOAD...
         // Associa o evento KeyDown ao formulário
-        private void FormClientesCRUD_Load(object sender, EventArgs e)
+        private void FormClientesCRUD_Load(object? sender, EventArgs e)
         {
             MostraDadosClienteEF();
         }
@@ -46,6 +45,10 @@ namespace FestasApp.Views.Clientes
         // Configura o formulário com base na operação
         private void SetThisForm()
         {
+            this.FormBorderStyle = FormBorderStyle.None;
+            ConfigurarFormBaseCrud("C l i e n t e s", operacao);
+            //lblTitulo.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+
             // Testa a operacao e configura os controles...
             switch (operacao)
             {
@@ -124,6 +127,7 @@ namespace FestasApp.Views.Clientes
         private void AddToolStripEventHandlers()
         {
             this.tstbtnSalvar.Click += TstbtnSalvar_Click;
+            this.Load += FormClientesCRUD_Load;
         }
         //
         // Evento click do botão SALVAR...
@@ -259,22 +263,23 @@ namespace FestasApp.Views.Clientes
                 txtNome.Focus();
                 return false;
             }
-            //
-            // Valida o campo Telefones
-            if (string.IsNullOrWhiteSpace(txtTelefone1.Text) && string.IsNullOrWhiteSpace(txtTelefone2.Text))
-            {
-                myUtilities.myMessageBox(this, "Um dos telefones do cliente é obrigatório.", "Erro de Validação", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                txtTelefone1.Focus();
-                return false;
-            }
-            //
-            // Valida o campo Cpf
-            if (string.IsNullOrWhiteSpace(txtCpf.Text) || !myUtilities.ValidarCPF(txtCpf.Text))
-            {
-                myUtilities.myMessageBox(this, "O Cpf é inválido.", "Erro de Validação", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                txtCpf.Focus();
-                return false;
-            }
+            ////
+            //// Valida o campo Telefones
+            //if (string.IsNullOrWhiteSpace(txtTelefone1.Text) && string.IsNullOrWhiteSpace(txtTelefone2.Text))
+            //{
+            //    myUtilities.myMessageBox(this, "Um dos telefones do cliente é obrigatório.", "Erro de Validação", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //    txtTelefone1.Focus();
+            //    return false;
+            //}
+            ////
+            //// Valida o campo Cpf
+            //if (string.IsNullOrWhiteSpace(txtCpf.Text) || !myUtilities.ValidarCPF(txtCpf.Text))
+            //{
+            //    myUtilities.myMessageBox(this, "O Cpf é inválido.", "Erro de Validação", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //    txtCpf.Focus();
+            //    return false;
+            //}
+
             // Se todas as validações passarem, retorna verdadeiro
             return true;
         }

@@ -35,6 +35,7 @@ namespace FestasApp
             components = new Container();
             ComponentResourceManager resources = new ComponentResourceManager(typeof(FormMenuMain));
             PnlBarraTitulo = new Panel();
+            pictureBox2 = new PictureBox();
             picMinimizar = new PictureBox();
             pnlMaxRest = new Panel();
             picRestaurar = new PictureBox();
@@ -75,6 +76,7 @@ namespace FestasApp
             pnlStatusRodape = new Panel();
             lblStatusConn = new Label();
             PnlBarraTitulo.SuspendLayout();
+            ((ISupportInitialize)pictureBox2).BeginInit();
             ((ISupportInitialize)picMinimizar).BeginInit();
             pnlMaxRest.SuspendLayout();
             ((ISupportInitialize)picRestaurar).BeginInit();
@@ -101,6 +103,7 @@ namespace FestasApp
             // PnlBarraTitulo
             // 
             PnlBarraTitulo.BackColor = Color.DarkGoldenrod;
+            PnlBarraTitulo.Controls.Add(pictureBox2);
             PnlBarraTitulo.Controls.Add(picMinimizar);
             PnlBarraTitulo.Controls.Add(pnlMaxRest);
             PnlBarraTitulo.Controls.Add(picFechar);
@@ -110,6 +113,17 @@ namespace FestasApp
             PnlBarraTitulo.Size = new Size(1169, 30);
             PnlBarraTitulo.TabIndex = 0;
             PnlBarraTitulo.MouseDown += PnlBarraTitulo_MouseDown;
+            // 
+            // pictureBox2
+            // 
+            pictureBox2.Dock = DockStyle.Left;
+            pictureBox2.Image = Resources.park_image_full;
+            pictureBox2.Location = new Point(0, 0);
+            pictureBox2.Name = "pictureBox2";
+            pictureBox2.Size = new Size(30, 30);
+            pictureBox2.SizeMode = PictureBoxSizeMode.Zoom;
+            pictureBox2.TabIndex = 17;
+            pictureBox2.TabStop = false;
             // 
             // picMinimizar
             // 
@@ -570,6 +584,7 @@ namespace FestasApp
             btnPacotesFestas.TextAlign = ContentAlignment.MiddleLeft;
             btnPacotesFestas.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnPacotesFestas.UseVisualStyleBackColor = false;
+            btnPacotesFestas.Click += btnPacotesFestas_Click;
             // 
             // ContainerSubFinanceiro
             // 
@@ -626,8 +641,8 @@ namespace FestasApp
             // 
             // FormMenuMain
             // 
-            AutoScaleDimensions = new SizeF(7F, 17F);
-            AutoScaleMode = AutoScaleMode.Font;
+            AutoScaleDimensions = new SizeF(96F, 96F);
+            AutoScaleMode = AutoScaleMode.Dpi;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
             ClientSize = new Size(1169, 585);
             Controls.Add(pnlBarraLateralMenu);
@@ -636,6 +651,7 @@ namespace FestasApp
             Name = "FormMenuMain";
             Text = "FormMenuBase";
             PnlBarraTitulo.ResumeLayout(false);
+            ((ISupportInitialize)pictureBox2).EndInit();
             ((ISupportInitialize)picMinimizar).EndInit();
             pnlMaxRest.ResumeLayout(false);
             ((ISupportInitialize)picRestaurar).EndInit();
@@ -702,5 +718,6 @@ namespace FestasApp
         private FlowLayoutPanel ContainerSubFinanceiro;
         private Panel pnlStatusRodape;
         public Label lblStatusConn;
+        private PictureBox pictureBox2;
     }
 }

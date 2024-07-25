@@ -1,4 +1,4 @@
-﻿//***********************************************************
+﻿//---------------------------------------------------------------
 //
 //   Festa.Com - Aplicativo para Controle de Festas & Eventos
 //   Autor: Josemar Santana
@@ -10,9 +10,7 @@
 //   
 //   CLASSE myDateTime para auxiliar nas validações de Datas
 //  
-//************************************************************
-
-using System.Diagnostics;
+//---------------------------------------------------------------
 
 namespace FestasApp.Utilities
 {

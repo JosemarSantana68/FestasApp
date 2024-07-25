@@ -71,5 +71,8 @@ namespace FestasApp.ViewModels
         {
             this.Close();
         }
-    }
+
+
+
+    } // end class FormBaseCRUD
 }

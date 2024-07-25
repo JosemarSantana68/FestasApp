@@ -34,6 +34,11 @@ namespace FestasApp.Models
         // Construtor padrão
         public clsFestasEspacos() { }
 
+        public clsFestasEspacos(string espc_nome)
+        {
+            this.espc_nome = espc_nome;
+        }
+
         // Construtor que inicializa todas as propriedades
         public clsFestasEspacos(int id, string nome)
         {

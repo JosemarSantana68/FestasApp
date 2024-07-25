@@ -45,9 +45,8 @@ namespace FestasApp.Models
         {
         }
         // Construtor que inicializa todas as propriedades
-        public clsFestasPacotes(int pct_id, string pct_nome, string pct_descricao, string pct_duracao, double pct_valor)
+        public clsFestasPacotes(string pct_nome, string pct_descricao, string pct_duracao, double pct_valor)
         {
-            this.pct_id = pct_id;
             this.pct_nome = pct_nome;
             this.pct_descricao = pct_descricao;
             this.pct_duracao = pct_duracao;

@@ -33,16 +33,15 @@ namespace FestasApp.Models
 
         [Required]
         public string itensfest_nome { get; set; } = string.Empty;
-
         public string? itensfest_tipo { get; set; } = string.Empty;
         public string? itensfest_descricao { get; set; } = string.Empty;
         public double? itensfest_valor { get; set; }
 
-
+        // construtor
         public clsFestasItens() { }
-        public clsFestasItens(int itensfest_id, string itensfest_tipo, string itensfest_nome, string itensfest_descricao, double itensfest_valor)
+        // construtor com parâmetros
+        public clsFestasItens(string itensfest_tipo, string itensfest_nome, string itensfest_descricao, double itensfest_valor)
         {
-            this.itensfest_id = itensfest_id;
             this.itensfest_tipo = itensfest_tipo;
             this.itensfest_nome = itensfest_nome;
             this.itensfest_descricao = itensfest_descricao;

@@ -19,15 +19,21 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Contratos\" />
     <Folder Include="Services\" />
     <Folder Include="ViewModels\" />
     <Folder Include="Views\FestasDetalhes\" />
-    <Folder Include="Views\FestasPacotes\" />
+    <Folder Include="Views\FestasContratos\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="iTextSharp" Version="5.5.13.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
     <PackageReference Include="MySql.Data" Version="8.4.0" />
+    <PackageReference Include="NLog" Version="5.3.2" />
+    <PackageReference Include="NLog.Config" Version="4.7.15" />
+    <PackageReference Include="PDFsharp" Version="6.1.1" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.2" />
   </ItemGroup>
 

@@ -22,6 +22,17 @@ namespace FestasApp.Repositories
         // construtor
         public repClientesEF() { }
         //
+        // Método para testar a conexão
+        private static bool TestarConexao()
+        {
+            if (!myConnMySql.TestarConexao())
+            {
+                myLogger.LogInfo("Conexão com o banco de dados falhou.");
+                return false;
+            }
+            return true;
+        }
+        //
         // retorna um cliente através do Id
         public clsClientes? GetCliente(int Id)
         {
@@ -30,7 +41,7 @@ namespace FestasApp.Repositories
                 return null;
 
             // testa a conexão
-            if (!myConnMySql.TestarConexao())
+            if (!TestarConexao())
             {
                 return null;
             }
@@ -66,8 +77,7 @@ namespace FestasApp.Repositories
             }
             catch (Exception ex)
             {
-                // Log de erro (opcional)
-                //Console.WriteLine($"Erro ao buscar cliente: {ex.Message}");
+                myLogger.LogError($"Erro ao carregar o item com Id {Id}.", ex);
                 return null;
             }
             return null;
@@ -77,10 +87,9 @@ namespace FestasApp.Repositories
         public static List<clsClientes> GetClientesEF()
         {
             // testa a conexão
-            if (!myConnMySql.TestarConexao())
-            {
-                return null;
-            }
+            if (!TestarConexao())
+                //return []; // Retornando uma lista vazia em vez de null
+                return new List<clsClientes>(); // Retornando uma lista vazia em vez de null
 
             try
             {
@@ -88,24 +97,19 @@ namespace FestasApp.Repositories
                 {
                     // Carregar os dados do DbSet<T>
                     //var listaClientes = context.Clientes.ToList();
-
                     var listaClientes = context.Clientes.OrderBy(c => c.cli_nome).ToList();
-
                     return listaClientes;
                 }
-
             }
             catch (MySqlException mysqlEx)
             {
-                // Trata erros específicos do MySQL
-                //FormMenuMain.ShowMyMessageBox($"Erro no banco de dados: {mysqlEx.Message}", "SQL exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                myLogger.LogError("Erro ao carregar a lista de clientes.", mysqlEx);
             }
             catch (Exception ex)
             {
-                // Trata outros tipos de exceções
-                //FormMenuMain.ShowMyMessageBox($"Erro: {ex.Message}", "Erro no Banco de Dados", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                myLogger.LogError("Erro ao carregar a lista de clientes.", ex);
             }
-            return null;
+            return [];
         }
         //
         // salvar cliente

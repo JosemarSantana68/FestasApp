@@ -1,5 +1,4 @@
-﻿//***********************************************************
-//
+﻿//----------------------------------------------------------------------------------------
 //   Festa.Com - Aplicativo para Controle de Festas & Eventos
 //   Autor: Josemar Santana
 //   Linguagem: C#
@@ -10,8 +9,7 @@
 //   
 //   CLASSE repFestasEF herda de clsFestas,
 //   utiliza ENTITY FRAMEWORK / LINQ para auxiliar nas relações com Banco de Dados MySql
-//  
-//************************************************************
+//----------------------------------------------------------------------------------------
 
 namespace FestasApp.Repositories
 {
@@ -58,7 +56,7 @@ namespace FestasApp.Repositories
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Log de erro (opcional)
                 //Console.WriteLine($"Erro ao buscar festa: {ex.Message}");
@@ -85,42 +83,10 @@ namespace FestasApp.Repositories
                     .Include(f => f.Status)
                     .Include(f => f.TipoEvento)
                     .Include(f => f.Usuario)
-                    .OrderBy(f => f.fest_dtFesta)
+                    .OrderBy(f => f.fest_dtFesta) // ordena por data de festas
                     .ToList();
 
                     return listaFestas;
-                }
-            }
-            catch (MySqlException) //mysqlEx
-            {
-                // Trata erros específicos do MySQL
-                //FormMenuMain.ShowMyMessageBox($"Erro no banco de dados: {mysqlEx.Message}", "SQL exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            catch (Exception) //ex
-            {
-                // Trata outros tipos de exceções
-                //FormMenuMain.ShowMyMessageBox($"Erro: {ex.Message}", "Erro no Banco de Dados", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            return null;
-        }
-        //
-        public static List<clsFestasAdicionais>? GetItensFestaEF(int festaId)
-        {
-            // testa conexão
-            if (!myConnMySql.TestarConexao())
-                return null;
-
-            try
-            {
-                using (var context = new clsFestasContext())
-                {
-                    // Obtém os adicionais da festa selecionada, incluindo os itens relacionados
-                    var adicionaisFesta = context.Adicionais // tblFestasAdicionais
-                                                    .Include(a => a.ItensFestas)    // tblFestasItens        
-                                                    .Where(a => a.add_fest_id == festaId) // filtra adicionais do id da festa
-                                                    .ToList();
-
-                    return adicionaisFesta;
                 }
             }
             catch (MySqlException) //mysqlEx

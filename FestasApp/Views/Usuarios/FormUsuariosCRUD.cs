@@ -33,14 +33,19 @@ namespace FestasApp.Views.Usuarios
                 ConfigurarFormBaseCrud("U s u á r i o s", operacao);
                 SetThisForm();
                 SetControls();
-                AddToolStripEventHandlers();
-                PopularControlesComUsuario();
+                AddEventHandlers();
             ResumeLayout();
         }
         //
-        private void AddToolStripEventHandlers()
+        private void FormUsuariosCRUD_Load(object? sender, EventArgs e)
+        {
+            PopularControlesComUsuario();
+        }
+        //
+        private void AddEventHandlers()
         {
             this.tstbtnSalvar.Click += TstbtnSalvar_Click;
+            this.Load += FormUsuariosCRUD_Load;
         }
         //
         // Configura o formulário com base na operação
@@ -86,8 +91,7 @@ namespace FestasApp.Views.Usuarios
             {
                 // Exibe a mensagem de confirmação usando MessageBox.Show
                 var message = $"""
-                        Deseja Excluir o usuário
-                        {usuario.user_nome}?
+                        Deseja Excluir o usuário {usuario.user_nome}?
                         
                         Esta ação não poderá ser desfeita!
                         """;
@@ -99,8 +103,6 @@ namespace FestasApp.Views.Usuarios
                     repUsuarios repUser = new repUsuarios();
                     if (repUser.DeleteUsuario(usuario.user_id))
                     {
-                        // Exibe a mensagem de sucesso usando a nova função myMessageBox
-                        //myUtilities.myMessageBox(this, "Usuário excluído com sucesso!", "E x c l u i r", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         this.Close(); // Fecha o formulário após excluir
                     }
                     else

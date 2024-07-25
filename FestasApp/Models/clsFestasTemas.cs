@@ -32,7 +32,11 @@ namespace FestasApp.Models
         public string? tema_descricao { get; set; } = string.Empty;
 
         public clsFestasTemas() { }
- 
-    
+
+        public clsFestasTemas(string tema_nome, string? tema_descricao)
+        {
+            this.tema_nome = tema_nome;
+            this.tema_descricao = tema_descricao;
+        }
     }// end class clsFestasTemas
 }

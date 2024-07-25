@@ -1,15 +1,16 @@
-﻿//***********************************************************
+﻿//-------------------------------------------------------------
 //
 //   Festa.Com - Aplicativo para Controle de Festas & Eventos
 //   Autor: Josemar Santana
 //   Linguagem: C#
 //
 //   Inicio: 23/05/2024
-//   Ultima Alteração: 
+//   Criação do módulo: 23/05/2024
+//   Ultima Alteração: 15/07/2024
 //   
 //   CLASSE DA CONEXÃO MYSQL
 //
-//************************************************************
+//-------------------------------------------------------------
 
 namespace FestasApp.Controllers
 {
@@ -22,21 +23,24 @@ namespace FestasApp.Controllers
 
         static public string strConnMySql = $"server = {servidor}; User Id = {usuario}; database = {bancoDados}; password={senha}";
 
-        // Método para testar a conexão
+        // Método para testar a conexão e atualizar status no label
         public static bool TestarConexao()
         {
+            var formMenuMain = FormMenuMain.Instance;
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(strConnMySql))
+                using (MySqlConnection conn = new(strConnMySql))
                 {
                     conn.Open();
+                    formMenuMain!.SetLabelStatusConexao(true);
                     return true;
                 }
             }
             catch (MySqlException)
             {
+                formMenuMain!.SetLabelStatusConexao(false);
                 return false;
             }
         }
-    }
-}
+    } // end static class myConnMySql
+} // end namespace FestasApp.Controllers
