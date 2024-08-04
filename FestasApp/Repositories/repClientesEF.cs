@@ -93,7 +93,7 @@ namespace FestasApp.Repositories
 
             try
             {
-                using (var context = new clsFestasContext())
+                using (clsFestasContext context = new())
                 {
                     // Carregar os dados do DbSet<T>
                     //var listaClientes = context.Clientes.ToList();
@@ -117,18 +117,18 @@ namespace FestasApp.Repositories
         {
             // testa a conexão
             if (!myConnMySql.TestarConexao())
-            {
                 return false;
-            }
 
             try
             {
                 using (var context = new clsFestasContext())
                 {
+                    // EDITA
                     if (cliente.cli_id > 0)
                     {
                         context.Entry(cliente).State = EntityState.Modified;
                     }
+                    // NOVO
                     else
                     {
                         context.Clientes.Add(cliente);

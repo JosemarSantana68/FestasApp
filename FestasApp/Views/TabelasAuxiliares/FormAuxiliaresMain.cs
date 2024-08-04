@@ -1,4 +1,5 @@
 ﻿//--------------------------------------------------------------
+//
 //   Festa.Com - Aplicativo para Controle de Festas & Eventos
 //   Autor: Josemar Santana
 //   Linguagem: C#
@@ -8,26 +9,35 @@
 //   Ultima Alteração: 09/07/2024
 //   
 //   FORMULÁRIO PRINCIPAL PARA AS TABELAS AUXILIARES
+//
 //--------------------------------------------------------------
-
-
+//
 namespace FestasApp.Views.TabelasAuxiliares
 {
     public partial class FormAuxiliaresMain : FormBaseCadastro
     {
-        // Instância de TabelaAuxiliarManager para gerenciar as tabelas auxiliares
+        /// <summary>
+        /// Instância de TabelaAuxiliarManager para gerenciar as tabelas auxiliares
+        /// </summary>
         private readonly TabelaAuxiliarManager _tabelaAuxiliarManager = new();
         private readonly ControlConfigurator _controlConfigurator;
         private readonly DataGridManager _dataGridManager;
         public readonly DataLoader _dataLoader; // public
 
-        // objetos para o painel de visualização de contratos modelos
+        /// <summary>
+        /// objetos para o painel de visualização de contratos modelos
+        /// </summary>
         public Panel? pnlVisualizacao;
         public WebBrowser? pdfViewer;
-        // entidade do Entity Framework
-        private clsFestasContext _context = new clsFestasContext();
 
-        // 1.0. construtor
+        /// <summary>
+        /// entidade do Entity Framework
+        /// </summary>
+        private clsFestasContext _context = new();
+
+        /// <summary>
+        /// 1.0. construtor
+        /// </summary>
         public FormAuxiliaresMain()
         {
             InitializeComponent();
@@ -41,7 +51,9 @@ namespace FestasApp.Views.TabelasAuxiliares
                 AddEventHandlers();
             ResumeLayout();
         }
-        // 1.1.
+        /// <summary>
+        /// 1.1.
+        /// </summary>
         private void SetThisForm()
         {
             this.FormBorderStyle = FormBorderStyle.None;
@@ -49,7 +61,9 @@ namespace FestasApp.Views.TabelasAuxiliares
             lblTitulo.Text = "C a d a s t r o s  d a s  T a b e l a s  A u x i l i a r e s";
             lblTitulo.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
         }
-        // 1.2. configurações iniciais de controles
+        /// <summary>
+        /// 1.2. configurações iniciais de controles
+        /// </summary>
         private void SetControls()
         {
             _controlConfigurator.ConfigureControls();
@@ -62,7 +76,9 @@ namespace FestasApp.Views.TabelasAuxiliares
             //ConfigurarDtgTabelasAuxiliares();
             //ConfigurarDtgRegistrosTabelasAuxiliares();
         }
-        // 1.3. adiciona eventos Handlers
+        /// <summary>
+        /// 1.3. adiciona eventos Handlers
+        /// </summary>
         private void AddEventHandlers()
         {
             // Adiciona o manipulador de eventos para os botões do ToolStrip
@@ -79,7 +95,11 @@ namespace FestasApp.Views.TabelasAuxiliares
             //dtgTabelasAuxiliares.KeyDown += new KeyEventHandler(dtgTabelasAuxiliares_KeyDown);
             //dtgRegistrosTabelasAuxiliares.SelectionChanged += DtgRegistrosTabelasAuxiliares_SelectionChanged;
         }
-        // 2.0. Load
+        /// <summary>
+        /// 2.0. Load
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void FormAuxiliaresMain_Load(object? sender, EventArgs e)
         {
             _dataLoader.PopularDtgTabelasAuxiliares();
@@ -112,7 +132,7 @@ namespace FestasApp.Views.TabelasAuxiliares
             AbrirFormCRUD(operacao);
         }
         //
-        private void AbrirFormCRUD(OperacaoCRUD operacao)
+        private async void AbrirFormCRUD(OperacaoCRUD operacao)
         {
             if (dtgTabelasAuxiliares.SelectedRows.Count > 0)
             {
@@ -125,7 +145,7 @@ namespace FestasApp.Views.TabelasAuxiliares
                         using (FormItensFestasCRUD frm = new(_dataLoader.idRegistro, operacao))
                         {
                             // Usar a Modal para exibir o FormCRUD
-                            FormMenuMain.ShowModalOverlay(frm);
+                            await FormMenuMain.ShowModalOverlay(frm);
                         }
                     }
                 } 
@@ -138,7 +158,7 @@ namespace FestasApp.Views.TabelasAuxiliares
                         using (FormEspacosFestas frm = new(_dataLoader.idRegistro, operacao))
                         {
                             // Usar a Modal para exibir o FormCRUD
-                            FormMenuMain.ShowModalOverlay(frm);
+                            await FormMenuMain.ShowModalOverlay(frm);
                         }
                     }
                 } 
@@ -156,7 +176,7 @@ namespace FestasApp.Views.TabelasAuxiliares
                         using (FormPacotesCRUD frm = new(_dataLoader.idRegistro, operacao))
                         {
                             // Usar a Modal para exibir o FormCRUD
-                            FormMenuMain.ShowModalOverlay(frm);
+                            await FormMenuMain.ShowModalOverlay(frm);
                         }
                     }
                 } 
@@ -169,7 +189,7 @@ namespace FestasApp.Views.TabelasAuxiliares
                         using (FormStatusCRUD frm = new(_dataLoader.idRegistro, operacao))
                         {
                             // Usar a Modal para exibir o FormCRUD
-                            FormMenuMain.ShowModalOverlay(frm);
+                            await FormMenuMain.ShowModalOverlay(frm);
                         }
                     }
                 } 
@@ -182,7 +202,7 @@ namespace FestasApp.Views.TabelasAuxiliares
                         using (FormTemasFestas frm = new(_dataLoader.idRegistro, operacao))
                         {
                             // Usar a Modal para exibir o FormCRUD
-                            FormMenuMain.ShowModalOverlay(frm);
+                            await FormMenuMain.ShowModalOverlay(frm);
                         }
                     }
                 } 
@@ -195,7 +215,7 @@ namespace FestasApp.Views.TabelasAuxiliares
                         using (FormTipoEvento frm = new(_dataLoader.idRegistro, operacao))
                         {
                             // Usar a Modal para exibir o FormCRUD
-                            FormMenuMain.ShowModalOverlay(frm);
+                            await FormMenuMain.ShowModalOverlay(frm);
                         }
                     }
                 }

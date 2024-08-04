@@ -13,9 +13,16 @@
 
 namespace FestasApp.Repositories
 {
+   
+
     internal class repTipoEventoEF : clsFestasTipoEvento
     {
-        public repTipoEventoEF() { }
+        private clsParam _param;
+
+        public repTipoEventoEF() 
+        {
+            _param = new clsParam();
+        }
         //
         // Método para testar a conexão
         private static bool TestarConexao()
@@ -87,7 +94,7 @@ namespace FestasApp.Repositories
             // testa conexão
             if (!TestarConexao())
                 return false;
-
+            
             try
             {
                 using (var context = new clsFestasContext())
@@ -95,6 +102,9 @@ namespace FestasApp.Repositories
                     context.TipoEvento.Add(newItem);
                     context.SaveChanges();
                     myLogger.LogInfo("Item adicionado com sucesso.");
+                    //
+                    //_param.Id = newItem.tpev_id;
+
                     return true;
                 }
             }

@@ -1,4 +1,4 @@
-﻿//***********************************************************
+﻿//-------------------------------------------------------------------
 //
 //   Festa.Com - Aplicativo para Controle de Festas & Eventos
 //   Autor: Josemar Santana
@@ -10,41 +10,43 @@
 //   
 //   FORMULÁRIO DE FESTAS C.R.U.D.
 //
-//************************************************************
-using System.Diagnostics;
-using System.Diagnostics.Contracts;
-using FestasApp.Utilities;
-
+//-------------------------------------------------------------------
+//
 namespace FestasApp.Views.Festas
 {
     public partial class FormFestasCRUD : FormBaseCRUD
     {
         // instanciar objetos das classe para este form
-        private int? festaId;
-        private clsFestas? _festa;
+        private clsFestas? _festa = new();
         private OperacaoCRUD operacao;
         //
-        // CRIAÇÃO - Construtor que recebe um objeto da classe e a operação
-        public FormFestasCRUD(int? _festaId, OperacaoCRUD _operacao)
+        public clsParam FestaIdParam = new(); // para retornar para o datagriFesta
+        private clsParam param = new(); // param para tratar as tabelas auxiliares
+
+        //
+        // CRIAÇÃO - Construtor que recebe o id da festa e a operação
+        public FormFestasCRUD(clsParam _festaId, OperacaoCRUD _operacao)
         {
             InitializeComponent();
-            this.festaId = _festaId;
+            this.FestaIdParam.Id = _festaId.Id;
             this.operacao = _operacao;
             //
             SuspendLayout();
-            ConfigurarFormBaseCrud("F e s t a s", operacao);
-            AddEventHandlers();
+                ConfigurarFormBaseCrud("F e s t a s", operacao);
+                SetControls();
+                AddEventHandlers();
             ResumeLayout();
         }
+        //
         // CARREGAMENTO - Load
         private void FormFestasCRUD_Load(object sender, EventArgs e)
         {
             SuspendLayout();
-            this.BeginInvoke(new Action(() => msktxtDataVenda.Focus()));
-            //msktxtDataVenda.SelectAll(); // Seleciona todo o texto
-            SetThisForm();
-            SetControls();
-            MostraDadosFestaSelecionadaEF(festaId!.Value);
+                this.BeginInvoke(new Action(() => txtDataVenda.Focus())); //
+                txtDataVenda.SelectionStart = 0; // posiciona o cursor no inicio da data
+                
+                SetOperacao();
+                MostraDadosFestaSelecionadaEF();
             ResumeLayout();
         }
         // Adiciona eventosHandlers aos controles
@@ -53,9 +55,12 @@ namespace FestasApp.Views.Festas
             this.tstbtnSalvar.Click += TstbtnSalvar_Click;
             this.dtgItens.SelectionChanged += DtgItens_SelectionChanged;
             this.dtgItens.CellContentClick += DtgItens_CellContentClick;
+            this.txtItemQtde.Validating += TxtItemQtde_Validating;
+            this.txtDescontosFesta.Validating += TxtDescontosFesta_Validating;
         }
+        //
         // Configura o formulário com base na operação
-        private void SetThisForm()
+        private void SetOperacao()
         {
             // Testa a operacao e configura os controles...
             switch (operacao)
@@ -79,83 +84,63 @@ namespace FestasApp.Views.Festas
         //
         private void SetControls()
         {
-            /*
-             Mask: Define a máscara que será usada pelo MaskedTextBox. No seu caso, a máscara é "00:00".
-             
-            CutCopyMaskFormat: Define o comportamento ao cortar e copiar o texto. MaskFormat.ExcludePromptAndLiterals faz com que apenas os caracteres de entrada do usuário sejam incluídos na operação de corte e cópia.
-             
-            TextMaskFormat: Define como a propriedade Text é manipulada. MaskFormat.ExcludePromptAndLiterals faz com que a leitura do texto exclua os prompts e literais. 
-             */
-            mskHoraInicio.Mask = "00:00";
-            mskHoraInicio.CutCopyMaskFormat = MaskFormat.ExcludePromptAndLiterals;
-            mskHoraInicio.TextMaskFormat = MaskFormat.ExcludePromptAndLiterals;
+            // definir os maxLenght dos controles
 
-            mskHoraFim.Mask = "00:00";
-            mskHoraFim.CutCopyMaskFormat = MaskFormat.ExcludePromptAndLiterals;
-            mskHoraFim.TextMaskFormat = MaskFormat.ExcludePromptAndLiterals;
-            
-            //
+            // itens festas
             cbbItemFesta.Height = 18;
             txtItemQtde.Height = 18;
             txtItemValor.Height = 18;
             //
-            txtValorTotalIntens.TextAlign = HorizontalAlignment.Right;
-            txtValorTotalIntens.ReadOnly = true;
-            txtValorTotalIntens.TabStop = false;
+            lblValorTotalIntens.TextAlign = ContentAlignment.MiddleRight;
+            lblValorTotalIntens.TabStop = false;
             //
             ConfigurarDtgItens();
             //
             ConfigurarAutoCompletarTxt();
-
-            // desmarcar comboboxes
-            //// Associa o evento GotFocus para cada ComboBox
-            //cbbEspaco.GotFocus += cbb_GotFocus;
-            //cbbPacote.GotFocus += cbb_GotFocus;
-            //cbbStatus.GotFocus += cbb_GotFocus;
-            //cbbTema.GotFocus += cbb_GotFocus;
-            //cbbTipoEvento.GotFocus += cbb_GotFocus;
         }
         //
         private void LimparControles()
         {
             // limpas os controles
-            msktxtDataVenda.Text = DateTime.Now.ToShortDateString();
-            txtClienteNome.Clear();
-            txtUserNome.Clear();
-            mskDataFesta.Clear();
-            lblValorTotalFesta.Text = string.Empty;
+            txtDataVenda.Text = DateTime.Now.ToShortDateString();
+            txtDataFesta.Clear();
+            txtHoraInicio.Clear();
+            txtHoraFim.Clear();
             txtTotalPessoa.Clear();
             txtTotalAdultos.Clear();
             txtPessoasAMais.Clear();
             txtCriancasPagantes.Clear();
             txtCriancasNaoPagantes.Clear();
-            txtContrato.Clear();
             // limpa adicionais da festa
             txtItemQtde.Clear();
             txtItemValor.Clear();
             dtgItens.Rows.Clear();
-            txtValorTotalIntens.Clear();
+            lblValorTotalIntens.Text = "0,00";
+            // valor da festa
+            lblValorPacote.Text = "0,00";
+            lblValorAdicionais.Text = "0,00";
+            txtDescontosFesta.Text = "0,00";
+            lblValorTotalFesta.Text = "0,00";
         }
         //
+        // desmarca comboboxes
         private void UnselectComboBoxes()
         {
-            cbbPacote.SelectedItem = -1;
-            cbbTema.SelectedItem = -1;
-            cbbEspaco.SelectedItem = -1;
+            cbbVendedor.SelectedItem = -1; // mostrar usuario ativo
+            //cbbVendedor.SelectionLength = 0; // desmarca seleção
+            cbbClientes.SelectedItem = -1;
+            cbbPacotes.SelectedItem = -1;
+            cbbTemas.SelectedItem = -1;
+            cbbEspacos.SelectedItem = -1;
             cbbStatus.SelectedItem = -1;
-            cbbTipoEvento.SelectedItem = -1;
+            cbbTiposEvento.SelectedItem = -1;
+            cbbContratos.SelectedItem = -1;
+            //
             cbbItemFesta.SelectedItem = -1;
-
         }
         //
         private async void TstbtnSalvar_Click(object? sender, EventArgs e)
         {
-            //// Validar os controles antes de prosseguir
-            //if (!ValidarControles())
-            //{
-            //    return; // Se a validação falhar, interrompa o processo de salvar
-            //}
-
             // Testa a operacao e configura os controles...
             switch (operacao)
             {
@@ -163,19 +148,21 @@ namespace FestasApp.Views.Festas
                     await SalvarFestaEF();
                     break;
                 case OperacaoCRUD.EDITAR:
-                    await SalvarFestaEF(festaId);
+                    await SalvarFestaEF(FestaIdParam.Id);
                     break;
                 case OperacaoCRUD.EXCLUIR:
-                    await ExcluirFestaEF(festaId);
+                    //await ExcluirFestaEF(festaId);
                     break;
             }
         }
+        //
         // 1. mostra dados de festa selecionada
-        private void MostraDadosFestaSelecionadaEF(int festaId)
+        private void MostraDadosFestaSelecionadaEF()
         {
-            if (operacao != OperacaoCRUD.NOVO)
+            // editar, consultar, excluir
+            if (FestaIdParam.IsValid() && operacao != OperacaoCRUD.NOVO)
             {
-                using (var context = new clsFestasContext())
+                using (clsFestasContext context = new())
                 {
                     _festa = context.Festas
                         .Include(f => f.Cliente)
@@ -187,27 +174,28 @@ namespace FestasApp.Views.Festas
                         .Include(f => f.TipoEvento)
                         .Include(f => f.Detalhes)
                         .Include(f => f.Adicionais)
-                        .FirstOrDefault(f => f.fest_id == festaId);
+                        .FirstOrDefault(f => f.fest_id == FestaIdParam.Id);
 
                     if (_festa != null)
                     {
                         // Preencha os controles do formulário com os dados da festa
-                        txtClienteNome.Text = _festa.Cliente?.cli_nome ?? "Não especificado";
-                        txtUserNome.Text = _festa.Usuario?.user_nome ?? "Não especificado";
-                        cbbPacote.Text = _festa.Pacote?.pct_nome ?? "Não especificado";
-                        cbbTema.Text = _festa.Tema?.tema_nome ?? "Não especificado";
-                        cbbEspaco.Text = _festa.Espaco?.espc_nome ?? "Não especificado";
-                        cbbStatus.Text = _festa.Status?.stt_status ?? "Não especificado";
-                        cbbTipoEvento.Text = _festa.TipoEvento?.tpev_nome ?? "Não especificado";
-                        msktxtDataVenda.Text = _festa.fest_dtVenda.ToString(); // ?? DateTime.Now;
-                        mskDataFesta.Text = _festa.fest_dtFesta.ToString(); // ?? DateTime.Now;
-                        lblValorTotalFesta.Text = _festa.fest_valor?.ToString("F2") ?? "0,00";
+                        cbbVendedor.SelectedValue = _festa.fest_user_id;
+                        cbbClientes.SelectedValue = _festa.fest_cli_id;
+                        cbbTiposEvento.SelectedValue = _festa.fest_tpEv_id;
+                        cbbPacotes.SelectedValue = _festa.fest_pct_id;
+                        cbbEspacos.SelectedValue = _festa.fest_espc_id;
+                        cbbTemas.SelectedValue = _festa.fest_tema_id;
+                        cbbStatus.SelectedValue = _festa.fest_stt_id;
 
-                        // Obtém os DETALHES da festa selecionada, incluindo os itens relacionados
-                        MostraDetalhesFestaSelecionada(context, festaId);
+                        txtDataVenda.Text = _festa.fest_dtVenda?.ToShortDateString();
+                        txtDataFesta.Text = _festa.fest_dtFesta?.ToShortDateString();
+                        lblValorTotalFesta.Text = _festa.fest_valor?.ToString("N2") ?? "0,00";
 
-                        // Obtém os ADICIONAIS da festa selecionada, incluindo os itens relacionados
-                        MostraItensFestaSelecionadaEF(context, festaId);
+                        // 1.1. Obtém os DETALHES da festa selecionada, incluindo os itens relacionados
+                        MostraDetalhesFestaSelecionada(); // utiliza id da festa atual
+
+                        // 1.2. Obtém os ADICIONAIS da festa selecionada, incluindo os itens relacionados
+                        MostraItensFestaSelecionadaEF(); // utiliza id da festa atual
                     }
                     else
                     {
@@ -218,18 +206,19 @@ namespace FestasApp.Views.Festas
             }
         }
         //
-        // 2. mostra detalhes da festa selecionada
-        private void MostraDetalhesFestaSelecionada(clsFestasContext context, int festa_id)
+        // 1.1. mostra detalhes da festa selecionada
+        private void MostraDetalhesFestaSelecionada()
         {
-            // instancia uma nova entidade...
-            var detalhesFesta = new repDetalhesEF();
-            var detalhesEncontrado = detalhesFesta.GetDetalhesFestaEF(festa_id);
+            // declara uma nova instancia, não é estatica
+            repDetalhesEF detalhesFesta = new();
+            // busca detalhes da festa com idAtual, retorna um objeto
+            var detalhesEncontrado = detalhesFesta.GetDetalhesFestaEF(_festa!.fest_id);
 
             if (detalhesEncontrado != null)
             {
                 // trata horarios
-                mskHoraInicio.Text = myDateTime.FormatTimeForDisplay(detalhesEncontrado.detfest_iniciohora);
-                mskHoraFim.Text = myDateTime.FormatTimeForDisplay(detalhesEncontrado.detfest_fimhora);
+                txtHoraInicio.Text = myDateTime.FormatTimeForDisplay(detalhesEncontrado.detfest_iniciohora, @"hh\:mm");
+                txtHoraFim.Text = myDateTime.FormatTimeForDisplay(detalhesEncontrado.detfest_fimhora, @"hh\:mm");
                 //
                 txtTotalPessoa.Text = detalhesEncontrado.detfest_totalpessoas?.ToString() ?? "0";
                 txtTotalAdultos.Text = detalhesEncontrado.detfest_adultos?.ToString() ?? "0";
@@ -238,86 +227,58 @@ namespace FestasApp.Views.Festas
                 txtCriancasNaoPagantes.Text = detalhesEncontrado.detfest_criancasnaopagantes?.ToString() ?? "0";
                 txtObservacao.Text = detalhesEncontrado.detfest_observacao ?? "";
 
-                // obter nome contrato
-                if (detalhesEncontrado.detfest_ctt_id != null)
-                {
-                    int idContrato = (int)detalhesEncontrado.detfest_ctt_id;
-                    txtContrato.Text = ObterContratoNome(context, idContrato);
-                }
+                cbbContratos.SelectedValue = detalhesEncontrado.detfest_ctt_id ?? 1; // selecionar o "PADRAO"
             }
             else
             {
-                // Limpa os campos se não houver detalhes da festa
+                // 1.1.1. Limpa os campos se não houver detalhes da festa
                 LimpaControlesDetalhesFesta();
             }
         }
         //
-        // 2.1. obter nome contrato, passando o idContrato
-        private string ObterContratoNome(clsFestasContext context, int IdContrato)
-        {
-            try
-            {
-                var contrato = context.Contratos.FirstOrDefault(c => c.ctt_id == IdContrato);
-                var contratoNome = contrato?.ctt_nome ?? "Não informado";
-
-                return contratoNome;
-            }
-            catch (Exception) { }
-
-            return string.Empty; // aviso CS8603
-        }
-        //
-        // 2.2.  Limpa os campos de detalhes da festa
+        // 1.1.1.  Limpa os campos de detalhes da festa
         private void LimpaControlesDetalhesFesta()
         {
-            mskHoraInicio.Clear();
-            mskHoraFim.Clear();
+            txtHoraInicio.Clear();
+            txtHoraFim.Clear();
             txtTotalPessoa.Text = "0";
             txtTotalAdultos.Text = "0";
             txtPessoasAMais.Text = "0";
             txtCriancasPagantes.Text = "0";
             txtCriancasNaoPagantes.Text = "0";
             txtObservacao.Clear();
-            txtContrato.Text = "PADRAO";
         }
         //
-        // 3. mostra itens adicionais da festa selecionada
-        private void MostraItensFestaSelecionadaEF(clsFestasContext contexto, int festa_id)
+        // 1.2. mostra itens adicionais da festa selecionada
+        private void MostraItensFestaSelecionadaEF()
         {
-            var adicionaisFesta = repAdicionaisEF.GetItensFestaEF(festa_id);
+            // busca detalhes da itensFesta com idAtual, retorna um objeto
+            var adicionaisFesta = repAdicionaisEF.GetItensFestaEF(_festa!.fest_id);
 
             // Preencha o DataGridView Itens com os adicionais da festa
-            dtgItens.Rows.Clear();
-
             if (adicionaisFesta != null)
             {
+                dtgItens.Rows.Clear();
+
                 foreach (var adicional in adicionaisFesta)
                 {
-                    //sastring itenFestaValor = $"{adicional.ItensFestas?.itensfest_nome} ({adicional.add_valor}) ";
 
-                    dtgItens.Rows.Add(adicional.ItensFestas?.itensfest_nome,
-                                      adicional.add_qtde,
-                                      adicional.add_valor * adicional.add_qtde);
+                    dtgItens.Rows.Add(adicional.add_itensfest_id,
+                                        adicional.ItensFestas?.itensfest_nome,
+                                        adicional.add_qtde,
+                                        adicional.add_valor * adicional.add_qtde);
                 }
             }
             SomarValorTotalItens();
         }
         //
-        private async Task<clsFestasContratos> ObterContratoId(clsFestasContext contexto, string nomeContrato)
-        {
-            var contratoId = await contexto.Contratos.FirstOrDefaultAsync(c => c.ctt_nome == nomeContrato);
-            if (contratoId == null)
-            {
-                throw new Exception("Contrato não encontrado.");
-            }
-            return contratoId;
-        }
         //
         private void TravarControles()
         {
-
+            // fatorar
         }
         //
+        // carregar comboboxes com valores das tabelas
         private void CarregarComboBoxesEF()
         {
             if (!myConnMySql.TestarConexao())
@@ -325,34 +286,87 @@ namespace FestasApp.Views.Festas
                 FormMenuMain.ShowMyMessageBox("Não foi possível carregar os dados, sem conexão com o banco de dados.\nSetComboBoxesEF", "Falha");
                 return;
             }
-            using (var context = new clsFestasContext())
+
+            using (clsFestasContext context = new())
             {
-                SetComboBoxesEF(cbbEspaco, context.Espacos, "espc_nome", "espc_id");
-                SetComboBoxesEF(cbbPacote, context.Pacotes, "pct_nome", "pct_id");
-                SetComboBoxesEF(cbbStatus, context.Status, "stt_status", "stt_id");
-                SetComboBoxesEF(cbbTema, context.Temas, "tema_nome", "tema_id");
-                SetComboBoxesEF(cbbTipoEvento, context.TipoEvento, "tpev_nome", "tpev_id");
-                SetComboBoxesEF(cbbItemFesta, context.ItensFestas, "itensfest_nome", "itensfest_id");
+                SetComboBoxesEF(cbbVendedor, context.Usuarios.OrderBy(u => u.user_nome).ToList(), "user_nome", "user_id");
+                SetComboBoxesEF(cbbClientes, context.Clientes.OrderBy(c => c.cli_nome).ToList(), "cli_nome", "cli_id");
+                SetComboBoxesEF(cbbEspacos, context.Espacos.OrderBy(e => e.espc_nome).ToList(), "espc_nome", "espc_id");
+                SetComboBoxesEF(cbbPacotes, context.Pacotes.OrderBy(p => p.pct_nome).ToList(), "pct_nome", "pct_id");
+                SetComboBoxesEF(cbbStatus, context.Status.OrderBy(s => s.stt_status).ToList(), "stt_status", "stt_id");
+                SetComboBoxesEF(cbbTemas, context.Temas.OrderBy(t => t.tema_nome).ToList(), "tema_nome", "tema_id");
+                SetComboBoxesEF(cbbTiposEvento, context.TipoEvento.OrderBy(t => t.tpev_nome).ToList(), "tpev_nome", "tpev_id");
+                SetComboBoxesEF(cbbItemFesta, context.ItensFestas.OrderBy(i => i.itensfest_nome).ToList(), "itensfest_nome", "itensfest_id");
+                SetComboBoxesEF(cbbContratos, context.Contratos.OrderBy(c => c.ctt_nome).ToList(), "ctt_nome", "ctt_id");
             }
+
+            // Adiciona eventos as comboboxes
+            cbbItemFesta.SelectedIndexChanged += CbbItemFesta_SelectedIndexChanged;
+            cbbPacotes.SelectedIndexChanged += CbbPacote_SelectedIndexChanged;
         }
         //
-        private void SetComboBoxesEF<T>(ComboBox cbb, DbSet<T> dbSet, string displayMember, string valueMember) where T : class
+        // método auxiliar ao preenchimento das comboboxes
+        private void SetComboBoxesEF<T>(ComboBox cbb, List<T> dataList, string displayMember, string valueMember) where T : class
         {
-            if (!myConnMySql.TestarConexao())
-                return;
             try
             {
-                using (var context = new clsFestasContext())
-                {
-                    cbb.DataSource = dbSet.ToList();
-                    cbb.DisplayMember = displayMember;
-                    cbb.ValueMember = valueMember;
-                    cbb.SelectedIndex = -1;
-                }
+                cbb.DataSource = null;  // Limpa o DataSource
+                cbb.Items.Clear();      // Limpa os itens manualmente
+                //
+                cbb.DataSource = dataList;
+                cbb.DisplayMember = displayMember;
+                cbb.ValueMember = valueMember;
+                cbb.SelectedIndex = -1;
             }
             catch (Exception ex)
             {
                 FormMenuMain.ShowMyMessageBox($"Erro ao carregar dados: {ex.Message}\nSetComboBoxesEF {cbb.Name}", "Falha");
+            }
+        }
+        //
+        // método captura valor do pacote
+        private async void CbbPacote_SelectedIndexChanged(object? sender, EventArgs e)
+        {
+            try
+            {
+                if (cbbPacotes.SelectedValue is int selectedId)
+                {
+                    using (clsFestasContext context = new())
+                    {
+                        var item = await context.Pacotes
+                                                    .Where(p => p.pct_id == selectedId)
+                                                    .Select(p => new { p.pct_valor })
+                                                    .FirstOrDefaultAsync();
+                        if (item != null)
+                        {
+                            lblValorPacote.Text = ((decimal)item.pct_valor!).ToString("N2");
+                            SomarValorTotalFesta();
+                        }
+                    }
+                }
+            }
+            catch (Exception) { }
+        }
+        //
+        // cbbItensFestas captura valor do item
+        private async void CbbItemFesta_SelectedIndexChanged(object? sender, EventArgs e)
+        {
+            if (cbbItemFesta.SelectedValue is int selectedId)
+            {
+                using (clsFestasContext context = new clsFestasContext())
+                {
+                    var item = await context.ItensFestas
+                                            .Where(i => i.itensfest_id == selectedId)
+                                            .Select(i => new { i.itensfest_valor })
+                                            .FirstOrDefaultAsync();
+
+                    if (item != null)
+                    {
+                        txtItemValor.Text = ((decimal)item.itensfest_valor!).ToString("F"); // Formata como moeda
+                        txtItemQtde.Text = "1";
+                        txtItemQtde.Focus();
+                    }
+                }
             }
         }
         //
@@ -375,40 +389,132 @@ namespace FestasApp.Views.Festas
         // salvarFestas
         private async Task SalvarFestaEF(int? festaId = null)
         {
-            if (!ValidarControles())
+            bool isValid = await ValidarControles();
+            if (!isValid)
                 return;
 
             try
             {
-                using (var contexto = new clsFestasContext())
+                using (clsFestasContext context = new())
                 {
-                    // 1. festa - está ok
-                    clsFestas festa = await ObterOuCriarFesta(contexto, festaId);
+                    // 1. instância de festa - está ok
+                    clsFestas festa = await ObterOuCriarFesta(context, festaId);
                     // 1.1.- está ok
-                    await AtualizarPropriedadesFesta(contexto, festa);
+                    AtualizarPropriedadesFesta(festa);
 
-                    // 2. detalhes festa - está ok
-                    clsFestasDetalhes detalhesFesta = await ObterOuCriarDetalhesFesta(contexto, festaId);
-                    // 2.2. - está ok
-                    AtualizarPropriedadesDetalhesFesta(contexto, detalhesFesta);
+                    // Salva a festa no banco de dados para garantir que o fest_id seja gerado
+                    await context.SaveChangesAsync();
 
-                    // 3. adicionais festa
-                    AtualizarPropriedadesAdicionaisFesta(contexto, festaId!.Value);
+                    // 2. instância de detalhes festa - está ok
+                    clsFestasDetalhes detalhesFesta = await ObterOuCriarDetalhesFesta(context, festa.fest_id); // utilizar o id da festa (nova ou editada)
+                    // 2.1. - está ok
+                    AtualizarPropriedadesDetalhesFesta(detalhesFesta);
 
-                    // Salvar as alterações no banco de dados
-                    await contexto.SaveChangesAsync();
+                    // 3. itens/adicionais festa -- nova ou editada
+                    AtualizarPropriedadesAdicionaisFesta(context, festa.fest_id); // utilizar o id da festa (nova ou editada)
+
+                    // 4. Salvar as alterações no banco de dados
+                    await context.SaveChangesAsync();
+
+                    FestaIdParam.Id = festa.fest_id; // para retornar para o dtgFesta
                 }
 
-                myUtilities.myMessageBox(this, "Festa salva com sucesso.", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                await myUtilities.myMessageBox(this, "Festa salva com sucesso.", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 this.Close();
             }
             catch (Exception ex)
             {
-                myUtilities.myMessageBox(this, $"Erro ao salvar festa: {ex.Message}\nSalvarFestaEF", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                await myUtilities.myMessageBox(this, $"Erro ao salvar festa: {ex.Message}\nSalvarFestaEF", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         //
+        // 1. verifica se festa existe ou é uma nova festa
+        private async Task<clsFestas> ObterOuCriarFesta(clsFestasContext context, int? festaId)
+        {
+            // declara uma instancia festa vazia
+            clsFestas? festa;
+
+            // editar, consultar, excluir
+            if (festaId.HasValue && operacao != OperacaoCRUD.NOVO)
+            {
+                // se festaId passado é válido, tenta localizar festa
+                festa = await context.Festas.FindAsync(festaId.Value);
+                if (festa == null)
+                {
+                    throw new Exception("Festa não encontrada.");
+                }
+            }
+            else 
+            {
+                // novo
+                festa = new clsFestas();
+                context.Festas.Add(festa); // adiciona um novo objeto festa
+            }
+            return festa; // retorna festa-encontrada ou festa-nova
+        }
+        //
+        // 1.1. atualiza as propriedades da instância festa com os valores do formulário
+        private void AtualizarPropriedadesFesta(clsFestas festa)
+        {
+            festa.fest_user_id = (int)cbbVendedor.SelectedValue!; 
+            festa.fest_cli_id = (int)cbbClientes.SelectedValue!; 
+            festa.fest_tpEv_id = (int?)cbbTiposEvento.SelectedValue; 
+            festa.fest_espc_id = (int?)cbbEspacos.SelectedValue; 
+            festa.fest_pct_id = (int?)cbbPacotes.SelectedValue; 
+            festa.fest_tema_id = (int?)cbbTemas.SelectedValue; 
+            festa.fest_stt_id = (int?)cbbStatus.SelectedValue;
+
+            // formatar em um método, valor para salvar, passar controle e mascara
+            festa.fest_valor = !string.IsNullOrWhiteSpace(lblValorTotalFesta.Text) ? (double?)Convert.ToDecimal(lblValorTotalFesta.Text) : 0;
+            // formatar em um método, datas para salvar, passar controle e mascara
+            festa.fest_dtVenda = !string.IsNullOrWhiteSpace(txtDataVenda.Text) ? DateTime.ParseExact(txtDataVenda.Text, "dd/MM/yyyy", null) : null;
+            festa.fest_dtFesta = !string.IsNullOrWhiteSpace(txtDataFesta.Text) ? DateTime.ParseExact(txtDataFesta.Text, "dd/MM/yyyy", null) : null;
+        }
+        //
+        // 2. verifica se há detalhes para a festa, ou cria novos detalhes
+        private async Task<clsFestasDetalhes> ObterOuCriarDetalhesFesta(clsFestasContext context, int festaId)
+        {
+            // declara uma instância vazia
+            clsFestasDetalhes? detalhesFesta;
+            
+            if (operacao != OperacaoCRUD.NOVO)
+            {
+                // Busca os detalhes da festa pelo campo detfest_fest_id
+                detalhesFesta = await context.Detalhes
+                    .FirstOrDefaultAsync(d => d.detfest_fest_id == festaId);
+
+                if (detalhesFesta == null)
+                {
+                    // Se não houver detalhes, cria um novo e associa o ID da festa
+                    detalhesFesta = new clsFestasDetalhes { detfest_fest_id = festaId};
+                    context.Detalhes.Add(detalhesFesta);
+                }
+            }
+            else // novo
+            {
+                // Se operacaoNOVO, cria um novo e associa o ID da festa
+                detalhesFesta = new clsFestasDetalhes { detfest_fest_id = festaId};
+                context.Detalhes.Add(detalhesFesta);
+            }
+
+            return detalhesFesta;
+        }
+        // 2.1. atualiza as propriedades da instância detalhesFesta com os valores do formulário
+        private void AtualizarPropriedadesDetalhesFesta(clsFestasDetalhes detalhesFesta)
+        {
+            detalhesFesta.detfest_iniciohora = myDateTime.FormatTimeToRap(txtHoraInicio.Text, @"hh\:mm");
+            detalhesFesta.detfest_fimhora = myDateTime.FormatTimeToRap(txtHoraFim.Text, @"hh\:mm");
+            detalhesFesta.detfest_totalpessoas = Convert.ToInt32(0 + txtTotalPessoa.Text); // somar com 0, evita exceçoes se controle null
+            detalhesFesta.detfest_adultos = Convert.ToInt32(0 + txtTotalAdultos.Text);
+            detalhesFesta.detfest_criancaspagantes = Convert.ToInt32(0 + txtCriancasPagantes.Text);
+            detalhesFesta.detfest_criancasnaopagantes = Convert.ToInt32(0 + txtCriancasNaoPagantes.Text);
+            detalhesFesta.detfest_pessoasamais = Convert.ToInt32(0 + txtPessoasAMais.Text);
+            detalhesFesta.detfest_ctt_id = Convert.ToInt32(cbbContratos.SelectedValue);
+            detalhesFesta.detfest_observacao = txtObservacao.Text;
+        }
+        //
+        // 3. grava os dados do datagridItens nas propriedades de adicionais da festa repAdicionais
         private void AtualizarPropriedadesAdicionaisFesta(clsFestasContext contexto, int festaId)
         {
             // Limpa os adicionais existentes para evitar duplicações
@@ -416,172 +522,41 @@ namespace FestasApp.Views.Festas
                                                 .Where(a => a.add_fest_id == festaId)
                                                 .ToList();
 
+            // apaga adicionais existentes para evitar duplicação
             foreach (var adicional in adicionaisExistentes)
             {
                 contexto.Adicionais.Remove(adicional);
             }
-            // Salvar as alterações após a remoção dos adicionais existentes
-            //contexto.SaveChanges();
 
             // Itera sobre as linhas do DataGridView e adiciona novos itens adicionais
             foreach (DataGridViewRow row in dtgItens.Rows)
             {
                 if (row.IsNewRow) continue; // Ignora a linha de nova entrada
+                                            
+                var itemId = Convert.ToInt16(row.Cells[ColItemId].Value);
+                var itemQtde = Convert.ToInt16(row.Cells[ColQtde].Value);
+                var itemValor = Convert.ToDouble(row.Cells[ColValor].Value); // corrigir aqui, aparece o valor de qtde * valUnit
 
-                var itemNome = row.Cells[ColDescricao].Value?.ToString();
-                var itemQtde = Convert.ToInt32(row.Cells[ColQtde].Value);
-                var itemValor = Convert.ToDouble(row.Cells[ColValor].Value);
-
-                // Obtem o ID do item com base no nome do item (assumindo que há uma tabela de itens)
-                var item = contexto.ItensFestas.FirstOrDefault(i => i.itensfest_nome == itemNome);
-
-                if (item != null)
+                if (itemId > 0)
                 {
-                    var adicionalFesta = new clsFestasAdicionais
+                    clsFestasAdicionais adicionalFesta = new()
                     {
                         add_fest_id = festaId,
-                        add_itensfest_id = item.itensfest_id,
+                        add_itensfest_id = itemId,
                         add_qtde = itemQtde,
                         add_valor = itemValor
                     };
-
                     contexto.Adicionais.Add(adicionalFesta);
                 }
             }
         }
         //
-        private async Task<clsFestasAdicionais> ObterOuCriarAdicionaisFestaSEMUSO(clsFestasContext contexto, int? festaId)
+        // deletar-festa-selecionada
+        private async Task ExcluirFestaEF(int festaId)
         {
-            clsFestasAdicionais? adicionaisFesta;
-
-            if (festaId.HasValue)
+            if (festaId <= 0)
             {
-                // busca adicionais da festa
-                adicionaisFesta = await contexto.Adicionais
-                                            .FirstOrDefaultAsync(a => a.add_fest_id == festaId); // aviso CS8600
-
-                if (adicionaisFesta == null)
-                {
-                    // Se não houver adicionais, cria um novo e associa o ID da festa
-                    adicionaisFesta = new clsFestasAdicionais { add_fest_id = festaId.Value};
-                    contexto.Adicionais.Add(adicionaisFesta);
-                }
-            }
-            else
-            {
-                adicionaisFesta = new clsFestasAdicionais();
-                contexto.Adicionais.Add(adicionaisFesta);
-            }
-            return adicionaisFesta;
-        }
-        //
-        private async Task<clsFestas> ObterOuCriarFesta(clsFestasContext contexto, int? festaId)
-        {
-            clsFestas? festa;
-
-            if (festaId.HasValue)
-            {
-                festa = await contexto.Festas.FindAsync(festaId.Value);
-                if (festa == null)
-                {
-                    throw new Exception("Festa não encontrada.");
-                }
-            }
-            else
-            {
-                festa = new clsFestas();
-                contexto.Festas.Add(festa);
-            }
-
-            return festa;
-        }
-        //
-        private async Task AtualizarPropriedadesFesta(clsFestasContext contexto, clsFestas festa)
-        {
-            var cliente = await ObterCliente(contexto, txtClienteNome.Text);
-            festa.fest_cli_id = cliente.cli_id;
-
-            var usuario = await ObterUsuario(contexto, txtUserNome.Text);
-            festa.fest_user_id = usuario.user_id;
-
-            festa.fest_tpEv_id = (int?)cbbTipoEvento.SelectedValue;
-            festa.fest_espc_id = (int?)cbbEspaco.SelectedValue;
-            festa.fest_pct_id = (int?)cbbPacote.SelectedValue;
-            festa.fest_tema_id = (int?)cbbTema.SelectedValue;
-            festa.fest_stt_id = (int?)cbbStatus.SelectedValue;
-            festa.fest_valor = !string.IsNullOrWhiteSpace(lblValorTotalFesta.Text) ? (double?)Convert.ToDecimal(lblValorTotalFesta.Text) : 0;
-            festa.fest_dtVenda = DateTime.ParseExact(msktxtDataVenda.Text, "ddMMyyyy", null);
-            festa.fest_dtFesta = DateTime.ParseExact(mskDataFesta.Text, "ddMMyyyy", null);
-        }
-        //
-        private async Task<clsFestasDetalhes> ObterOuCriarDetalhesFesta(clsFestasContext contexto, int? festaId)
-        {
-            clsFestasDetalhes? detalhesFesta;
-
-            if (festaId.HasValue)
-            {
-                // Busca os detalhes da festa pelo campo detfest_fest_id
-                detalhesFesta = await contexto.Detalhes
-                    .FirstOrDefaultAsync(d => d.detfest_fest_id == festaId.Value);
-
-                if (detalhesFesta == null)
-                {
-                    // Se não houver detalhes, cria um novo e associa o ID da festa
-                    detalhesFesta = new clsFestasDetalhes { detfest_fest_id = festaId.Value };
-                    contexto.Detalhes.Add(detalhesFesta);
-                }
-            }
-            else
-            {
-                // aasocia o ID da festa ao detalhe localizado
-                detalhesFesta = new clsFestasDetalhes();
-                contexto.Detalhes.Add(detalhesFesta);
-            }
-
-            return detalhesFesta;
-        }
-        //
-        private void AtualizarPropriedadesDetalhesFesta(clsFestasContext contexto, clsFestasDetalhes detalhesFesta)
-        {
-            detalhesFesta.detfest_iniciohora = !string.IsNullOrWhiteSpace(mskHoraInicio.Text) ? TimeSpan.ParseExact(mskHoraInicio.Text, "hhmm", CultureInfo.InvariantCulture) : (TimeSpan?)null;
-            detalhesFesta.detfest_fimhora = !string.IsNullOrWhiteSpace(mskHoraFim.Text) ? TimeSpan.ParseExact(mskHoraFim.Text, "hhmm", CultureInfo.InvariantCulture) : (TimeSpan?)null;
-
-            detalhesFesta.detfest_totalpessoas = Convert.ToInt32(txtTotalPessoa.Text);
-            detalhesFesta.detfest_adultos = Convert.ToInt32(txtTotalAdultos.Text);
-            detalhesFesta.detfest_criancaspagantes = Convert.ToInt32(txtCriancasPagantes.Text);
-            detalhesFesta.detfest_criancasnaopagantes = Convert.ToInt32(txtCriancasNaoPagantes.Text);    
-            detalhesFesta.detfest_pessoasamais = Convert.ToInt32(txtPessoasAMais.Text);
-            detalhesFesta.detfest_observacao = txtObservacao.Text;
-            // obter id do contrato pelo nome
-            var contrato = contexto.Contratos.FirstOrDefault(c => c.ctt_nome == txtContrato.Text);
-            detalhesFesta.detfest_ctt_id = contrato?.ctt_id;
-        }
-        //
-        private async Task<clsClientes> ObterCliente(clsFestasContext contexto, string nomeCliente)
-        {
-            var cliente = await contexto.Clientes.FirstOrDefaultAsync(c => c.cli_nome == nomeCliente);
-            if (cliente == null)
-            {
-                throw new Exception("Cliente não encontrado.");
-            }
-            return cliente;
-        }
-        //
-        private async Task<clsUsuarios> ObterUsuario(clsFestasContext contexto, string nomeUsuario)
-        {
-            var usuario = await contexto.Usuarios.FirstOrDefaultAsync(u => u.user_nome == nomeUsuario);
-            if (usuario == null)
-            {
-                throw new Exception("Usuário não encontrado.");
-            }
-            return usuario;
-        }
-        //
-        private async Task ExcluirFestaEF(int? festaId)
-        {
-            if (festaId <= 0 || !festaId.HasValue)
-            {
-                myUtilities.myMessageBox(this, $"Festa não encontrada! {festaId.ToString()}", "Excluir Festa");
+                await myUtilities.myMessageBox(this, $"Festa não encontrada! {festaId}", "Excluir Festa");
                 return;
             }
 
@@ -589,12 +564,11 @@ namespace FestasApp.Views.Festas
             {
                 // Exibe a mensagem de confirmação usando MessageBox.Show
                 var message = $"""
-                        Deseja Excluir a Festa de?
-                        {txtClienteNome.Text}
+                        Deseja Excluir a Festa de {cbbClientes.Text}?
 
                         Esta ação não poderá ser desfeita!
                         """;
-                var result = myUtilities.myMessageBox(this, message, "Excluir Festa", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                var result = await myUtilities.myMessageBox(this, message, "Excluir Festa", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
                 if (result == DialogResult.Yes)
                 {
@@ -602,240 +576,189 @@ namespace FestasApp.Views.Festas
                     {
                         // Buscar a festa existente no banco de dados
                         clsFestas? festa = await contexto.Festas.FindAsync(festaId);
+
                         if (festa == null)
                         {
                             throw new Exception("Festa não encontrada.");
                         }
 
+                        // verificar se há registros da festas no financeiro, e não excluir se houver
+
                         // Remover a festa do contexto
                         contexto.Festas.Remove(festa);
+
+                        // Remover detalhes da festa
+
+                        // Remover Itens da festa
 
                         // Salvar as alterações no banco de dados
                         await contexto.SaveChangesAsync();
                     }
 
-                    //myUtilities.myMessageBox(this, "Festa excluída com sucesso.", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    //await myUtilities.myMessageBox(this, "Festa excluída com sucesso.", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     this.Close();
                     return;
                 }
             }
             catch (Exception ex)
             {
-                myUtilities.myMessageBox(this, $"Erro ao excluir festa: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                await myUtilities.myMessageBox(this, $"Erro ao excluir festa: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        //
+        // auto-completar
         private void ConfigurarAutoCompletarTxt()
         {
+            //
             // Clientes
-            txtClienteNome.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-            txtClienteNome.AutoCompleteSource = AutoCompleteSource.CustomSource;
-            txtClienteNome.AutoCompleteCustomSource = CarregarNomesClientes();
+            //
+            cbbClientes.DropDownStyle = ComboBoxStyle.DropDown;
+            cbbClientes.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            cbbClientes.AutoCompleteSource = AutoCompleteSource.ListItems;
+            //cbbClientes.AutoCompleteCustomSource = CarregarNomesClientes();
+            //
             // Usuarios
-            txtUserNome.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-            txtUserNome.AutoCompleteSource = AutoCompleteSource.CustomSource;
-            txtUserNome.AutoCompleteCustomSource = CarregarNomesUsuarios();
-            //// itens festas
+            //
+            //cbbVendedor.DropDownStyle = ComboBoxStyle.DropDownList;
+            //cbbVendedor.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            //cbbVendedor.AutoCompleteSource = AutoCompleteSource.ListItems;
+            //txtUserNome.AutoCompleteCustomSource = CarregarNomesUsuarios();
+            //
+            // itens festas
+            //
+            //cbbItemFesta.DropDownStyle = ComboBoxStyle.DropDownList;
             //cbbItemFesta.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             //cbbItemFesta.AutoCompleteSource = AutoCompleteSource.CustomSource;
             //cbbItemFesta.AutoCompleteCustomSource = CarregarItensFesta();
+            //
             // Contratos
-            txtContrato.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-            txtContrato.AutoCompleteSource = AutoCompleteSource.CustomSource;
-            txtContrato.AutoCompleteCustomSource = CarregarNomesContratos();
-        }
-        // itens festas
-        private AutoCompleteStringCollection CarregarItensFesta()
-        {
-            AutoCompleteStringCollection itensFesta = new AutoCompleteStringCollection();
-
-            using (var context = new clsFestasContext())
-            {
-                var itens = context.ItensFestas
-                                    .Select(i => i.itensfest_nome)
-                                    .ToList();
-
-                itensFesta.AddRange(itens.ToArray());
-            }
-            return itensFesta;
-        }
-        // contratos
-        private AutoCompleteStringCollection CarregarNomesContratos()
-        {
-            AutoCompleteStringCollection nomesContratos = new();
-
-            using (clsFestasContext context = new())
-            {
-                var contratos = context.Contratos
-                                        .Select(ct => ct.ctt_nome)
-                                        .Where(nome => nome != null) // Filtra os valores nulos
-                                        .ToList();
-
-                nomesContratos.AddRange(contratos.ToArray());
-
-            }
-            return nomesContratos;
-        }
-        // usuarios
-        private AutoCompleteStringCollection CarregarNomesUsuarios()
-        {
-            AutoCompleteStringCollection nomesUsuarios = new();
-
-            using (var context = new clsFestasContext())
-            {
-                var usuarios = context.Usuarios.Select(u => u.user_nome).ToList();
-                nomesUsuarios.AddRange(usuarios.ToArray());
-            }
-            return nomesUsuarios;
-        }
-        // clientes
-        private AutoCompleteStringCollection CarregarNomesClientes()
-        {
-            AutoCompleteStringCollection nomesClientes = new AutoCompleteStringCollection();
-
-            using (var context = new clsFestasContext())
-            {
-                var clientes = context.Clientes.Select(c => c.cli_nome).ToList();
-                nomesClientes.AddRange(clientes.ToArray());
-            }
-            return nomesClientes;
+            //
+            //cbbContratos.DropDownStyle = ComboBoxStyle.DropDownList;
+            //cbbContratos.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            //cbbContratos.AutoCompleteSource = AutoCompleteSource.ListItems;
+            //txtContrato.AutoCompleteCustomSource = CarregarNomesContratos();
         }
         //
-        private void pictureBox4_Click(object sender, EventArgs e)
+        // validação dos controles do formulário
+        private async Task<bool> ValidarControles()
         {
-            //// Criar e abrir o formulário CRUD passando o objeto e a operação
-            //using (Form frm = new FormBaseAuxilares())
-            //{
-            //    // Usar a Modal para exibir o FormCRUD
-            //    myUtilities.CreateModalOverlay(this, frmExibir: frm);
-            //}
-        }
-        //
-        private bool ValidarControles()
-        {
-            // Validação de data de venda
-            if (!myDateTime.ValidDate(msktxtDataVenda.Text))
+            //
+            // 1. Validação de data de venda
+            if (!myDateTime.ValidDate(txtDataVenda.Text))
             {
-                myUtilities.myMessageBox(this, "Data de venda inválida. Formato esperado: ddMMyyyy", "Validação", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                msktxtDataVenda.Focus();
+                await myUtilities.myMessageBox(this, "Data de venda inválida. Formato esperado: ddMMyyyy", "Validação", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtDataVenda.Focus();
                 return false;
             }
-                //if (!DateTime.TryParseExact(msktxtDataVenda.Text, "ddMMyyyy", null, System.Globalization.DateTimeStyles.None, out _))
-                //{
-                //    myUtilities.myMessageBox(this, "Data de venda inválida. Formato esperado: ddMMyyyy", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                //    return false;
-                //}
-
-            // Validação de usuário
-            if (string.IsNullOrWhiteSpace(txtUserNome.Text))
+            //
+            // 2. Validação de usuário
+            if (cbbVendedor.SelectedValue == null)
             {
-                myUtilities.myMessageBox(this, "Usuário inválido. Informe um Usuário!", "Validação", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                txtUserNome.Focus();
+                await myUtilities.myMessageBox(this, "Usuário inválido. Informe um Usuário!", "Validação", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                cbbVendedor.Focus();
                 return false;
             }
-
-            // Validação de cliente
-            if (string.IsNullOrWhiteSpace(txtClienteNome.Text))
+            //
+            // 3. Validação de cliente
+            if (cbbClientes.SelectedValue == null)
             {
-                myUtilities.myMessageBox(this, "Cliente inválido. Informe um Cliente!", "Validação", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                txtClienteNome.Focus();
+                await myUtilities.myMessageBox(this, "Cliente inválido. Informe um Cliente!", "Validação", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                cbbClientes.Focus();
                 return false;
             }
-
-            // Validação de data de festa
-            if (!myDateTime.ValidDate(mskDataFesta.Text))
+            //
+            // 4. Validação de data de festa
+            if (!myDateTime.ValidDate(txtDataFesta.Text))
             {
-                myUtilities.myMessageBox(this, "Data da festa inválida. informe uma data válida!", "Validação", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                mskDataFesta.Focus();
+                await myUtilities.myMessageBox(this, "Data da festa inválida. informe uma data válida!", "Validação", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtDataFesta.Focus();
                 return false;
             }
-            //if (!DateTime.TryParseExact(mskDataFesta.Text, "ddMMyyyy", null, System.Globalization.DateTimeStyles.None, out _))
-            //{
-            //    myUtilities.myMessageBox(this, "Data da festa inválida. Formato esperado: ddMMyyyy", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //    return false;
-            //}
-
-            // Validação dos ComboBoxes
-            // tipo evento
-            if (cbbTipoEvento.SelectedValue == null)
-            {
-                myUtilities.myMessageBox(this, "Tipo de Evento inválido. Selecione um Evento!", "Validação", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                cbbTipoEvento.Focus();
-                return false;
-            }
-            // espaço
-            if (cbbEspaco.SelectedValue == null)
-            {
-                myUtilities.myMessageBox(this, "Espaço inválido. Selecione um Espaço!", "Validação", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                cbbEspaco.Focus();
-                return false;
-            }
-            // tema
-            if (cbbTema.SelectedValue == null)
-            {
-                myUtilities.myMessageBox(this, "Tema inválido. Selecione um Tema!", "Validação", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                cbbTema.Focus();
-                return false;
-            }
-            // pacotes
-            if (cbbPacote.SelectedValue == null)
-            {
-                myUtilities.myMessageBox(this, "Pacote inválido. Selecione um Pacote!", "Validação", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                cbbPacote.Focus();
-                return false;
-            }
-            //******************************************************************
             // Validação de hora inicio
-            if (!myDateTime.ValidTime(mskHoraInicio.Text))
+            if (!myDateTime.ValidTime(txtHoraInicio.Text, @"hh\:mm"))
             {
-                myUtilities.myMessageBox(this, "Hora Início da festa inválida. Formato esperado: hh:mm", "Validação", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                mskHoraInicio.Focus();
+                await myUtilities.myMessageBox(this, "Hora Início da festa inválida. Formato esperado: hh:mm", "Validação", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtHoraInicio.Focus();
                 return false;
             }
-            // Validação de hora fim
-            if (!myDateTime.ValidTime(mskHoraFim.Text))
+            //
+            // 5.Validação de hora fim
+            if (!myDateTime.ValidTime(txtHoraFim.Text, @"hh\:mm"))
             {
-                myUtilities.myMessageBox(this, "Hora Final da festa inválida. Formato esperado: hh:mm", "Validação", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                mskHoraFim.Focus();
+                await myUtilities.myMessageBox(this, "Hora Final da festa inválida. Formato esperado: hh:mm", "Validação", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtHoraFim.Focus();
                 return false;
             }
-
-            // status
+            //
+            // 6. tipo evento
+            if (cbbTiposEvento.SelectedValue == null)
+            {
+                await myUtilities.myMessageBox(this, "Tipo de Evento inválido. Selecione um Evento!", "Validação", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                cbbTiposEvento.Focus();
+                return false;
+            }
+            //
+            // 7. pacotes
+            if (cbbPacotes.SelectedValue == null)
+            {
+                await myUtilities.myMessageBox(this, "Pacote inválido. Selecione um Pacote!", "Validação", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                cbbPacotes.Focus();
+                return false;
+            }
+            //
+            // 8. espaço
+            if (cbbEspacos.SelectedValue == null)
+            {
+                await myUtilities.myMessageBox(this, "Espaço inválido. Selecione um Espaço!", "Validação", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                cbbEspacos.Focus();
+                return false;
+            }
+            //
+            // 9. tema
+            if (cbbTemas.SelectedValue == null)
+            {
+                await myUtilities.myMessageBox(this, "Tema inválido. Selecione um Tema!", "Validação", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                cbbTemas.Focus();
+                return false;
+            }
+            //
+            // 10. status
             if (cbbStatus.SelectedValue == null)
             {
-                myUtilities.myMessageBox(this, "Status inválido.", "Validação", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                await myUtilities.myMessageBox(this, "Status inválido.", "Validação", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 cbbStatus.Focus();
                 return false;
             }
-
-            // Validação de contrato
-            if (string.IsNullOrWhiteSpace(txtContrato.Text) || txtContrato.Text == string.Empty)
+            //
+            // 11. Validação de contrato
+            if (string.IsNullOrWhiteSpace(cbbContratos.Text) || cbbContratos.Text == string.Empty)
             {
-                myUtilities.myMessageBox(this, "Contrato inválido.", "Validação", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                txtContrato.Focus();
+                await myUtilities.myMessageBox(this, "Contrato inválido.", "Validação", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                cbbContratos.Focus();
                 return false;
             }
-
-            // Validação do valor da festa
+            //
+            // 12. Validação do valor da festa
             //if (string.IsNullOrWhiteSpace(lblValorFesta.Text) || !decimal.TryParse(lblValorFesta.Text, out _))
             //{
-            //    myUtilities.myMessageBox(this, "Valor da festa inválido.", "Validação", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //    await myUtilities.myMessageBox(this, "Valor da festa inválido.", "Validação", MessageBoxButtons.OK, MessageBoxIcon.Error);
             //    return false;
             //}
 
             // se toda validação passar retorna true
             return true;
         }
+
         //
         //***************************************************************************
         #region DataGridViews dtgItens
         //
         // DataGridViews
         // constantes com Numeros das colunas
-        private const int ColDescricao = 0;
-        private const int ColQtde = 1;
-        private const int ColValor = 2;
-        private const int ColDelete = 3;
+        private const int ColItemId = 0;
+        private const int ColDescricao = 1;
+        private const int ColQtde = 2;
+        private const int ColValor = 3;
+        private const int ColDelete = 4;
         //
         private void ConfigurarDtgItens()
         {
@@ -877,16 +800,17 @@ namespace FestasApp.Views.Festas
             dtgItens.Columns.Clear();
 
             // adicionar configurar colunas
+            myFunctions.ConfigurarAdicionarColuna(dtg, ColItemId, "ID", 30, visible: false);
             myFunctions.ConfigurarAdicionarColuna(dtg, ColDescricao, "Descrição", 200, "", alignment: DataGridViewContentAlignment.MiddleLeft);
             myFunctions.ConfigurarAdicionarColuna(dtg, ColQtde, "Qtde", 80, "", alignment: DataGridViewContentAlignment.MiddleCenter);
             myFunctions.ConfigurarAdicionarColuna(dtg, ColValor, "Valor", 80, "", alignment: DataGridViewContentAlignment.MiddleRight);
 
             // Formatar coluna Valor como moeda
             dtg.Columns[ColDescricao].DefaultCellStyle.Font = new Font("Segoe UI", 9, FontStyle.Bold);
-            dtg.Columns[ColValor].DefaultCellStyle.Format = "C2";
+            dtg.Columns[ColValor].DefaultCellStyle.Format = "N2";
 
             // Adicionar coluna de exclusão
-            DataGridViewImageColumn deleteColumn = new DataGridViewImageColumn
+            DataGridViewImageColumn deleteColumn = new()
             {
                 Image = Properties.Resources.delete_18x18, // Certifique-se de ter um recurso de imagem chamado delete_18x18
                 //Name = "Delete",
@@ -902,7 +826,7 @@ namespace FestasApp.Views.Festas
         } //end ConfigurarDtgItens
         //
         // deletar itens dtgItensFestas
-        private void DtgItens_CellContentClick(object? sender, DataGridViewCellEventArgs e)
+        private async void DtgItens_CellContentClick(object? sender, DataGridViewCellEventArgs e)
         {
             // Verifique se o clique foi na coluna de exclusão
             if (e.ColumnIndex == dtgItens.Columns[ColDelete].Index && e.RowIndex >= 0)
@@ -914,7 +838,7 @@ namespace FestasApp.Views.Festas
                 {
                     string descricao = currentRow.Cells[ColDescricao].Value?.ToString() ?? string.Empty;
                     // Confirmar deleção
-                    var resultado = myUtilities.myMessageBox(this, $"Tem certeza que deseja deletar {descricao}?", "Confirmação de Deleção", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    var resultado = await myUtilities.myMessageBox(this, $"Tem certeza que deseja deletar {descricao}?", "Confirmação de Deleção", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                     if (resultado == DialogResult.Yes)
                     {
                         // Remover a linha do DataGridView
@@ -927,53 +851,62 @@ namespace FestasApp.Views.Festas
                 //else
                 //{
                 //    // Exibir mensagem de erro se a linha estiver vazia
-                //    myUtilities.myMessageBox(this, "A linha selecionada está vazia e não pode ser deletada.", "Erro de Deleção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                //    await myUtilities.myMessageBox(this, "A linha selecionada está vazia e não pode ser deletada.", "Erro de Deleção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 //}
             }
-        }
-        //
-        // adiciona itens no dtgItensFestas
-        private void btnAddItem_Click(object sender, EventArgs e)
-        {
-            // Validar os campos de entrada
-            if (string.IsNullOrWhiteSpace(cbbItemFesta.Text) ||
-                string.IsNullOrWhiteSpace(txtItemQtde.Text) ||
-                string.IsNullOrWhiteSpace(txtItemValor.Text))
-            {
-                myUtilities.myMessageBox(this, "Todos os campos devem ser preenchidos.", "Erro de Entrada", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                cbbItemFesta.Focus();
-                return;
-            }
-            // Tentar converter os valores de quantidade
-            if (!int.TryParse(txtItemQtde.Text, out int quantidade))
-            {
-                myUtilities.myMessageBox(this, "Quantidade deve ser um número inteiro válido.", "Erro de Entrada", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtItemQtde.Focus();
-                return;
-            }
-            // Tentar converter os valores de valor
-            if (!double.TryParse(txtItemValor.Text, out double valor))
-            {
-                myUtilities.myMessageBox(this, "Valor deve ser um número válido.", "Erro de Entrada", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtItemValor.Focus();
-                return;
-            }
-            // Adicionar o item ao DataGridView
-            //dtgItens.Rows.Add($"{cbbItemFesta.Text} ({valor.ToString("N2")})", quantidade, (valor * quantidade));
-            dtgItens.Rows.Add(cbbItemFesta.Text, quantidade, (valor * quantidade));
-            // soma total de itens
-            SomarValorTotalItens();
-            // Limpar os campos de entrada
-            cbbItemFesta.SelectedItem = -1;
-            txtItemQtde.Clear();
-            txtItemValor.Clear();
-            cbbItemFesta.Focus();
         }
         //
         private void DtgItens_SelectionChanged(object? sender, EventArgs e)
         {
             //txtValorTotalIntens.Text = SomarValorTotalItens().ToString("C2");
         }
+        //
+        private void TxtItemQtde_Validating(object? sender, CancelEventArgs e)
+        {
+
+        }
+        //
+        // adiciona itens no dtgItensFestas
+        private async void btnAddItem_Click(object sender, EventArgs e)
+        {
+            // Validar os campos de entrada
+            if (string.IsNullOrWhiteSpace(cbbItemFesta.Text) ||
+                string.IsNullOrWhiteSpace(txtItemQtde.Text) ||
+                string.IsNullOrWhiteSpace(txtItemValor.Text))
+            {
+                await myUtilities.myMessageBox(this, "Todos os campos devem ser preenchidos.", "Adicionais da Festa", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                cbbItemFesta.Focus();
+                return;
+            }
+            // Tentar converter os valores de quantidade
+            if (!int.TryParse(txtItemQtde.Text, out int quantidade))
+            {
+                await myUtilities.myMessageBox(this, "Quantidade deve ser um número inteiro válido.", "Adicionais da Festa", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtItemQtde.Focus();
+                return;
+            }
+            // Tentar converter os valores de valor
+            if (!double.TryParse(txtItemValor.Text, out double valor))
+            {
+                await myUtilities.myMessageBox(this, "Valor deve ser um número válido.", "Adicionais da Festa", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtItemValor.Focus();
+                return;
+            }
+            //
+            // Adicionar o item ao DataGridView
+            //dtgItens.Rows.Add($"{cbbItemFesta.Text} ({valor.ToString("N2")})", quantidade, (valor * quantidade));
+            dtgItens.Rows.Add(cbbItemFesta.SelectedValue, cbbItemFesta.Text, quantidade, (valor * quantidade));
+
+            // soma total de itens
+            SomarValorTotalItens();
+            // Limpar os campos de entrada
+            txtItemQtde.Clear();
+            txtItemValor.Clear();
+            //
+            cbbItemFesta.SelectedItem = -1;
+            cbbItemFesta.Focus();
+        }
+        //
         // valor total de itens
         private void SomarValorTotalItens()
         {
@@ -984,7 +917,27 @@ namespace FestasApp.Views.Festas
                 //double quantidade = row.Cells[ColQtde].Value != null ? Convert.ToDouble(row.Cells[ColValor].Value) : 0;
                 soma += valor;
             }
-            txtValorTotalIntens.Text = soma.ToString("C2");
+            lblValorTotalIntens.Text = soma.ToString("N2");
+            SomarValorTotalFesta();
+        }
+        //
+        private void TxtDescontosFesta_Validating(object? sender, CancelEventArgs e)
+        {
+            SomarValorTotalFesta();
+        }
+        //
+        private void SomarValorTotalFesta()
+        {
+            // valor-pacote
+            //lblValorPacote.Text = "0,00";
+            double pacote = Convert.ToDouble(lblValorPacote.Text);
+            // valor-adicionais
+            double valorAdicionais = Convert.ToDouble("0" + lblValorTotalIntens.Text);
+            lblValorAdicionais.Text = valorAdicionais.ToString("N2");
+            // desconto
+            double desconto = Convert.ToDouble("0" + txtDescontosFesta.Text);
+            // valor-total-festa
+            lblValorTotalFesta.Text = ((pacote + valorAdicionais) - desconto).ToString("N2");
         }
         //
         // Evento para mudar o cursor ao entrar na célula de exclusão
@@ -1011,7 +964,280 @@ namespace FestasApp.Views.Festas
             }
         }
         #endregion
-              
         //
+        // pic_Clicks
+        // add-Tipo-evento
+        private async void picAddTipoEvento_Click(object sender, EventArgs e)
+        {
+            ComboBox cbb = cbbTiposEvento;
+            // Armazenar o registro selecionado antes de abrir o formulário
+            string registroSelecionado = cbb.Text;
+
+            // Criar e abrir o formulário CRUD passando o objeto e a operação
+            OperacaoCRUD operacao = OperacaoCRUD.NOVO;
+            using (FormTipoEvento frm = new(param, operacao))
+            {
+                // Usar a Modal para exibir o FormCRUD
+                await myUtilities.CreateModalOverlayAsync(this, frmExibir: frm);
+
+                // Verificar se um novo registro foi criado
+                if (!string.IsNullOrEmpty(frm.TipoAtual.tpev_nome) && frm.TipoAtual.tpev_nome != registroSelecionado)
+                {
+                    // Atualizar ComboBox se houve mudanças
+                    using (clsFestasContext context = new clsFestasContext())
+                    {
+                        SetComboBoxesEF(cbbTiposEvento, context.TipoEvento.OrderBy(t => t.tpev_nome).ToList(), "tpev_nome", "tpev_id");
+                    }
+                    // Atualizar o registro selecionado com o novo registro
+                    registroSelecionado = frm.TipoAtual.tpev_nome;
+                }
+                if (!string.IsNullOrEmpty(registroSelecionado))
+                {
+                    // Selecionar o item que estava selecionado antes de abrir o formulário ou um novo
+                    cbb.Text = registroSelecionado;
+                }
+            }
+        }
+        //
+        // add-espaco
+        private async void picAddEspaco_Click(object sender, EventArgs e)
+        {
+            ComboBox cbb = cbbEspacos;
+            // Armazenar o registro selecionado antes de abrir o formulário
+            string registroSelecionado = cbb.Text;
+
+            // Criar e abrir o formulário CRUD passando o objeto e a operação
+            OperacaoCRUD operacao = OperacaoCRUD.NOVO;
+            using (FormEspacosFestas frm = new(param, operacao))
+            {
+                // Usar a Modal para exibir o FormCRUD
+                await myUtilities.CreateModalOverlayAsync(this, frmExibir: frm);
+
+                // Verificar se um novo registro foi criado
+                if (!string.IsNullOrEmpty(frm.EspacoAtual.espc_nome) && frm.EspacoAtual.espc_nome != registroSelecionado)
+                {
+                    // Atualizar ComboBox se houve mudanças
+                    using (clsFestasContext context = new clsFestasContext())
+                    {
+                        SetComboBoxesEF(cbbEspacos, context.Espacos.OrderBy(e => e.espc_nome).ToList(), "espc_nome", "espc_id");
+                    }
+                    // Atualizar o registro selecionado com o novo registro
+                    registroSelecionado = frm.EspacoAtual.espc_nome;
+                }
+                if (!string.IsNullOrEmpty(registroSelecionado))
+                {
+                    // Selecionar o item que estava selecionado antes de abrir o formulário ou um novo
+                    cbb.Text = registroSelecionado;
+                }
+            }
+        }
+        //
+        // add-tema
+        private async void picAddTema_Click(object sender, EventArgs e)
+        {
+            ComboBox cbb = cbbTemas;
+            // Armazenar o registro selecionado antes de abrir o formulário
+            string registroSelecionado = cbb.Text;
+
+            // Criar e abrir o formulário CRUD passando o objeto e a operação
+            OperacaoCRUD operacao = OperacaoCRUD.NOVO;
+            using (FormTemasFestas frm = new(param, operacao))
+            {
+                // Usar a Modal para exibir o FormCRUD
+                await myUtilities.CreateModalOverlayAsync(this, frmExibir: frm);
+
+                // Verificar se um novo registro foi criado
+                if (!string.IsNullOrEmpty(frm.TemaAtual.tema_nome) && frm.TemaAtual.tema_nome != registroSelecionado)
+                {
+                    // Atualizar ComboBox se houve mudanças
+                    using (clsFestasContext context = new())
+                    {
+                        SetComboBoxesEF(cbbTemas, context.Temas.OrderBy(t => t.tema_nome).ToList(), "tema_nome", "tema_id");
+                    }
+                    // Atualizar o registro selecionado com o novo registro
+                    registroSelecionado = frm.TemaAtual.tema_nome;
+                }
+                if (!string.IsNullOrEmpty(registroSelecionado))
+                {
+                    // Selecionar o item que estava selecionado antes de abrir o formulário ou um novo
+                    cbb.Text = registroSelecionado;
+                }
+            }
+        }
+        //
+        // add-pacote
+        private async void picAddPacote_Click(object sender, EventArgs e)
+        {
+            ComboBox cbb = cbbPacotes;
+            // Armazenar o registro selecionado antes de abrir o formulário
+            string registroSelecionado = cbb.Text;
+
+            // Criar e abrir o formulário CRUD passando o objeto e a operação
+            OperacaoCRUD operacao = OperacaoCRUD.NOVO;
+            using (FormPacotesCRUD frm = new(param, operacao))
+            {
+                // Usar a Modal para exibir o FormCRUD
+                await myUtilities.CreateModalOverlayAsync(this, frmExibir: frm);
+
+                // Verificar se um novo registro foi criado
+                if (!string.IsNullOrEmpty(frm.PacoteAtual.pct_nome) && frm.PacoteAtual.pct_nome != registroSelecionado)
+                {
+                    // Atualizar ComboBox se houve mudanças
+                    using (clsFestasContext context = new())
+                    {
+                        SetComboBoxesEF(cbbPacotes, context.Pacotes.OrderBy(p => p.pct_nome).ToList(), "pct_nome", "pct_id");
+                    }
+                    // Atualizar o registro selecionado com o novo registro
+                    registroSelecionado = frm.PacoteAtual.pct_nome;
+                }
+                if (!string.IsNullOrEmpty(registroSelecionado))
+                {
+                    // Selecionar o item que estava selecionado antes de abrir o formulário ou o novo
+                    cbb.Text = registroSelecionado;
+                }
+            }
+        }
+        //
+        // add-status
+        private async void picAddStatus_Click(object sender, EventArgs e)
+        {
+            ComboBox cbb = cbbStatus;
+            // armazena o registro slecionado antes de abrir o form auxiliar
+            string registroSelecionado = cbb.Text;
+
+            OperacaoCRUD operacao = OperacaoCRUD.NOVO;
+            using (FormStatusCRUD frm = new(param, operacao))
+            {
+                // Usar a Modal para exibir o FormCRUD
+                await myUtilities.CreateModalOverlayAsync(this, frmExibir: frm);
+
+                // verifica se um novo registro foi criado
+                if (!string.IsNullOrEmpty(frm.StatusAtual.stt_status) && frm.StatusAtual.stt_status != registroSelecionado)
+                {
+                    // atualizar combobox se houve mundanças
+                    using (clsFestasContext context = new())
+                    {
+                        SetComboBoxesEF(cbbStatus, context.Status.OrderBy(s => s.stt_status).ToList(), "stt_status", "stt_id");
+                    }
+                    // atualiza o registro selecionado com o novo registro
+                    registroSelecionado = frm.StatusAtual.stt_status;
+                }
+
+                if (!string.IsNullOrEmpty(registroSelecionado))
+                {
+                    // selecionar o item que estava selecionado antes de abrir o formulário, ou seleciona o novo
+                    cbb.Text = registroSelecionado;
+                }
+
+            }
+        }
+        //
+        // add-cliente
+        private async void picAddCliente_Click(object sender, EventArgs e)
+        {
+            ComboBox cbb = cbbClientes;
+            string registroSelecionado = cbb.Text;
+
+            OperacaoCRUD operacao = OperacaoCRUD.NOVO;
+            using (FormClientesCRUD frm = new(param, operacao))
+            {
+                // Usar a Modal para exibir o FormCRUD
+                await myUtilities.CreateModalOverlayAsync(this, frmExibir: frm);
+
+                // verifica se um novo registro foi criado
+                if (!string.IsNullOrEmpty(frm.ClienteAtual.cli_nome) && frm.ClienteAtual.cli_nome != registroSelecionado)
+                {
+                    // atualizar combobox se houve mundanças
+                    using (clsFestasContext context = new())
+                    {
+                        SetComboBoxesEF(cbbClientes, context.Clientes.OrderBy(c => c.cli_nome).ToList(), "cli_nome", "cli_id");
+                    }
+                    // atualiza o registro selecionado com o novo registro
+                    registroSelecionado = frm.ClienteAtual.cli_nome;
+                }
+
+                if (!string.IsNullOrEmpty(registroSelecionado))
+                {
+                    // selecionar o item que estava selecionado antes de abrir o formulário, ou seleciona o novo
+                    cbb.Text = registroSelecionado;
+                }
+            }
+        }
+        //
+
+        //************************ SEM USO -- TEMP
+        //// autocompletar-itens-festas
+        //private AutoCompleteStringCollection CarregarItensFesta()
+        //{
+        //    AutoCompleteStringCollection itensFesta = new();
+
+        //    using (var context = new clsFestasContext())
+        //    {
+        //        var itens = context.ItensFestas
+        //                            .Select(i => i.itensfest_nome)
+        //                            .ToList();
+
+        //        itensFesta.AddRange(itens.ToArray());
+        //    }
+        //    return itensFesta;
+        //}
+
+        ////
+        //// autocompletar-contratos
+        //private AutoCompleteStringCollection CarregarNomesContratos()
+        //{
+        //    AutoCompleteStringCollection nomesContratos = new();
+
+        //    using (clsFestasContext context = new())
+        //    {
+        //        var contratos = context.Contratos
+        //                                .Select(ct => ct.ctt_nome)
+        //                                .Where(nome => nome != null) // Filtra os valores nulos
+        //                                .ToList();
+
+        //        nomesContratos.AddRange(contratos.ToArray());
+        //    }
+        //    return nomesContratos;
+        //}
+        //
+        // autocompletar-usuarios
+        //private AutoCompleteStringCollection CarregarNomesUsuarios()
+        //{
+        //    AutoCompleteStringCollection nomesUsuarios = new();
+
+        //    using (var context = new clsFestasContext())
+        //    {
+        //        var usuarios = context.Usuarios
+        //                                .Select(u => u.user_nome)
+        //                                .ToList();
+
+        //        nomesUsuarios.AddRange(usuarios.ToArray());
+        //    }
+        //    return nomesUsuarios;
+        //}
+        //
+        // autocompletar-clientes
+        //private AutoCompleteStringCollection CarregarNomesClientes()
+        //{
+        //    // Crie uma instância do AutoCompleteStringCollection
+        //    AutoCompleteStringCollection nomesClientes = new AutoCompleteStringCollection();
+
+        //    // Carregar os nomes dos clientes do banco de dados
+        //    using (clsFestasContext context = new())
+        //    {
+        //        var clientes = context.Clientes
+        //                                .Select(c => c.cli_nome)
+        //                                .ToList();
+
+        //        // Adicionar os nomes dos clientes ao AutoCompleteStringCollection
+        //        nomesClientes.AddRange(clientes.ToArray());
+        //    }
+        //    return nomesClientes;
+        //}
+        //
+        //
+
+        //
+
     } // end class FormFestasCRUD
 } // end namespace FestasApp.Views.Festas

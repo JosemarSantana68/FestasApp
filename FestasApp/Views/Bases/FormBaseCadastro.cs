@@ -54,7 +54,8 @@ namespace FestasApp.Views
             // Fecha o formulário atual
             this.Close();
         }
-        public void AbrirFormCRUDGenerico<T, TForm>(DataGridView dtg,
+        //
+        public async void AbrirFormCRUDGenerico<T, TForm>(DataGridView dtg,
                                              int colIdIndex,
                                              Func<DataGridViewRow, T> mapper,
                                              Action reloadGrid,
@@ -82,7 +83,7 @@ namespace FestasApp.Views
                         using (TForm frm = formFactory(objeto, operacao))
                         {
                             // Usar a Modal para exibir o FormCRUD
-                            FormMenuMain.ShowModalOverlay(frm, delay: delay);
+                            await FormMenuMain.ShowModalOverlay(frm, delay: delay);
 
                             // Atualizar DataGrid após a operação CRUD
                             reloadGrid();
@@ -111,8 +112,6 @@ namespace FestasApp.Views
                 FormMenuMain.ShowMyMessageBox("Nenhuma linha está selecionada.", "Erro de Seleção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         } // end AbrirFormCRUDGenerico()
-
-
 
 
     } // end class

@@ -14,6 +14,7 @@
 
 namespace FestasApp.Enums
 {
+    // enumerado para as operações CRUD
     public enum OperacaoCRUD
     {
         NOVO,

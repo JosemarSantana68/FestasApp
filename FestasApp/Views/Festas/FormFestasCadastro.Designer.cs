@@ -28,12 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle9 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle10 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle11 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle12 = new DataGridViewCellStyle();
             pnlContainerDetalhesFesta = new Panel();
             pnlItensFestas = new Panel();
             tblItensFestas = new TableLayoutPanel();
@@ -61,6 +61,9 @@
             lblContratoModelo = new Label();
             label14 = new Label();
             lblPessoasAMais = new Label();
+            tableLayoutPanel1 = new TableLayoutPanel();
+            lblNomeCliente = new Label();
+            lblDetalhesFestas = new Label();
             pnlObservacao = new Panel();
             tblObservacao = new TableLayoutPanel();
             label4 = new Label();
@@ -69,9 +72,6 @@
             panel3 = new Panel();
             pnlSeparadorDetalhesFestas = new Panel();
             panel2 = new Panel();
-            tableLayoutPanel1 = new TableLayoutPanel();
-            lblNomeCliente = new Label();
-            lblDetalhesFestas = new Label();
             lblTotalFestas = new Label();
             lblPeriodoFestas = new Label();
             dtgFestas = new myDataGridView();
@@ -80,7 +80,7 @@
             tblRodape = new TableLayoutPanel();
             label12 = new Label();
             label11 = new Label();
-            panel4 = new Panel();
+            pnlDtgFestas = new Panel();
             pnlRodape.SuspendLayout();
             pnlTitulo.SuspendLayout();
             pnlCabecalho.SuspendLayout();
@@ -91,14 +91,14 @@
             ((ISupportInitialize)dtgItensFestas).BeginInit();
             pnlDetalhesFesta.SuspendLayout();
             tblDetalhesFestas.SuspendLayout();
+            tableLayoutPanel1.SuspendLayout();
             pnlObservacao.SuspendLayout();
             tblObservacao.SuspendLayout();
             pnlSeparadorBotton.SuspendLayout();
             pnlSeparadorDetalhesFestas.SuspendLayout();
-            tableLayoutPanel1.SuspendLayout();
             ((ISupportInitialize)dtgFestas).BeginInit();
             tblRodape.SuspendLayout();
-            panel4.SuspendLayout();
+            pnlDtgFestas.SuspendLayout();
             SuspendLayout();
             // 
             // pnlRodape
@@ -129,7 +129,7 @@
             // pnlMeio
             // 
             pnlMeio.BackColor = Color.Transparent;
-            pnlMeio.Controls.Add(panel4);
+            pnlMeio.Controls.Add(pnlDtgFestas);
             pnlMeio.Controls.Add(pnlContainerDetalhesFesta);
             pnlMeio.Size = new Size(1166, 575);
             // 
@@ -141,18 +141,18 @@
             pnlContainerDetalhesFesta.Controls.Add(pnlSeparadorBotton);
             pnlContainerDetalhesFesta.Controls.Add(pnlSeparadorDetalhesFestas);
             pnlContainerDetalhesFesta.Dock = DockStyle.Bottom;
-            pnlContainerDetalhesFesta.Location = new Point(0, 281);
+            pnlContainerDetalhesFesta.Location = new Point(0, 288);
             pnlContainerDetalhesFesta.Name = "pnlContainerDetalhesFesta";
-            pnlContainerDetalhesFesta.Size = new Size(1166, 294);
+            pnlContainerDetalhesFesta.Size = new Size(1166, 287);
             pnlContainerDetalhesFesta.TabIndex = 8;
             // 
             // pnlItensFestas
             // 
             pnlItensFestas.Controls.Add(tblItensFestas);
             pnlItensFestas.Dock = DockStyle.Fill;
-            pnlItensFestas.Location = new Point(610, 25);
+            pnlItensFestas.Location = new Point(610, 15);
             pnlItensFestas.Name = "pnlItensFestas";
-            pnlItensFestas.Size = new Size(556, 263);
+            pnlItensFestas.Size = new Size(556, 266);
             pnlItensFestas.TabIndex = 12;
             // 
             // tblItensFestas
@@ -170,7 +170,7 @@
             tblItensFestas.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
             tblItensFestas.RowStyles.Add(new RowStyle(SizeType.Absolute, 150F));
             tblItensFestas.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tblItensFestas.Size = new Size(556, 263);
+            tblItensFestas.Size = new Size(556, 266);
             tblItensFestas.TabIndex = 0;
             // 
             // lblItensFestas
@@ -190,27 +190,28 @@
             dtgItensFestas.AllowUserToDeleteRows = false;
             dtgItensFestas.AllowUserToOrderColumns = true;
             dtgItensFestas.AllowUserToResizeRows = false;
-            dataGridViewCellStyle4.BackColor = Color.LightGoldenrodYellow;
-            dtgItensFestas.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle7.BackColor = Color.LightGoldenrodYellow;
+            dtgItensFestas.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle7;
             dtgItensFestas.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
             dtgItensFestas.BackgroundColor = Color.White;
-            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.BottomCenter;
-            dataGridViewCellStyle5.BackColor = Color.DarkGoldenrod;
-            dataGridViewCellStyle5.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            dataGridViewCellStyle5.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle5.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle5.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.True;
-            dtgItensFestas.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
+            dtgItensFestas.BorderStyle = BorderStyle.None;
+            dataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.BottomCenter;
+            dataGridViewCellStyle8.BackColor = Color.DarkGoldenrod;
+            dataGridViewCellStyle8.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            dataGridViewCellStyle8.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle8.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle8.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle8.WrapMode = DataGridViewTriState.True;
+            dtgItensFestas.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle8;
             dtgItensFestas.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = SystemColors.Window;
-            dataGridViewCellStyle6.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle6.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle6.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle6.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.False;
-            dtgItensFestas.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle9.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle9.BackColor = SystemColors.Window;
+            dataGridViewCellStyle9.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle9.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle9.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle9.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle9.WrapMode = DataGridViewTriState.False;
+            dtgItensFestas.DefaultCellStyle = dataGridViewCellStyle9;
             dtgItensFestas.Location = new Point(3, 28);
             dtgItensFestas.MultiSelect = false;
             dtgItensFestas.Name = "dtgItensFestas";
@@ -225,11 +226,12 @@
             // 
             pnlDetalhesFesta.BackColor = Color.Transparent;
             pnlDetalhesFesta.Controls.Add(tblDetalhesFestas);
+            pnlDetalhesFesta.Controls.Add(tableLayoutPanel1);
             pnlDetalhesFesta.Controls.Add(pnlObservacao);
             pnlDetalhesFesta.Dock = DockStyle.Left;
-            pnlDetalhesFesta.Location = new Point(0, 25);
+            pnlDetalhesFesta.Location = new Point(0, 15);
             pnlDetalhesFesta.Name = "pnlDetalhesFesta";
-            pnlDetalhesFesta.Size = new Size(610, 263);
+            pnlDetalhesFesta.Size = new Size(610, 266);
             pnlDetalhesFesta.TabIndex = 11;
             // 
             // tblDetalhesFestas
@@ -263,25 +265,25 @@
             tblDetalhesFestas.Controls.Add(label14, 3, 5);
             tblDetalhesFestas.Controls.Add(lblPessoasAMais, 4, 5);
             tblDetalhesFestas.Dock = DockStyle.Fill;
-            tblDetalhesFestas.Location = new Point(0, 0);
+            tblDetalhesFestas.Location = new Point(0, 25);
             tblDetalhesFestas.Name = "tblDetalhesFestas";
             tblDetalhesFestas.RowCount = 7;
-            tblDetalhesFestas.RowStyles.Add(new RowStyle(SizeType.Absolute, 15F));
+            tblDetalhesFestas.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tblDetalhesFestas.RowStyles.Add(new RowStyle(SizeType.Absolute, 28F));
             tblDetalhesFestas.RowStyles.Add(new RowStyle(SizeType.Absolute, 28F));
             tblDetalhesFestas.RowStyles.Add(new RowStyle(SizeType.Absolute, 28F));
             tblDetalhesFestas.RowStyles.Add(new RowStyle(SizeType.Absolute, 28F));
             tblDetalhesFestas.RowStyles.Add(new RowStyle(SizeType.Absolute, 28F));
-            tblDetalhesFestas.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tblDetalhesFestas.Size = new Size(610, 175);
-            tblDetalhesFestas.TabIndex = 0;
+            tblDetalhesFestas.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tblDetalhesFestas.Size = new Size(610, 153);
+            tblDetalhesFestas.TabIndex = 8;
             // 
             // label13
             // 
             label13.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             label13.AutoSize = true;
             label13.ForeColor = Color.Black;
-            label13.Location = new Point(18, 19);
+            label13.Location = new Point(18, 10);
             label13.Name = "label13";
             label13.Size = new Size(168, 19);
             label13.TabIndex = 0;
@@ -295,7 +297,7 @@
             lblTipoEvento.BorderStyle = BorderStyle.FixedSingle;
             lblTipoEvento.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             lblTipoEvento.ForeColor = Color.Black;
-            lblTipoEvento.Location = new Point(192, 18);
+            lblTipoEvento.Location = new Point(192, 9);
             lblTipoEvento.Name = "lblTipoEvento";
             lblTipoEvento.Size = new Size(145, 22);
             lblTipoEvento.TabIndex = 0;
@@ -306,7 +308,7 @@
             label5.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             label5.AutoSize = true;
             label5.ForeColor = Color.Black;
-            label5.Location = new Point(18, 103);
+            label5.Location = new Point(18, 94);
             label5.Name = "label5";
             label5.Size = new Size(168, 19);
             label5.TabIndex = 0;
@@ -320,7 +322,7 @@
             lblHoraFim.BorderStyle = BorderStyle.FixedSingle;
             lblHoraFim.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             lblHoraFim.ForeColor = Color.Black;
-            lblHoraFim.Location = new Point(192, 102);
+            lblHoraFim.Location = new Point(192, 93);
             lblHoraFim.Name = "lblHoraFim";
             lblHoraFim.Size = new Size(89, 22);
             lblHoraFim.TabIndex = 0;
@@ -332,7 +334,7 @@
             label3.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             label3.AutoSize = true;
             label3.ForeColor = Color.Black;
-            label3.Location = new Point(18, 75);
+            label3.Location = new Point(18, 66);
             label3.Name = "label3";
             label3.Size = new Size(168, 19);
             label3.TabIndex = 0;
@@ -346,7 +348,7 @@
             lblHoraInicio.BorderStyle = BorderStyle.FixedSingle;
             lblHoraInicio.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             lblHoraInicio.ForeColor = Color.Black;
-            lblHoraInicio.Location = new Point(192, 74);
+            lblHoraInicio.Location = new Point(192, 65);
             lblHoraInicio.Name = "lblHoraInicio";
             lblHoraInicio.Size = new Size(89, 22);
             lblHoraInicio.TabIndex = 0;
@@ -358,7 +360,7 @@
             label15.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             label15.AutoSize = true;
             label15.ForeColor = Color.Black;
-            label15.Location = new Point(18, 47);
+            label15.Location = new Point(18, 38);
             label15.Name = "label15";
             label15.Size = new Size(168, 19);
             label15.TabIndex = 0;
@@ -372,7 +374,7 @@
             lblStatusFesta.BorderStyle = BorderStyle.FixedSingle;
             lblStatusFesta.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             lblStatusFesta.ForeColor = Color.Black;
-            lblStatusFesta.Location = new Point(192, 46);
+            lblStatusFesta.Location = new Point(192, 37);
             lblStatusFesta.Name = "lblStatusFesta";
             lblStatusFesta.Size = new Size(145, 22);
             lblStatusFesta.TabIndex = 0;
@@ -383,7 +385,7 @@
             label1.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             label1.AutoSize = true;
             label1.ForeColor = Color.Black;
-            label1.Location = new Point(343, 19);
+            label1.Location = new Point(343, 10);
             label1.Name = "label1";
             label1.Size = new Size(185, 19);
             label1.TabIndex = 0;
@@ -397,19 +399,19 @@
             lblTotalPessoa.BorderStyle = BorderStyle.FixedSingle;
             lblTotalPessoa.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             lblTotalPessoa.ForeColor = Color.Black;
-            lblTotalPessoa.Location = new Point(534, 18);
+            lblTotalPessoa.Location = new Point(534, 9);
             lblTotalPessoa.Name = "lblTotalPessoa";
             lblTotalPessoa.Size = new Size(46, 22);
             lblTotalPessoa.TabIndex = 0;
             lblTotalPessoa.Text = "000";
-            lblTotalPessoa.TextAlign = ContentAlignment.MiddleLeft;
+            lblTotalPessoa.TextAlign = ContentAlignment.MiddleRight;
             // 
             // label2
             // 
             label2.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             label2.AutoSize = true;
             label2.ForeColor = Color.Black;
-            label2.Location = new Point(343, 47);
+            label2.Location = new Point(343, 38);
             label2.Name = "label2";
             label2.Size = new Size(185, 19);
             label2.TabIndex = 0;
@@ -423,19 +425,19 @@
             lblAdultos.BorderStyle = BorderStyle.FixedSingle;
             lblAdultos.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             lblAdultos.ForeColor = Color.Black;
-            lblAdultos.Location = new Point(534, 46);
+            lblAdultos.Location = new Point(534, 37);
             lblAdultos.Name = "lblAdultos";
             lblAdultos.Size = new Size(46, 22);
             lblAdultos.TabIndex = 0;
             lblAdultos.Text = "000";
-            lblAdultos.TextAlign = ContentAlignment.MiddleLeft;
+            lblAdultos.TextAlign = ContentAlignment.MiddleRight;
             // 
             // label8
             // 
             label8.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             label8.AutoSize = true;
             label8.ForeColor = Color.Black;
-            label8.Location = new Point(343, 75);
+            label8.Location = new Point(343, 66);
             label8.Name = "label8";
             label8.Size = new Size(185, 19);
             label8.TabIndex = 0;
@@ -449,12 +451,12 @@
             lblCriancasPagantes.BorderStyle = BorderStyle.FixedSingle;
             lblCriancasPagantes.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             lblCriancasPagantes.ForeColor = Color.Black;
-            lblCriancasPagantes.Location = new Point(534, 74);
+            lblCriancasPagantes.Location = new Point(534, 65);
             lblCriancasPagantes.Name = "lblCriancasPagantes";
             lblCriancasPagantes.Size = new Size(46, 22);
             lblCriancasPagantes.TabIndex = 0;
             lblCriancasPagantes.Text = "000";
-            lblCriancasPagantes.TextAlign = ContentAlignment.MiddleLeft;
+            lblCriancasPagantes.TextAlign = ContentAlignment.MiddleRight;
             // 
             // lblCriancasNaoPagantes
             // 
@@ -463,19 +465,19 @@
             lblCriancasNaoPagantes.BorderStyle = BorderStyle.FixedSingle;
             lblCriancasNaoPagantes.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             lblCriancasNaoPagantes.ForeColor = Color.Black;
-            lblCriancasNaoPagantes.Location = new Point(534, 102);
+            lblCriancasNaoPagantes.Location = new Point(534, 93);
             lblCriancasNaoPagantes.Name = "lblCriancasNaoPagantes";
             lblCriancasNaoPagantes.Size = new Size(46, 22);
             lblCriancasNaoPagantes.TabIndex = 0;
             lblCriancasNaoPagantes.Text = "000";
-            lblCriancasNaoPagantes.TextAlign = ContentAlignment.MiddleLeft;
+            lblCriancasNaoPagantes.TextAlign = ContentAlignment.MiddleRight;
             // 
             // label9
             // 
             label9.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             label9.AutoSize = true;
             label9.ForeColor = Color.Black;
-            label9.Location = new Point(343, 103);
+            label9.Location = new Point(343, 94);
             label9.Name = "label9";
             label9.Size = new Size(185, 19);
             label9.TabIndex = 0;
@@ -487,7 +489,7 @@
             label7.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             label7.AutoSize = true;
             label7.ForeColor = Color.Black;
-            label7.Location = new Point(18, 131);
+            label7.Location = new Point(18, 122);
             label7.Name = "label7";
             label7.Size = new Size(168, 19);
             label7.TabIndex = 0;
@@ -501,7 +503,7 @@
             lblContratoModelo.BorderStyle = BorderStyle.FixedSingle;
             lblContratoModelo.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             lblContratoModelo.ForeColor = Color.Black;
-            lblContratoModelo.Location = new Point(192, 130);
+            lblContratoModelo.Location = new Point(192, 121);
             lblContratoModelo.Name = "lblContratoModelo";
             lblContratoModelo.Size = new Size(145, 22);
             lblContratoModelo.TabIndex = 0;
@@ -512,7 +514,7 @@
             label14.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             label14.AutoSize = true;
             label14.ForeColor = Color.Black;
-            label14.Location = new Point(343, 131);
+            label14.Location = new Point(343, 122);
             label14.Name = "label14";
             label14.Size = new Size(185, 19);
             label14.TabIndex = 0;
@@ -526,19 +528,59 @@
             lblPessoasAMais.BorderStyle = BorderStyle.FixedSingle;
             lblPessoasAMais.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             lblPessoasAMais.ForeColor = Color.Black;
-            lblPessoasAMais.Location = new Point(534, 130);
+            lblPessoasAMais.Location = new Point(534, 121);
             lblPessoasAMais.Name = "lblPessoasAMais";
             lblPessoasAMais.Size = new Size(46, 22);
             lblPessoasAMais.TabIndex = 0;
             lblPessoasAMais.Text = "000";
-            lblPessoasAMais.TextAlign = ContentAlignment.MiddleLeft;
+            lblPessoasAMais.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // tableLayoutPanel1
+            // 
+            tableLayoutPanel1.BackColor = Color.Transparent;
+            tableLayoutPanel1.ColumnCount = 2;
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 190F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel1.Controls.Add(lblNomeCliente, 1, 0);
+            tableLayoutPanel1.Controls.Add(lblDetalhesFestas, 0, 0);
+            tableLayoutPanel1.Dock = DockStyle.Top;
+            tableLayoutPanel1.Location = new Point(0, 0);
+            tableLayoutPanel1.Name = "tableLayoutPanel1";
+            tableLayoutPanel1.RowCount = 1;
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel1.Size = new Size(610, 25);
+            tableLayoutPanel1.TabIndex = 7;
+            // 
+            // lblNomeCliente
+            // 
+            lblNomeCliente.Anchor = AnchorStyles.Left;
+            lblNomeCliente.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblNomeCliente.ForeColor = Color.Black;
+            lblNomeCliente.Location = new Point(193, 3);
+            lblNomeCliente.Name = "lblNomeCliente";
+            lblNomeCliente.Size = new Size(186, 19);
+            lblNomeCliente.TabIndex = 0;
+            lblNomeCliente.Text = "Nome do Cliente";
+            lblNomeCliente.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // lblDetalhesFestas
+            // 
+            lblDetalhesFestas.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            lblDetalhesFestas.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblDetalhesFestas.ForeColor = Color.Black;
+            lblDetalhesFestas.Location = new Point(3, 3);
+            lblDetalhesFestas.Name = "lblDetalhesFestas";
+            lblDetalhesFestas.Size = new Size(184, 19);
+            lblDetalhesFestas.TabIndex = 0;
+            lblDetalhesFestas.Text = "Detalhes da Festa.:";
+            lblDetalhesFestas.TextAlign = ContentAlignment.MiddleRight;
             // 
             // pnlObservacao
             // 
             pnlObservacao.BackColor = Color.Transparent;
             pnlObservacao.Controls.Add(tblObservacao);
             pnlObservacao.Dock = DockStyle.Bottom;
-            pnlObservacao.Location = new Point(0, 175);
+            pnlObservacao.Location = new Point(0, 178);
             pnlObservacao.Name = "pnlObservacao";
             pnlObservacao.Size = new Size(610, 88);
             pnlObservacao.TabIndex = 6;
@@ -590,7 +632,7 @@
             pnlSeparadorBotton.BackColor = Color.FromArgb(26, 32, 40);
             pnlSeparadorBotton.Controls.Add(panel3);
             pnlSeparadorBotton.Dock = DockStyle.Bottom;
-            pnlSeparadorBotton.Location = new Point(0, 288);
+            pnlSeparadorBotton.Location = new Point(0, 281);
             pnlSeparadorBotton.Name = "pnlSeparadorBotton";
             pnlSeparadorBotton.Size = new Size(1166, 6);
             pnlSeparadorBotton.TabIndex = 8;
@@ -608,11 +650,10 @@
             // 
             pnlSeparadorDetalhesFestas.BackColor = Color.FromArgb(37, 46, 59);
             pnlSeparadorDetalhesFestas.Controls.Add(panel2);
-            pnlSeparadorDetalhesFestas.Controls.Add(tableLayoutPanel1);
             pnlSeparadorDetalhesFestas.Dock = DockStyle.Top;
             pnlSeparadorDetalhesFestas.Location = new Point(0, 0);
             pnlSeparadorDetalhesFestas.Name = "pnlSeparadorDetalhesFestas";
-            pnlSeparadorDetalhesFestas.Size = new Size(1166, 25);
+            pnlSeparadorDetalhesFestas.Size = new Size(1166, 15);
             pnlSeparadorDetalhesFestas.TabIndex = 6;
             // 
             // panel2
@@ -621,48 +662,8 @@
             panel2.Dock = DockStyle.Left;
             panel2.Location = new Point(0, 0);
             panel2.Name = "panel2";
-            panel2.Size = new Size(5, 25);
+            panel2.Size = new Size(5, 15);
             panel2.TabIndex = 1;
-            // 
-            // tableLayoutPanel1
-            // 
-            tableLayoutPanel1.BackColor = Color.FromArgb(26, 32, 40);
-            tableLayoutPanel1.ColumnCount = 2;
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 190F));
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.Controls.Add(lblNomeCliente, 1, 0);
-            tableLayoutPanel1.Controls.Add(lblDetalhesFestas, 0, 0);
-            tableLayoutPanel1.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Location = new Point(0, 0);
-            tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.RowCount = 1;
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.Size = new Size(1166, 25);
-            tableLayoutPanel1.TabIndex = 0;
-            // 
-            // lblNomeCliente
-            // 
-            lblNomeCliente.Anchor = AnchorStyles.Left;
-            lblNomeCliente.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblNomeCliente.ForeColor = Color.White;
-            lblNomeCliente.Location = new Point(193, 3);
-            lblNomeCliente.Name = "lblNomeCliente";
-            lblNomeCliente.Size = new Size(500, 19);
-            lblNomeCliente.TabIndex = 0;
-            lblNomeCliente.Text = "Nome do Cliente";
-            lblNomeCliente.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // lblDetalhesFestas
-            // 
-            lblDetalhesFestas.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            lblDetalhesFestas.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblDetalhesFestas.ForeColor = Color.White;
-            lblDetalhesFestas.Location = new Point(3, 3);
-            lblDetalhesFestas.Name = "lblDetalhesFestas";
-            lblDetalhesFestas.Size = new Size(184, 19);
-            lblDetalhesFestas.TabIndex = 0;
-            lblDetalhesFestas.Text = "Detalhes da Festa.:";
-            lblDetalhesFestas.TextAlign = ContentAlignment.MiddleRight;
             // 
             // lblTotalFestas
             // 
@@ -696,26 +697,26 @@
             dtgFestas.AllowUserToDeleteRows = false;
             dtgFestas.AllowUserToOrderColumns = true;
             dtgFestas.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.BackColor = Color.LightGoldenrodYellow;
-            dtgFestas.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle10.BackColor = Color.LightGoldenrodYellow;
+            dtgFestas.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle10;
             dtgFestas.BackgroundColor = Color.White;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.BottomCenter;
-            dataGridViewCellStyle2.BackColor = Color.DarkGoldenrod;
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            dataGridViewCellStyle2.ForeColor = Color.White;
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-            dtgFestas.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle11.Alignment = DataGridViewContentAlignment.BottomCenter;
+            dataGridViewCellStyle11.BackColor = Color.DarkGoldenrod;
+            dataGridViewCellStyle11.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            dataGridViewCellStyle11.ForeColor = Color.White;
+            dataGridViewCellStyle11.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle11.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle11.WrapMode = DataGridViewTriState.True;
+            dtgFestas.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle11;
             dtgFestas.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = SystemColors.Window;
-            dataGridViewCellStyle3.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle3.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
-            dtgFestas.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle12.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle12.BackColor = SystemColors.Window;
+            dataGridViewCellStyle12.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle12.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle12.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle12.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle12.WrapMode = DataGridViewTriState.False;
+            dtgFestas.DefaultCellStyle = dataGridViewCellStyle12;
             dtgFestas.Dock = DockStyle.Fill;
             dtgFestas.Location = new Point(5, 0);
             dtgFestas.MultiSelect = false;
@@ -723,7 +724,7 @@
             dtgFestas.ReadOnly = true;
             dtgFestas.RowHeadersVisible = false;
             dtgFestas.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dtgFestas.Size = new Size(1156, 276);
+            dtgFestas.Size = new Size(1156, 283);
             dtgFestas.TabIndex = 9;
             // 
             // lblValorTotalFestas
@@ -810,15 +811,15 @@
             label11.Text = "Período";
             label11.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // panel4
+            // pnlDtgFestas
             // 
-            panel4.Controls.Add(dtgFestas);
-            panel4.Dock = DockStyle.Fill;
-            panel4.Location = new Point(0, 0);
-            panel4.Name = "panel4";
-            panel4.Padding = new Padding(5, 0, 5, 5);
-            panel4.Size = new Size(1166, 281);
-            panel4.TabIndex = 10;
+            pnlDtgFestas.Controls.Add(dtgFestas);
+            pnlDtgFestas.Dock = DockStyle.Fill;
+            pnlDtgFestas.Location = new Point(0, 0);
+            pnlDtgFestas.Name = "pnlDtgFestas";
+            pnlDtgFestas.Padding = new Padding(5, 0, 5, 5);
+            pnlDtgFestas.Size = new Size(1166, 288);
+            pnlDtgFestas.TabIndex = 10;
             // 
             // FormFestasCadastro
             // 
@@ -839,14 +840,14 @@
             pnlDetalhesFesta.ResumeLayout(false);
             tblDetalhesFestas.ResumeLayout(false);
             tblDetalhesFestas.PerformLayout();
+            tableLayoutPanel1.ResumeLayout(false);
             pnlObservacao.ResumeLayout(false);
             tblObservacao.ResumeLayout(false);
             pnlSeparadorBotton.ResumeLayout(false);
             pnlSeparadorDetalhesFestas.ResumeLayout(false);
-            tableLayoutPanel1.ResumeLayout(false);
             ((ISupportInitialize)dtgFestas).EndInit();
             tblRodape.ResumeLayout(false);
-            panel4.ResumeLayout(false);
+            pnlDtgFestas.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -857,29 +858,11 @@
         private Label lblTotalFestas;
         private Label lblPeriodoFestas;
         private Panel pnlDetalhesFesta;
-        private TableLayoutPanel tblDetalhesFestas;
-        private Label label1;
-        private Label label2;
-        private Label label3;
-        private Label label5;
-        private Label label7;
-        private Label label8;
-        private Label label9;
-        private Label lblTotalPessoa;
-        private Label lblAdultos;
-        private Label lblCriancasPagantes;
-        private Label lblCriancasNaoPagantes;
-        private Label lblHoraInicio;
-        private Label lblHoraFim;
-        private Label lblContratoModelo;
         private Panel pnlObservacao;
         private TableLayoutPanel tblObservacao;
         private Label label4;
         private Label lblObservacaoFestas;
         private myDataGridView dtgFestas;
-        private Label lblNomeCliente;
-        private Label lblDetalhesFestas;
-        private TableLayoutPanel tableLayoutPanel1;
         private Label lblValorTotalFestas;
         private TableLayoutPanel tblRodape;
         private Label label10;
@@ -891,12 +874,30 @@
         private TableLayoutPanel tblItensFestas;
         private Label lblItensFestas;
         private myDataGridView dtgItensFestas;
+        private Panel pnlDtgFestas;
+        private TableLayoutPanel tblDetalhesFestas;
         private Label label13;
-        private Label lblStatusFesta;
-        private Label label15;
         private Label lblTipoEvento;
+        private Label label5;
+        private Label lblHoraFim;
+        private Label label3;
+        private Label lblHoraInicio;
+        private Label label15;
+        private Label lblStatusFesta;
+        private Label label1;
+        private Label lblTotalPessoa;
+        private Label label2;
+        private Label lblAdultos;
+        private Label label8;
+        private Label lblCriancasPagantes;
+        private Label lblCriancasNaoPagantes;
+        private Label label9;
+        private Label label7;
+        private Label lblContratoModelo;
         private Label label14;
         private Label lblPessoasAMais;
-        private Panel panel4;
+        private TableLayoutPanel tableLayoutPanel1;
+        private Label lblNomeCliente;
+        private Label lblDetalhesFestas;
     }
 }

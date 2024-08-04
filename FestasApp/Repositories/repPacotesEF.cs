@@ -15,6 +15,7 @@ namespace FestasApp.Repositories
 {
     internal class repPacotesEF : clsFestasPacotes
     {
+        // construtor padrão
         public repPacotesEF() { }
         //
         // Método para testar a conexão
@@ -51,7 +52,7 @@ namespace FestasApp.Repositories
             }
         }
         //
-        // retorna um Item através do Id
+        // captura e retorna um Item através do Id
         public clsFestasPacotes? GetItem(int Id)
         {
             // se não tiver Item selecionado

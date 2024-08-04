@@ -15,11 +15,15 @@ namespace FestasApp.Views
 {
     public partial class FormClientesCadastro : FormBaseCadastro
     {
-        // declaração de instâncias
+        /// <summary>
+        /// declaração de instâncias
+        /// </summary>
         private clsParam clienteId = new clsParam(); 
         private DataTable dtClientes = new DataTable();
-        //
-        // construtor
+        
+        /// <summary>
+        /// construtor
+        /// </summary>
         public FormClientesCadastro()
         {
             InitializeComponent();
@@ -29,15 +33,19 @@ namespace FestasApp.Views
                 AddEventHandlers();
             ResumeLayout(false);
         }    
-        //
-        // Evento disparado quando o formulário de cliente é carregado
+        /// <summary>
+        /// Evento disparado quando o formulário de cliente é carregado
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void FormClientesCadastro_Load(object? sender, EventArgs e)
         {
             // Configurações adicionais podem ser feitas aqui
             CarregarDtgClientesEF();
         }
-        //
-        // Configurações iniciais do formulário de cliente
+        /// <summary>
+        /// Configurações iniciais do formulário de cliente
+        /// </summary>
         private void SetThisForm()
         {
             // Adicione aqui as configurações específicas para o formulário de cliente
@@ -46,14 +54,18 @@ namespace FestasApp.Views
             lblTitulo.Text = "C a d a s t r o  d e  C l i e n t e s";
             lblTitulo.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
         }
-        //
+        /// <summary>
+        /// configura controles deste formulário
+        /// </summary>
         private void SetControls()
         {
             // Configurar as colunas do DataGridView
             ConfigurarColunasDtgClientes();
         }
         //
-        // adiciona eventos aos stripsButtons...
+        /// <summary>
+        /// adiciona eventos Handlers...
+        /// </summary>
         private void AddEventHandlers()
         {
             // Adiciona o manipulador de eventos para os botões do ToolStrip
@@ -64,7 +76,11 @@ namespace FestasApp.Views
             this.Load += FormClientesCadastro_Load;
             dtgClientes.SelectionChanged += DtgClientes_SelectionChanged;
         }
-        //
+        /// <summary>
+        /// método selectionChanged dtgClientes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DtgClientes_SelectionChanged(object? sender, EventArgs e)
         {
             if (dtgClientes.SelectedRows.Count > 0)
@@ -77,8 +93,11 @@ namespace FestasApp.Views
                 clienteId.Id = 0; // Define como 0 se nenhuma linha estiver selecionada
             }
         }
-        //
-        // btn NOVO...
+        /// <summary>
+        /// btn NOVO...
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TstbtnNovo_Click(object? sender, EventArgs e)
         {
             OperacaoCRUD operacao = OperacaoCRUD.NOVO;
@@ -86,29 +105,41 @@ namespace FestasApp.Views
             clienteId.Id = 0;
             AbrirFormCRUDEF(operacao);
         }
-        //
-        // btn EDITAR
+        /// <summary>
+        /// btn EDITAR
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TstbtnEditar_Click(object? sender, EventArgs e)
         {
             OperacaoCRUD operacao = OperacaoCRUD.EDITAR;
             AbrirFormCRUDEF(operacao);
         }
-        //
-        // btn CONSULTAR
+        /// <summary>
+        /// btn CONSULTAR
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TstbtnConsultar_Click(object? sender, EventArgs e)
         {
             OperacaoCRUD operacao = OperacaoCRUD.CONSULTAR;
             AbrirFormCRUDEF(operacao);
         }
-        //
-        // btn EXCLUIR
+        /// <summary>
+        /// btn EXCLUIR
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TstbtnExcluir_Click(object? sender, EventArgs e)
         {
             OperacaoCRUD operacao = OperacaoCRUD.EXCLUIR;
             AbrirFormCRUDEF(operacao);
         }
-        //
-        private void AbrirFormCRUDEF(OperacaoCRUD operacao)
+        /// <summary>
+        /// método para abrir o formCRUD
+        /// </summary>
+        /// <param name="operacao"></param>
+        private async void AbrirFormCRUDEF(OperacaoCRUD operacao)
         {
             // Verifique se há uma ClientId selecionada no DataGridView
             if (clienteId.IsValid())
@@ -116,10 +147,11 @@ namespace FestasApp.Views
                 try
                 {
                     // Abre o formulário CRUD para edição passando o ID do cliente e a operação
-                    using (FormClientesCRUD frm = new FormClientesCRUD(clienteId, operacao))
+                    using (FormClientesCRUD frm = new(clienteId, operacao))
                     {
-                        FormMenuMain.ShowModalOverlay(frm); // Usar a Modal para exibir o FormCRUD
-                        CarregarDtgClientesEF(); // quando volta do CRUD, atualiza dataGrid
+                        await FormMenuMain.ShowModalOverlay(frm); // Usar a Modal para exibir o FormCRUD
+                        // quando volta do CRUD, atualiza dataGrid
+                        CarregarDtgClientesEF(); 
                     }
                 }
                 catch (Exception ex)
@@ -132,8 +164,9 @@ namespace FestasApp.Views
                 FormMenuMain.ShowMyMessageBox("Nenhuma linha está selecionada.\nAbrirFormCRUDEF", "Erro de Seleção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
-        //
-        // carregar dataGrid com dados da tabela tblclientes do banco de dados usando LINQ e EF
+        /// <summary>
+        /// carregar dataGrid com dados da tabela tblclientes do banco de dados usando LINQ e EF
+        /// </summary>
         private void CarregarDtgClientesEF()
         {
             // testa a conexão
@@ -145,29 +178,34 @@ namespace FestasApp.Views
             }
             //
             DataGridView dtg = dtgClientes;
-            dtg.Rows.Clear();
 
             try
             {
+                // Desassocia a fonte de dados para evitar o erro ao limpar as linhas
+                //dtg.DataSource = null;
+                // Limpa as linhas existentes sem alterar as colunas
+                dtg.Rows.Clear();
+
                 // Carregar os dados do DbSet<T>
                 var listaClientes = repClientesEF.GetClientesEF();
 
-                //dtg.DataSource = listaClientes;
+                // Preenche o DataTable com os dados da lista
                 if (listaClientes != null)
                 {
-                    foreach (var clientes in listaClientes)
+                    foreach (var cliente in listaClientes)
                     {
+                        // adiciona linhas com dados ao dtg
                         dtg.Rows.Add(
-                            clientes.cli_id,
-                            clientes.cli_nome,
-                            clientes.cli_telefone1,
-                            clientes.cli_telefone2,
-                            clientes.cli_cpf,
-                            clientes.cli_endereco,
-                            clientes.cli_cep,
-                            clientes.cli_cidade,
-                            clientes.cli_uf
-                            );
+                            cliente.cli_id,
+                            cliente.cli_nome,
+                            cliente.cli_telefone1,
+                            cliente.cli_telefone2,
+                            cliente.cli_cpf,
+                            cliente.cli_endereco,
+                            cliente.cli_cep,
+                            cliente.cli_cidade,
+                            cliente.cli_uf
+                        );
                     }
                 }
                 // Seleciona a primeira linha se houver linhas no DataGridView
@@ -199,8 +237,9 @@ namespace FestasApp.Views
             // controles do formBase
             TratarBtnCrud(habilitar);
         }
-        //
-        // Configura o DataGridView para exibir os clientes.
+        /// <summary>
+        /// Configura o DataGridView para exibir os clientes.
+        /// </summary>
         //
         private const int ColId = 0;
         private const int ColNomeCliente = 1;
@@ -227,12 +266,17 @@ namespace FestasApp.Views
             myFunctions.ConfigurarAdicionarColuna(dtg, ColCidade, "Cidade", 120);
             myFunctions.ConfigurarAdicionarColuna(dtg, ColUf, "UF", 80, alignment: DataGridViewContentAlignment.MiddleCenter);
 
+            //dtg.Columns[ColCpf].DefaultCellStyle.Format = "___.___.___-__";
+
             // Adiciona o evento CellFormatting para formatação dos dados
             dtgClientes.CellFormatting += DtgClientes_CellFormatting;
 
-        } // end ConfigurarDtgClientes
-        //
-        // Evento disparado para formatar as células do DataGridView.
+        } 
+        /// <summary>
+        /// Evento disparado para formatar as células do DataGridView.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DtgClientes_CellFormatting(object? sender, DataGridViewCellFormattingEventArgs e)
         {
             // Formatar Telefone-1
@@ -241,7 +285,7 @@ namespace FestasApp.Views
                 string? value = e.Value.ToString();
                 if (!string.IsNullOrEmpty(value) && value.Length == 11)
                 {
-                    e.Value = String.Format("{0:(00)00000-0000}", Int64.Parse(value));
+                    e.Value = value.ToTelefone(); //String.Format("{0:(00)00000-0000}", Int64.Parse(value));
                     e.FormattingApplied = true;
                 }
             }
@@ -251,51 +295,114 @@ namespace FestasApp.Views
                 string? value = e.Value.ToString();
                 if (!string.IsNullOrEmpty(value) && value.Length == 11)
                 {
-                    e.Value = String.Format("{0:(00)00000-0000}", Int64.Parse(value));
+                    e.Value = value.ToTelefone(); //String.Format("{0:(00)00000-0000}", Int64.Parse(value));
                     e.FormattingApplied = true;
                 }
             }
+            //
             // Formatar CPF
             if (e.ColumnIndex == ColCpf && e.Value != null)
             {
                 string? value = e.Value.ToString();
+
                 if (!string.IsNullOrEmpty(value) && value.Length == 11)
                 {
-                    e.Value = $"{value.Substring(0, 3)}.{value.Substring(3, 3)}.{value.Substring(6, 3)}-{value.Substring(9, 2)}";
+                    e.Value = value.ToCpf(); // $"{value.Substring(0, 3)}.{value.Substring(3, 3)}.{value.Substring(6, 3)}-{value.Substring(9, 2)}";
                     e.FormattingApplied = true;
                 }
             }
+            //
             // Formatar CEP
             if (e.ColumnIndex == ColCep && e.Value != null)
             {
                 string? value = e.Value.ToString();
                 if (!string.IsNullOrEmpty(value) && value.Length == 8)
                 {
-                    e.Value = $"{value.Substring(0, 2)}.{value.Substring(2, 3)}-{value.Substring(5, 3)}";
+                    e.Value = value.ToCep(); //$"{value.Substring(0, 2)}.{value.Substring(2, 3)}-{value.Substring(5, 3)}";
                     e.FormattingApplied = true;
                 }
             }
         }
-        //
-        // DuploClick dtgClientes...
+        /// <summary>
+        /// DuploClick dtgClientes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void dtgClientes_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             tstbtnEditar.PerformClick();
         }
-        //
-        // txtPesquisaCliente
+        /// <summary>
+        /// txtPesquisaCliente
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void txtPesquisaCliente_TextChanged(object sender, EventArgs e)
         {
-            FiltrarClientes();
+            FiltrarClientesEF(txtPesquisaCliente.Text);
         }
+        /// <summary>
+        /// método para filtrar dtgCleientes
+        /// </summary>
+        /// <param name="nomeCliente"></param>
+        private void FiltrarClientesEF(string nomeCliente)
+        {
+            DataGridView dtg = dtgClientes;
+            // Limpa todas as linhas antes de adicionar as filtradas
+            dtg.Rows.Clear();
+            try
+            {
+                // Carregar os dados do DbSet<T>
+                var listaClientes = repClientesEF.GetClientesEF();
+
+                // Filtrar a lista de clientes com base no nome
+                var clientesFiltrados = listaClientes
+                    .Where(cliente => cliente.cli_nome!.Contains(nomeCliente, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+
+                // Preenche o DataGridView com os dados filtrados
+                if (clientesFiltrados != null)
+                {
+                    foreach (var cliente in clientesFiltrados)
+                    {
+                        DataGridViewRow row = new DataGridViewRow();
+                        row.CreateCells(dtg);
+                        row.Cells[ColId].Value = cliente.cli_id;
+                        row.Cells[ColNomeCliente].Value = cliente.cli_nome;
+                        row.Cells[ColTelefone1].Value = cliente.cli_telefone1;
+                        row.Cells[ColTelefone2].Value = cliente.cli_telefone2;
+                        row.Cells[ColCpf].Value = cliente.cli_cpf;
+                        row.Cells[ColEndereco].Value = cliente.cli_endereco;
+                        row.Cells[ColCep].Value = cliente.cli_cep;
+                        row.Cells[ColCidade].Value = cliente.cli_cidade;
+                        row.Cells[ColUf].Value = cliente.cli_uf;
+                        dtg.Rows.Add(row);
+                    }
+                }
+
+                // Seleciona a primeira linha se houver linhas no DataGridView
+                if (dtg.Rows.Count > 0)
+                {
+                    dtg.Rows[0].Selected = true;
+                    dtg.FirstDisplayedScrollingRowIndex = 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                // Trata qualquer exceção que ocorra durante o processo de filtragem
+                FormMenuMain.ShowMyMessageBox("Erro ao filtrar clientes: " + ex.Message, "Erro na Pesquisa", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        //*********************** SEM USO temporários ***********************
         //
         // Método para filtrar clientes no DataGridView
-        private void FiltrarClientes()
+        private void FiltrarClientesSEMUSO(string nomeCliente)
         {
             try
             {
-                // Verifica se há uma fonte de dados
-                if (dtgClientes.DataSource is DataTable dtlistaClientes)
+                // Verifica se a fonte de dados é um BindingSource
+                if (dtgClientes.DataSource is BindingSource bs)
                 {
                     // Verifica se o campo de pesquisa não está vazio
                     if (!string.IsNullOrWhiteSpace(txtPesquisaCliente.Text))
@@ -303,18 +410,18 @@ namespace FestasApp.Views
                         // Monta a string para filtro
                         string filtro = string.Format("[{0}] LIKE '%{1}%'", "cli_nome", txtPesquisaCliente.Text);
 
-                        // Aplica o filtro ao DataTable
-                        dtlistaClientes.DefaultView.RowFilter = filtro;
+                        // Aplica o filtro ao BindingSource
+                        bs.Filter = filtro;
                     }
                     else
                     {
                         // Se o campo de pesquisa estiver vazio, remove o filtro
-                        dtlistaClientes.DefaultView.RowFilter = string.Empty;
+                        bs.RemoveFilter();
                     }
                 }
                 else
                 {
-                    throw new InvalidOperationException("A fonte de dados não é um DataTable.");
+                    throw new InvalidOperationException("A fonte de dados não é um BindingSource.");
                 }
             }
             catch (Exception ex)
@@ -322,6 +429,9 @@ namespace FestasApp.Views
                 // Exibe a mensagem de erro
                 FormMenuMain.ShowMyMessageBox("Erro ao filtrar clientes: " + ex.Message, "Pesquisa Clientes", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        } // end FiltrarClientes
+        } 
+        // end FiltrarClientes
+        //
+
     } // end class
 } // end namespace

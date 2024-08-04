@@ -299,7 +299,7 @@ namespace FestasApp
             // 
             // tmSidebarTransition
             // 
-            tmSidebarTransition.Interval = 10;
+            tmSidebarTransition.Interval = 5;
             tmSidebarTransition.Tick += tmSidebarTransition_Tick;
             // 
             // pnlBtnFestas

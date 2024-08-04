@@ -77,7 +77,7 @@ namespace FestasApp.Repositories
         }
         //
         // Método para adicionar um novo item de festa
-        public static bool AdicionarItemFesta(clsFestasItens novoItem)
+        public static bool AddItemFesta(clsFestasItens novoItem)
         {
             // Testa a conexão
             if (!myConnMySql.TestarConexao())

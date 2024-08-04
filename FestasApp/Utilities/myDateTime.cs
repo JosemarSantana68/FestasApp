@@ -25,7 +25,7 @@ namespace FestasApp.Utilities
         {
             DateTime dataConvertida;
             var result = DateTime
-                .TryParseExact(data, "ddMMyyyy",
+                .TryParseExact(data, "dd/MM/yyyy",
                 CultureInfo.InvariantCulture,
                 DateTimeStyles.None,
                 out dataConvertida);
@@ -63,15 +63,16 @@ namespace FestasApp.Utilities
                 return "Data inválida!";
             }
         }
+        //
 
         /// <summary>
         /// Valida uma hora no formato "hh:mm" e retorna um booleano indicando se a hora é válida.
         /// </summary>
         /// <param name="time">A hora a ser validada.</param>
         /// <returns>True se a hora for válida, caso contrário, false.</returns>
-        public static bool ValidTime(string time)
+        public static bool ValidTime(string time, string mask = @"hh\:mm")
         {
-            Debug.WriteLine($"Hora Texto: {time}");
+            //Debug.WriteLine($"Hora Texto: {time}");
 
             // Se a string estiver vazia, considere inválida (ou válida, dependendo da sua regra)
             if (string.IsNullOrWhiteSpace(time) || time == "  :")
@@ -81,19 +82,44 @@ namespace FestasApp.Utilities
 
             TimeSpan TimeConvertida;
             var result = TimeSpan
-                .TryParseExact(time, "hhmm",
+                .TryParseExact(time, mask,
                 CultureInfo.InvariantCulture,
                 TimeSpanStyles.None,
                 out TimeConvertida);
 
-            Debug.WriteLine($"Hora convertida: {TimeConvertida}");
+            //Debug.WriteLine($"Hora convertida: {TimeConvertida}");
 
             return result;
         }
         //
-        public static string FormatTimeForDisplay(TimeSpan? time)
+        // método para formatar hora em texto, para apresentar no form
+        public static string FormatTimeForDisplay(TimeSpan? time, string mask = @"hh\:mm")
         {
-            return time.HasValue ? time.Value.ToString(@"hh\:mm") : string.Empty;
+            // Verifica se o tempo tem valor e retorna formatado, caso contrário retorna string vazia
+            return time.HasValue ? time.Value.ToString(mask) : string.Empty;
         }
-    }
-}
+        //
+        // método para formatar texto em hora, para salvar em repositório
+        public static TimeSpan? FormatTimeToRap(string txtTime, string mask = @"hh\:mm")
+        {
+            if (string.IsNullOrWhiteSpace(txtTime))
+            {
+                return null; // Retorna nulo se o texto estiver vazio ou for nulo
+            }
+
+            try
+            {
+                // Tenta converter o texto em TimeSpan usando o formato especificado
+                return TimeSpan.ParseExact(txtTime, mask, CultureInfo.InvariantCulture);
+            }
+            catch (FormatException ex)
+            {
+                // Lida com exceções de formato e retorna nulo ou uma mensagem de erro apropriada
+                Console.WriteLine($"Erro ao formatar o tempo: {ex.Message}");
+                return null;
+            }
+        }
+        
+
+    } // end static class myDateTime
+} // end namespace

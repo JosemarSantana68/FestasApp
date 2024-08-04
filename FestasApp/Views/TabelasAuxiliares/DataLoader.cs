@@ -1,4 +1,5 @@
-﻿//--------------------------------------------------------------
+﻿//---------------------------------------------------------------------------------------
+//
 //   Festa.Com - Aplicativo para Controle de Festas & Eventos
 //   Autor: Josemar Santana
 //   Linguagem: C#
@@ -8,28 +9,40 @@
 //   Ultima Alteração: 11/07/2024
 //   
 //   Esta classe será responsável por carregar dados das diferentes tabelas auxiliares.
-//--------------------------------------------------------------
+//
+//---------------------------------------------------------------------------------------
 
 namespace FestasApp.Views.TabelasAuxiliares
 {
     public class DataLoader
     {
+        /// <summary>
+        /// Instância de FormAuxiliaresMain para gerenciar as tabelas auxiliares
+        /// </summary>
         private readonly FormAuxiliaresMain _form;
         private readonly clsFestasContext _context;
         public clsParam idRegistro = new(); // Inicialize a instância publica
 
-        // Instância de TabelaAuxiliarManager para gerenciar as tabelas auxiliares
-        private readonly TabelaAuxiliarManager _tabelaAuxiliarManager = new();
-
+        // Instância de TabelaAuxiliarManager para gerenciar a seleção das tabelas auxiliares no dtg
+        private readonly TabelaAuxiliarManager _tabelaAuxiliarManager = new(); // em: namespace FestasApp.Managers
+        
+        /// <summary>
+        /// construtor padrão
+        /// </summary>
+        /// <param name="form"></param>
+        /// <param name="context"></param>
         public DataLoader(FormAuxiliaresMain form, clsFestasContext context)
         {
             _form = form;
             _context = context;
         }
         //
-        // Método para popular o DataGridView com as tabelas auxiliares
+        /// <summary>
+        /// 1. Método para popular o DataGridView com as tabelas auxiliares
+        /// </summary>
         public void PopularDtgTabelasAuxiliares()
         {
+            // percorre a lista de tabelas auxiliares e preenche dtgTabelas
             foreach (var tabela in _tabelaAuxiliarManager.tabelasAuxiliares)
             {
                 AdicionarTabela(tabela);
@@ -37,7 +50,10 @@ namespace FestasApp.Views.TabelasAuxiliares
             OrdenarESelecionarPrimeiraLinha();
         }
         //
-        // Método para adicionar uma tabela ao DataGridView
+        /// <summary>
+        /// 1.1. Método para adicionar uma tabela ao DataGridView
+        /// </summary>
+        /// <param name="tabela"></param>
         private void AdicionarTabela(string tabela)
         {
             if (_form.dtgTabelasAuxiliares != null)
@@ -46,7 +62,9 @@ namespace FestasApp.Views.TabelasAuxiliares
             }
         }
         //
-        // Método para ordenar o DataGridView e selecionar a primeira linha
+        /// <summary>
+        /// 1.2. Método para ordenar o DataGridView e selecionar a primeira linha
+        /// </summary>
         private void OrdenarESelecionarPrimeiraLinha()
         {
             if (_form.dtgTabelasAuxiliares != null)
@@ -67,7 +85,11 @@ namespace FestasApp.Views.TabelasAuxiliares
             }
         }
         //
-        //  evento ao selecionar Tabela em dtgTabelas
+        /// <summary>
+        ///  evento ao selecionar Tabela em dtgTabelas
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void HandleSelectionChanged(object sender, EventArgs e)
         {
             DataGridView dtg = (DataGridView)sender;
@@ -81,14 +103,18 @@ namespace FestasApp.Views.TabelasAuxiliares
                 DataGridViewRow row = dtg.SelectedRows[0];
                 // linha selecionada
                 var tabelaSelecionada = row.Cells[0].Value.ToString();
-                // mostra os registros da tabela selecionada
+                // mostra os registros da tabela selecionada no dtgRegistros
                 if (!string.IsNullOrEmpty(tabelaSelecionada))
                 {
                     CarregarRegistrosDaTabela();
                 }
             }
         }
-        // personaliza tabela selecionada no datagrid
+        //
+        /// <summary>
+        /// personaliza tabela selecionada no datagridTabelas
+        /// </summary>
+        /// <param name="dtg"></param>
         private void SetTabelaSelecionada(DataGridView dtg)
         {
             // retorna configuração das linhas anteriormente selecionadas
@@ -111,25 +137,17 @@ namespace FestasApp.Views.TabelasAuxiliares
                 dtg.InvalidateRow(selectedRow.Index);
                 dtg.Update();
 
+                // se tabela selecionada não for contratos, fecha painel de visualização
                 if (!_tabelaAuxiliarManager.IsTabelaContratosSelecionada(_form.dtgTabelasAuxiliares))
                 {
                     FecharPanelVisualizacao();
                 }
             }
         }
-        //
-        private void FecharPanelVisualizacao()
-        {
-            if (_form.pnlVisualizacao != null)
-            {
-                _form.pnlMeio.Controls.Remove(_form.pnlVisualizacao);
-                _form.pnlVisualizacao.Dispose();
-                _form.pnlVisualizacao = null;
-                // retorna o tamanho do dtgRegistros
-                _form.dtgRegistrosTabelasAuxiliares.Dock = DockStyle.Fill;
-            }
-        }
-        //
+        
+        /// <summary>
+        /// popular dtgRegistrosTabelas de acordo com a tabela selecionada
+        /// </summary>
         public void CarregarRegistrosDaTabela()
         {
             DataGridView dtg = _form.dtgRegistrosTabelasAuxiliares;
@@ -146,7 +164,8 @@ namespace FestasApp.Views.TabelasAuxiliares
                         dtg.Rows.Add(registro.itensfest_id, registro.itensfest_nome, registro.itensfest_tipo, registro.itensfest_descricao, registro.itensfest_valor);
                     }
                 }
-            } // espaços
+            } 
+            // espaços
             else if (_tabelaAuxiliarManager.IsTabelaEspacosSelecionada(_form.dtgTabelasAuxiliares))
             {
                 var espacos = repEspacosEF.GetEspacos();
@@ -158,7 +177,8 @@ namespace FestasApp.Views.TabelasAuxiliares
                         dtg.Rows.Add(registro.espc_id, registro.espc_nome);
                     }
                 }
-            } // contratos
+            } 
+            // contratos
             else if (_tabelaAuxiliarManager.IsTabelaContratosSelecionada(_form.dtgTabelasAuxiliares))
             {
                 var contratos = repContratosEF.GetContratos();
@@ -170,7 +190,8 @@ namespace FestasApp.Views.TabelasAuxiliares
                         dtg.Rows.Add(registro.ctt_id, registro.ctt_nome, registro.ctt_caminho_arquivo);
                     }
                 }
-            } // pacotes
+            } 
+            // pacotes
             else if (_tabelaAuxiliarManager.IsTabelaPacotesSelecionada(_form.dtgTabelasAuxiliares))
             {
                 var pacotes = repPacotesEF.GetPacotes();
@@ -182,7 +203,8 @@ namespace FestasApp.Views.TabelasAuxiliares
                         dtg.Rows.Add(registro.pct_id, registro.pct_nome, registro.pct_descricao, registro.pct_duracao + "h", registro.pct_valor);
                     }
                 }
-            } // status
+            } 
+            // status
             else if (_tabelaAuxiliarManager.IsTabelaStatusSelecionada(_form.dtgTabelasAuxiliares))
             {
                 var status = repStatusEF.GetStatus();
@@ -194,7 +216,8 @@ namespace FestasApp.Views.TabelasAuxiliares
                         dtg.Rows.Add(registro.stt_id, registro.stt_status);
                     }
                 }
-            } // temas
+            } 
+            // temas
             else if (_tabelaAuxiliarManager.IsTabelaTemasSelecionada(_form.dtgTabelasAuxiliares))
             {
                 var temas = repTemasEF.GetTemas();
@@ -206,7 +229,8 @@ namespace FestasApp.Views.TabelasAuxiliares
                         dtg.Rows.Add(registro.tema_id, registro.tema_nome, registro.tema_descricao);
                     }
                 }
-            } // tipos eventos
+            } 
+            // tipos eventos
             else if (_tabelaAuxiliarManager.IsTabelaTipoEventosSelecionada(_form.dtgTabelasAuxiliares))
             {
                 var tpev = repTipoEventoEF.GetTipoEvento();
@@ -218,34 +242,40 @@ namespace FestasApp.Views.TabelasAuxiliares
                         dtg.Rows.Add(registro.tpev_id, registro.tpev_nome);
                     }
                 }
-            }        
+            }
 
            // Continue para outras tabelas...
-             
         }
         //
-        // configurações específicas para dtg TIPO de EVENTOS
+        //------------------------------------------------------
+        /// <summary>
+        /// configurações específicas para dtg TIPO de EVENTOS
+        /// </summary>
         private void SetDtgRegistrosParaTipoEvento()
         {
             DataGridView dtg = _form.dtgRegistrosTabelasAuxiliares;
             dtg.Columns.Clear();
             myFunctions.ConfigurarAdicionarColuna(dtg, 0, "ID", 50, "", alignment: DataGridViewContentAlignment.MiddleCenter);
-            myFunctions.ConfigurarAdicionarColuna(dtg, 1, "Temas", 220, "");
-            dtg.Sort(dtg.Columns["Temas"], ListSortDirection.Ascending);
+            myFunctions.ConfigurarAdicionarColuna(dtg, 1, "Tipo de Evento", 220, "");
+            dtg.Sort(dtg.Columns["Tipo de Evento"], ListSortDirection.Ascending);
         }
-        //
-        // configurações específicas para dtg TEMAS
+        //------------------------------------------------------
+        /// <summary>
+        /// configurações específicas para dtg TEMAS
+        /// </summary>
         private void SetDtgRegistrosParaTemas()
         {
             DataGridView dtg = _form.dtgRegistrosTabelasAuxiliares;
             dtg.Columns.Clear();
             myFunctions.ConfigurarAdicionarColuna(dtg, 0, "ID", 50, "", alignment: DataGridViewContentAlignment.MiddleCenter);
-            myFunctions.ConfigurarAdicionarColuna(dtg, 1, "Tipos de Eventos", 220, "");
+            myFunctions.ConfigurarAdicionarColuna(dtg, 1, "Temas", 220, "");
             myFunctions.ConfigurarAdicionarColuna(dtg, 2, "Descrição", 150, "");
-            dtg.Sort(dtg.Columns["Tipos de Eventos"], ListSortDirection.Ascending);
+            dtg.Sort(dtg.Columns["Temas"], ListSortDirection.Ascending);
         }
-        //
-        // configurações específicas para dtg STATUS
+        //------------------------------------------------------
+        /// <summary>
+        /// configurações específicas para dtg STATUS
+        /// </summary>
         private void SetDtgRegistrosParaStatus()
         {
             DataGridView dtg = _form.dtgRegistrosTabelasAuxiliares;
@@ -254,8 +284,10 @@ namespace FestasApp.Views.TabelasAuxiliares
             myFunctions.ConfigurarAdicionarColuna(dtg, 1, "Status", 220, "");
             dtg.Sort(dtg.Columns["Status"], ListSortDirection.Ascending);
         }
-        //
-        // configurações específicas para dtg PACOES
+        //------------------------------------------------------
+        /// <summary>
+        /// configurações específicas para dtg PACOTES
+        /// </summary>
         private void SetDtgRegistrosParaPacotes()
         {
             DataGridView dtg = _form.dtgRegistrosTabelasAuxiliares;
@@ -268,14 +300,44 @@ namespace FestasApp.Views.TabelasAuxiliares
             dtg.Sort(dtg.Columns["Nome"], ListSortDirection.Ascending);
             dtg.Columns["Valor"].DefaultCellStyle.Format = "C2";
         }
+        //------------------------------------------------------
+        /// <summary>
+        /// configurações específicas para dtg ITENS
+        /// </summary>
+        private void SetDtgRegistrosParaItens()
+        {
+            DataGridView dtg = _form.dtgRegistrosTabelasAuxiliares;
+            dtg.Columns.Clear();
+            myFunctions.ConfigurarAdicionarColuna(dtg, 0, "ID", 50, "", alignment: DataGridViewContentAlignment.MiddleCenter);
+            myFunctions.ConfigurarAdicionarColuna(dtg, 1, "Nome", 220, "");
+            myFunctions.ConfigurarAdicionarColuna(dtg, 2, "Tipo", 100, "");
+            myFunctions.ConfigurarAdicionarColuna(dtg, 3, "Descrição", 200, "");
+            myFunctions.ConfigurarAdicionarColuna(dtg, 4, "Valor", 100, "", alignment: DataGridViewContentAlignment.MiddleRight);
+            dtg.Sort(dtg.Columns["Nome"], ListSortDirection.Ascending);
+
+            dtg.Columns["Valor"].DefaultCellStyle.Format = "C2";
+        }
+        //------------------------------------------------------
+        /// <summary>
+        /// configurações específicas para dtg ESPAÇOS
+        /// </summary>
+        private void SetDtgRegistrosParaEspacos()
+        {
+            DataGridView dtg = _form.dtgRegistrosTabelasAuxiliares;
+            dtg.Columns.Clear();
+            myFunctions.ConfigurarAdicionarColuna(dtg, 0, "ID", 50, "", alignment: DataGridViewContentAlignment.MiddleCenter);
+            myFunctions.ConfigurarAdicionarColuna(dtg, 1, "Nome", 220, "");
+            dtg.Sort(dtg.Columns["Nome"], ListSortDirection.Ascending);
+        }
         //
-        // configura para dtg contratos
+        //------------------------------------------------------
+        /// <summary>
+        /// configura para dtg CONTRATOS
+        /// </summary>
         private void SetDtgRegistrosParaContratos()
         {
             DataGridView dtg = _form.dtgRegistrosTabelasAuxiliares;
-            // Limpar colunas existentes
             dtg.Columns.Clear();
-            // configurar colunas
             myFunctions.ConfigurarAdicionarColuna(dtg, 0, "ID", 50, "", alignment: DataGridViewContentAlignment.MiddleCenter);
             myFunctions.ConfigurarAdicionarColuna(dtg, 1, "Nome", 220, "");
             myFunctions.ConfigurarAdicionarColuna(dtg, 2, "Arquivo", 400, "", visible: false);
@@ -299,6 +361,11 @@ namespace FestasApp.Views.TabelasAuxiliares
             _form.dtgRegistrosTabelasAuxiliares.CellMouseLeave += DtgRegistrosTabelasAuxiliares_CellMouseLeave;
         }
         //
+        /// <summary>
+        /// ao selecionar - captura o idRegistro selecionado no dtgRegistros
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DtgRegistrosTabelasAuxiliares_SelectionChanged(object? sender, EventArgs e)
         {
             if (_form.dtgRegistrosTabelasAuxiliares.SelectedRows.Count > 0)
@@ -311,13 +378,17 @@ namespace FestasApp.Views.TabelasAuxiliares
                 idRegistro.Id = null; // Define como null se nenhuma linha estiver selecionada
             }
         }
-
         //
-        // mostrar arquivo-contrato
+        /// <summary>
+        /// ao clicar, se tabela for contratos - mostrar arquivo-pdf-contrato em painel de visualização
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DtgRegistrosTabelasAuxiliares_CellContentClick(object? sender, DataGridViewCellEventArgs e)
         {
             DataGridView dtg = (DataGridView)sender!;
 
+            // se a tabela selecionada for Contratos,
             if (_tabelaAuxiliarManager.IsTabelaContratosSelecionada(_form.dtgTabelasAuxiliares))
             {
                 // Verifique se o clique foi na coluna de visualização
@@ -328,29 +399,21 @@ namespace FestasApp.Views.TabelasAuxiliares
                     if (currentRow.Cells["Arquivo"].Value != null && !string.IsNullOrEmpty(currentRow.Cells["Arquivo"].Value.ToString()))
                     {
                         var caminhoArquivo = currentRow.Cells["Arquivo"].Value?.ToString() ?? string.Empty;
-                        // mostrar contrato
+                        // mostrar pdf-contrato
                         ExibirPainelVisualizacao();
                         VisualizarArquivoContrato(caminhoArquivo);
                     }
                     else
                     {
-                        FecharPanelVisualizacao();
+                        FecharPanelVisualizacao(); // método testa, se estiver aberto fecha
                     }
                 }
             }
-            // seleciona um registro para CRUD
-            if (_form.dtgRegistrosTabelasAuxiliares.SelectedRows.Count > 0)
-            {
-                var selectedRow = _form.dtgRegistrosTabelasAuxiliares.SelectedRows[0]; // Obtém a linha selecionada
-                var idRegistro = Convert.ToInt32(selectedRow.Cells[0].Value); // obtém o valor do Id do Registro da linha selecionada
-            }
-            else
-            {
-                //_form.idRegistro = 0; // Define como 0 se nenhuma linha estiver selecionada
-            }
         }
         //
-        // Mostrar painel de visualização se a tabela selecionada for "Contratos"
+        /// <summary>
+        /// Mostrar painel de visualização se a tabela selecionada for "Contratos"
+        /// </summary>
         private void ExibirPainelVisualizacao()
         {
             // se panel não existir ele cria novo panel
@@ -362,8 +425,26 @@ namespace FestasApp.Views.TabelasAuxiliares
             // ocupa o restante do pnlMeio com dtgRegistros
             _form.dtgRegistrosTabelasAuxiliares.Dock = DockStyle.Fill;
         }
+        /// <summary>
+        /// método para fechar painel de visualizar contratos-pdf
+        /// </summary>
+        private void FecharPanelVisualizacao()
+        {
+            if (_form.pnlVisualizacao != null)
+            {
+                _form.pnlMeio.Controls.Remove(_form.pnlVisualizacao);
+                _form.pnlVisualizacao.Dispose();
+                _form.pnlVisualizacao = null;
+                // retorna o tamanho do dtgRegistros
+                _form.dtgRegistrosTabelasAuxiliares.Dock = DockStyle.Fill;
+            }
+        }
+
         //
-        // método para visualizar o arquivo de contrato em um WebBrowser
+        /// <summary>
+        /// método para visualizar o arquivo de contrato em um WebBrowser
+        /// </summary>
+        /// <param name="filePath"></param>
         private void VisualizarArquivoContrato(string filePath)
         {
             // se caminho estiver vazio return
@@ -390,9 +471,12 @@ namespace FestasApp.Views.TabelasAuxiliares
             }
         }
         //
-        // configurações do painel de visualização
+        /// <summary>
+        /// configurações do painel de visualização
+        /// </summary>
         private void CriarPanelVisualizacao()
         {
+            // 1. cria painel
             _form.pnlVisualizacao = new Panel 
             {
                 Dock = DockStyle.Right,
@@ -402,7 +486,7 @@ namespace FestasApp.Views.TabelasAuxiliares
                 BackColor = Color.LightGray
             };
 
-            // Cria o botão de fechar
+            // 1.1. Cria o botão de fechar
             Button btnClose = new Button
             {
                 Text = "Fechar",
@@ -411,8 +495,9 @@ namespace FestasApp.Views.TabelasAuxiliares
                 //Margin = new Padding(10,10,0,0)
                 Cursor = Cursors.Hand,
             };
-            btnClose.Click += BtnClose_Click;
+            btnClose.Click += BtnClosePnlVisualização_Click;
 
+            // 1.2. cria visualizador de pdf
             _form.pdfViewer = new WebBrowser
             {
                 Dock = DockStyle.Fill
@@ -426,27 +511,21 @@ namespace FestasApp.Views.TabelasAuxiliares
             _form.pnlMeio.Controls.Add(_form.pnlVisualizacao);
         }
         //
-        // Evento de clique do botão de fechar
-        private void BtnClose_Click(object? sender, EventArgs e)
+        /// <summary>
+        /// Evento de clique do botão de fechar
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnClosePnlVisualização_Click(object? sender, EventArgs e)
         {
             FecharPanelVisualizacao();
         }
         //
-        // retorna a tabela selecionada
-        public string TabelaSelecionada()
-        {
-            DataGridView dtgTabelas = (DataGridView)_form.dtgTabelasAuxiliares;
-            if (dtgTabelas.SelectedRows.Count > 0)
-            {
-                DataGridViewRow selectedRow = dtgTabelas.SelectedRows[0]; // linha selecionada
-                var tabelaSelecionada = selectedRow.Cells[0].Value?.ToString(); // nome da tabela selecionada
-
-                return tabelaSelecionada ?? string.Empty;
-            }
-            return string.Empty;
-        }
-        //
-        // MouseEnter e MouseLeave para dar feedback visual
+        /// <summary>
+        /// MouseEnter e MouseLeave para dar feedback visual
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DtgRegistrosTabelasAuxiliares_CellMouseEnter(object? sender, DataGridViewCellEventArgs e)
         {
             //if (TabelaSelecionadaContratos() && sender is DataGridView dtg && e.ColumnIndex >= 0 && e.RowIndex >= 0)
@@ -458,7 +537,11 @@ namespace FestasApp.Views.TabelasAuxiliares
                 }
             }
         }
-        //
+        /// <summary>
+        /// MouseEnter e MouseLeave para dar feedback visual
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DtgRegistrosTabelasAuxiliares_CellMouseLeave(object? sender, DataGridViewCellEventArgs e)
         {
             //if (TabelaSelecionadaContratos() && sender is DataGridView dtg && e.ColumnIndex >= 0 && e.RowIndex >= 0)
@@ -471,76 +554,6 @@ namespace FestasApp.Views.TabelasAuxiliares
             }
         }
         //
-        // configurações específicas para dtg Itens
-        private void SetDtgRegistrosParaItens()
-        {
-            DataGridView dtg = _form.dtgRegistrosTabelasAuxiliares;
-            dtg.Columns.Clear();
-            myFunctions.ConfigurarAdicionarColuna(dtg, 0, "ID", 50, "", alignment: DataGridViewContentAlignment.MiddleCenter);
-            myFunctions.ConfigurarAdicionarColuna(dtg, 1, "Nome", 220, "");
-            myFunctions.ConfigurarAdicionarColuna(dtg, 2, "Tipo", 100, "");
-            myFunctions.ConfigurarAdicionarColuna(dtg, 3, "Descrição", 200, "");
-            myFunctions.ConfigurarAdicionarColuna(dtg, 4, "Valor", 100, "", alignment: DataGridViewContentAlignment.MiddleRight);
-            dtg.Sort(dtg.Columns["Nome"], ListSortDirection.Ascending);
-
-            dtg.Columns["Valor"].DefaultCellStyle.Format = "C2";
-        }
-        //
-        // configurações específicas para dtg Espaços
-        private void SetDtgRegistrosParaEspacos()
-        {
-            DataGridView dtg = _form.dtgRegistrosTabelasAuxiliares;
-            dtg.Columns.Clear();
-            myFunctions.ConfigurarAdicionarColuna(dtg, 0, "ID", 50, "", alignment: DataGridViewContentAlignment.MiddleCenter);
-            myFunctions.ConfigurarAdicionarColuna(dtg, 1, "Nome", 220, "");
-            dtg.Sort(dtg.Columns["Nome"], ListSortDirection.Ascending);
-        }
-        //
-        // método central para carregar registros em dtgRegistrosTabelasAuxiliares
-        private void CarregarRegistrosSEMUSO(string tabela)
-        {
-            var registros = ObterRegistros(tabela);
-            _form.dtgRegistrosTabelasAuxiliares.Rows.Clear();
-
-            foreach (var registro in registros)
-            {
-                // Adicione os registros ao DataGridView conforme necessário
-            }
-        }
-        //
-        // método para centralizar a execução da consulta dos repositórios
-        private IEnumerable<dynamic> ObterRegistros(string tabela)
-        {
-            switch (tabela)
-            {
-                case "Itens das Festas":
-                    return repItensFestasEF.GetItensFestas();
-
-                case "Espaços":
-                    return repEspacosEF.GetEspacos();
-
-                case "Contratos":
-                    return repContratosEF.GetContratos();
-                
-                case "Pacotes":
-                    return repPacotesEF.GetPacotes();
-
-                case "Status":
-                    return repStatusEF.GetStatus();
-
-                case "Temas":
-                    return repTemasEF.GetTemas();
-
-                case "Tipo de Eventos":
-                    return repTipoEventoEF.GetTipoEvento();
-
-                // Continue para outras tabelas...
-
-                default:
-                    return Enumerable.Empty<dynamic>();
-            }
-        }
-        
 
     } // end class DataLoader
-}
+} // end namespace

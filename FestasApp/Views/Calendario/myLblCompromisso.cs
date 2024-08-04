@@ -21,23 +21,28 @@ namespace FestasApp.Views.Calendario
     {
         // Armazena a cor original do painel
         private Color _originalBackColor;
+        private Color _originalForeColor;
+        //
         protected override void OnCreateControl()
         {
             base.OnCreateControl();
             // Salva a cor original atual
             _originalBackColor = BackColor;
+            _originalForeColor = ForeColor;
         }
         protected override void OnMouseEnter(EventArgs e)
         {
             base.OnMouseEnter(e);          
             // Altera a cor do fundo quando o mouse entra no painel
-            BackColor = Color.DarkOrange;
+            //BackColor = Color.DarkOrange;
+            ForeColor = Color.DarkOrange;
         }
         protected override void OnMouseLeave(EventArgs e)
         {
             base.OnMouseLeave(e);
             // Restaura a cor original quando o mouse sai do painel
-            BackColor = _originalBackColor;
+            //BackColor = _originalBackColor;
+            ForeColor = _originalForeColor;
         }
     }
 }

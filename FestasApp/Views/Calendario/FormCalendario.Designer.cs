@@ -203,7 +203,7 @@
             MonthYearContainer.Location = new Point(0, 0);
             MonthYearContainer.Name = "MonthYearContainer";
             MonthYearContainer.Padding = new Padding(5, 0, 0, 0);
-            MonthYearContainer.Size = new Size(797, 50);
+            MonthYearContainer.Size = new Size(823, 50);
             MonthYearContainer.TabIndex = 0;
             // 
             // tblMonthYear
@@ -222,7 +222,7 @@
             tblMonthYear.Name = "tblMonthYear";
             tblMonthYear.RowCount = 1;
             tblMonthYear.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tblMonthYear.Size = new Size(759, 50);
+            tblMonthYear.Size = new Size(785, 50);
             tblMonthYear.TabIndex = 8;
             // 
             // pnlMesAntes
@@ -233,7 +233,7 @@
             pnlMesAntes.Dock = DockStyle.Fill;
             pnlMesAntes.Location = new Point(23, 3);
             pnlMesAntes.Name = "pnlMesAntes";
-            pnlMesAntes.Size = new Size(209, 44);
+            pnlMesAntes.Size = new Size(217, 44);
             pnlMesAntes.TabIndex = 4;
             // 
             // lblMesAntes
@@ -243,7 +243,7 @@
             lblMesAntes.Location = new Point(0, 0);
             lblMesAntes.Name = "lblMesAntes";
             lblMesAntes.Padding = new Padding(0, 0, 0, 10);
-            lblMesAntes.Size = new Size(169, 44);
+            lblMesAntes.Size = new Size(177, 44);
             lblMesAntes.TabIndex = 5;
             lblMesAntes.Text = "Mês Anterior";
             lblMesAntes.TextAlign = ContentAlignment.BottomRight;
@@ -253,7 +253,7 @@
             picMesAntes.Cursor = Cursors.Hand;
             picMesAntes.Dock = DockStyle.Right;
             picMesAntes.Image = Resources.calendar_minus;
-            picMesAntes.Location = new Point(169, 0);
+            picMesAntes.Location = new Point(177, 0);
             picMesAntes.Name = "picMesAntes";
             picMesAntes.Size = new Size(40, 44);
             picMesAntes.SizeMode = PictureBoxSizeMode.Zoom;
@@ -265,9 +265,9 @@
             pnlMesApos.Controls.Add(lblMesApos);
             pnlMesApos.Controls.Add(picMesApos);
             pnlMesApos.Dock = DockStyle.Fill;
-            pnlMesApos.Location = new Point(525, 3);
+            pnlMesApos.Location = new Point(544, 3);
             pnlMesApos.Name = "pnlMesApos";
-            pnlMesApos.Size = new Size(209, 44);
+            pnlMesApos.Size = new Size(217, 44);
             pnlMesApos.TabIndex = 3;
             // 
             // lblMesApos
@@ -277,7 +277,7 @@
             lblMesApos.Location = new Point(40, 0);
             lblMesApos.Name = "lblMesApos";
             lblMesApos.Padding = new Padding(0, 0, 0, 10);
-            lblMesApos.Size = new Size(169, 44);
+            lblMesApos.Size = new Size(177, 44);
             lblMesApos.TabIndex = 2;
             lblMesApos.Text = "Mês Anterior";
             lblMesApos.TextAlign = ContentAlignment.BottomLeft;
@@ -300,9 +300,9 @@
             LblMonthYear.Cursor = Cursors.Hand;
             LblMonthYear.Dock = DockStyle.Fill;
             LblMonthYear.Font = new Font("Segoe UI", 12F);
-            LblMonthYear.Location = new Point(238, 0);
+            LblMonthYear.Location = new Point(246, 0);
             LblMonthYear.Name = "LblMonthYear";
-            LblMonthYear.Size = new Size(281, 50);
+            LblMonthYear.Size = new Size(292, 50);
             LblMonthYear.TabIndex = 5;
             LblMonthYear.Text = "LblMonthYear";
             LblMonthYear.TextAlign = ContentAlignment.MiddleCenter;
@@ -333,7 +333,7 @@
             DaysOfWeekContainer.Dock = DockStyle.Top;
             DaysOfWeekContainer.Location = new Point(0, 50);
             DaysOfWeekContainer.Name = "DaysOfWeekContainer";
-            DaysOfWeekContainer.Size = new Size(797, 30);
+            DaysOfWeekContainer.Size = new Size(823, 30);
             DaysOfWeekContainer.TabIndex = 1;
             // 
             // LblSabado
@@ -433,7 +433,7 @@
             DaysRow0Containers.Dock = DockStyle.Top;
             DaysRow0Containers.Location = new Point(0, 80);
             DaysRow0Containers.Name = "DaysRow0Containers";
-            DaysRow0Containers.Size = new Size(797, 68);
+            DaysRow0Containers.Size = new Size(823, 68);
             DaysRow0Containers.TabIndex = 2;
             // 
             // PnlDay06
@@ -617,7 +617,7 @@
             DaysRow1Containers.Dock = DockStyle.Top;
             DaysRow1Containers.Location = new Point(0, 148);
             DaysRow1Containers.Name = "DaysRow1Containers";
-            DaysRow1Containers.Size = new Size(797, 68);
+            DaysRow1Containers.Size = new Size(823, 68);
             DaysRow1Containers.TabIndex = 3;
             // 
             // PnlDay16
@@ -801,7 +801,7 @@
             DaysRow2Containers.Dock = DockStyle.Top;
             DaysRow2Containers.Location = new Point(0, 216);
             DaysRow2Containers.Name = "DaysRow2Containers";
-            DaysRow2Containers.Size = new Size(797, 68);
+            DaysRow2Containers.Size = new Size(823, 68);
             DaysRow2Containers.TabIndex = 4;
             // 
             // PnlDay26
@@ -985,7 +985,7 @@
             DaysRow3Containers.Dock = DockStyle.Top;
             DaysRow3Containers.Location = new Point(0, 284);
             DaysRow3Containers.Name = "DaysRow3Containers";
-            DaysRow3Containers.Size = new Size(797, 68);
+            DaysRow3Containers.Size = new Size(823, 68);
             DaysRow3Containers.TabIndex = 5;
             // 
             // PnlDay36
@@ -1169,7 +1169,7 @@
             DaysRow4Containers.Dock = DockStyle.Top;
             DaysRow4Containers.Location = new Point(0, 352);
             DaysRow4Containers.Name = "DaysRow4Containers";
-            DaysRow4Containers.Size = new Size(797, 68);
+            DaysRow4Containers.Size = new Size(823, 68);
             DaysRow4Containers.TabIndex = 6;
             // 
             // PnlDay46
@@ -1353,7 +1353,7 @@
             DaysRow5Containers.Dock = DockStyle.Top;
             DaysRow5Containers.Location = new Point(0, 420);
             DaysRow5Containers.Name = "DaysRow5Containers";
-            DaysRow5Containers.Size = new Size(797, 68);
+            DaysRow5Containers.Size = new Size(823, 68);
             DaysRow5Containers.TabIndex = 7;
             // 
             // PnlDay56
@@ -1528,7 +1528,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(797, 645);
+            ClientSize = new Size(823, 645);
             Controls.Add(DaysRow5Containers);
             Controls.Add(DaysRow4Containers);
             Controls.Add(DaysRow3Containers);

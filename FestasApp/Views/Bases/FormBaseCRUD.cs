@@ -14,6 +14,7 @@ namespace FestasApp.ViewModels
 {
     public partial class FormBaseCRUD : Form
     {
+        // construtor padrão
         public FormBaseCRUD()
         {
             InitializeComponent();
@@ -75,4 +76,4 @@ namespace FestasApp.ViewModels
 
 
     } // end class FormBaseCRUD
-}
+} // end namespace

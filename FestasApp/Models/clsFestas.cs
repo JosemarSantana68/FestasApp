@@ -79,7 +79,6 @@ namespace FestasApp.Models
         // Propriedade de navegação para clsFestasAdicionais
         public ICollection<clsFestasAdicionais>? Adicionais { get; set; }
 
-
         // Construtor padrão
         public clsFestas() { }
 

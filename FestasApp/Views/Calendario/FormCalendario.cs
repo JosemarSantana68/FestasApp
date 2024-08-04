@@ -19,20 +19,31 @@ namespace FestasApp.Views.Calendario
         // Criação do objeto da classe de calendário mensal
         private clsMonthlyCalendarInfo _CalendarInfo = null!;// Adiciona a not-nullable annotation
 
-        // Construtor do formulário
+        // Construtor padrão do formulário
         public FormCalendario()
         {
-            //MessageBox.Show("Initialize");
-
+            //
             this.DoubleBuffered = true; // Ativa o double buffering
             SuspendLayout();
-
             InitializeComponent();
-
-            this.FormBorderStyle = FormBorderStyle.None;
-            // Inicializa o calendário
-            _CalendarInfo = new clsMonthlyCalendarInfo();
-
+                this.FormBorderStyle = FormBorderStyle.None;
+                // Inicializa o calendário
+                _CalendarInfo = new clsMonthlyCalendarInfo();
+                AddEventHandlers();
+            ResumeLayout(false);
+        }
+        //
+        // Método chamado ao carregar o formulário.Show()
+        private void FormCalendario_Load(object? sender, EventArgs e)
+        {
+            PreencherCalendario(); // monta os dias e semanas do clendario
+            CriarDadosCalendarioEF(); // preenche com os dados da tblFestas
+            //CriarDadosTeste();
+        }
+        //
+        // Adiciona eventos handlers
+        private void AddEventHandlers()
+        {
             // Eventos para o formulário
             this.Load += FormCalendario_Load;
             this.ClientSizeChanged += FormCalendario_ClientSizeChanged;
@@ -43,31 +54,6 @@ namespace FestasApp.Views.Calendario
             picMesAntes.Click += MudarMesAntes_Click;
             lblMesApos.Click += MudarMesApos_Click;
             picMesApos.Click += MudarMesApos_Click;
-
-            ResumeLayout(false);
-        }
-        //
-        // Método chamado ao carregar o formulário principal
-        private void FormCalendario_Load(object? sender, EventArgs e)
-        {
-            //MessageBox.Show("Load");
-            PreencherCalendario();
-            CriarDadosTeste();
-        }
-        //
-        // Inicialização dos componentes do formulário
-        private void ConfigurarFormCalendario()
-        {
-            SuspendLayout();
-            //
-            // Configuração inicial dos containers de layout
-            ConfigurarContainers();
-            ConfiguraMesAno();
-            //AjustarMesAno();
-            AjustarDiasDaSemana();
-            AjustarDias();
-            //
-            ResumeLayout(false);
         }
         //
         // Método chamado ao alterar o tamanho do formulário principal
@@ -76,6 +62,19 @@ namespace FestasApp.Views.Calendario
             // Redimensiona os containers de layout de acordo com o novo tamanho do formulário
             SuspendLayout();
             ConfigurarFormCalendario();
+            ResumeLayout(false);
+        }
+        //
+        // Inicialização dos componentes do formulário
+        private void ConfigurarFormCalendario()
+        {
+            SuspendLayout();
+                // Configuração inicial dos containers de layout
+                ConfigurarContainers();
+                ConfiguraMesAno();
+                //AjustarMesAno();
+                AjustarDiasDaSemana();
+                AjustarDias();
             ResumeLayout(false);
         }
         //
@@ -115,6 +114,7 @@ namespace FestasApp.Views.Calendario
         private void lblMonthYear_TextChanged(object? sender, EventArgs e)
         {
             Label? lbl = sender as Label;
+
             if (lbl != null)
             {
                 lbl.Text = lbl.Text.ToPrimeUpper();
@@ -184,10 +184,7 @@ namespace FestasApp.Views.Calendario
         {
             SuspendLayout();
             // Verifica se _CalendarInfo é null e inicializa se necessário
-            if (_CalendarInfo == null)
-            {
-                _CalendarInfo = new clsMonthlyCalendarInfo();
-            }
+            _CalendarInfo ??= new clsMonthlyCalendarInfo();
 
             LblMonthYear.Text = $"{NomeMes(_CalendarInfo.Month)} {_CalendarInfo.Year}";
 
@@ -203,6 +200,22 @@ namespace FestasApp.Views.Calendario
 
                     // escreve dia do mes ba label
                     lbl!.Text = _CalendarInfo.DayInMonth(rowIndex, colIndex).ToString();
+
+                    // Lista temporária para armazenar os controles a serem removidos
+                    var controlesParaRemover = new List<Control>();
+
+                    // Coleta os compromissos existentes para evitar duplicação ao recarregar
+                    foreach (Control ctrl in pnl.Controls)
+                    {
+                        if (ctrl != null && ctrl.Name.Contains("LblEvento"))
+                            controlesParaRemover.Add(ctrl);
+                    }
+
+                    // Remove os controles fora do loop de iteração
+                    foreach (Control ctrl in controlesParaRemover)
+                    {
+                        pnl.Controls.Remove(ctrl);
+                    }
 
                     // pinta a fonte para mes ativo
                     if (_CalendarInfo.IsActiveMonth(rowIndex, colIndex))
@@ -226,15 +239,299 @@ namespace FestasApp.Views.Calendario
                 }
             }
             ResumeLayout(false);
+        }       
+        //
+        // Método chamado ao clicar no label lblMonthYear de mês e ano
+        private void MonthYearContainer_Click(object? sender, EventArgs e)
+        {
+            int midPointX = LblMonthYear.Width / 2;
+            Point pointClicked = LblMonthYear.PointToClient(Cursor.Position);
+            DateTime activeMonth = new DateTime(_CalendarInfo.Year, _CalendarInfo.Month, 1);
+            DateTime newMonth;
+            if (pointClicked.X < midPointX)
+            {
+                newMonth = activeMonth.AddMonths(-1); // Mês anterior
+            }
+            else
+            {
+                newMonth = activeMonth.AddMonths(1); // Próximo mês
+            }
+            _CalendarInfo.GoToMonth(newMonth.Year, newMonth.Month);
+            AtualizaMesAno();
         }
         //
-        // Método para criar dados de teste no calendário
-        private void CriarDadosTeste()
+        // Método chamado ao clicar no container de mês e ano
+        private void MudarMesAntes_Click(object? sender, EventArgs e)
+        {
+            DateTime activeMonth = new DateTime(_CalendarInfo.Year, _CalendarInfo.Month, 1);
+            DateTime newMonth;
+            newMonth = activeMonth.AddMonths(-1); // Mês anterior
+            _CalendarInfo.GoToMonth(newMonth.Year, newMonth.Month);
+            AtualizaMesAno();
+        }
+        //
+        // Método chamado ao clicar no container de mês e ano
+        private void MudarMesApos_Click(object? sender, EventArgs e)
+        {
+            DateTime activeMonth = new DateTime(_CalendarInfo.Year, _CalendarInfo.Month, 1);
+            DateTime newMonth;
+            newMonth = activeMonth.AddMonths(1); // Próximo mês
+            _CalendarInfo.GoToMonth(newMonth.Year, newMonth.Month);
+            lblMesAntes.Text = $"{NomeMes(_CalendarInfo.Month)} {_CalendarInfo.Year}";
+            AtualizaMesAno();
+        }
+        //
+        private void AtualizaMesAno()
+        {
+            //RemoverDadosEventos(this);
+            PreencherCalendario();
+            CriarDadosCalendarioEF();
+            //CriarDadosTeste();
+        }
+        //
+        // Método recursivo para remover dados de teste do calendário
+        private void RemoverDadosEventos(Control c)
+        {
+            foreach (Control ctrl in c.Controls)
+            {
+                RemoverDadosEventos(ctrl);
+                if (ctrl.Parent != null && ctrl.Name.Contains("LblEvento"))
+                    ctrl.Parent.Controls.Remove(ctrl);
+            }
+        }
+        //
+        // Função auxiliar para retornar o nome do mês com base no número do mês
+        private string NomeMes(int month)
+        {
+            return CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(month);
+        }
+        //
+        private void picBtnFechar_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+        //
+        //*******************************************************************************
+        // Método para popular festas no calendário EM UMA LABEL (tipo-festa nome-cliente)
+
+        /// <summary>
+        /// Popula um dicionário com as festas por data.
+        /// </summary>
+        /// <returns>Um dicionário onde a chave é a data da festa e o valor é uma lista de strings
+        /// com o tipo de evento e nome do cliente.</returns>
+        private Dictionary<DateTime, List<string>> PopularFestas()
+        {
+            // Dicionário para armazenar datas das festas e seus respectivos clientes e tipos de eventos
+            var compromissosPorData = new Dictionary<DateTime, List<string>>();
+
+            try
+            {
+                using (clsFestasContext context = new clsFestasContext())
+                {
+                    // Consultar dados do banco de dados
+                    var festas = context.Festas
+                                        .Include(f => f.Cliente)
+                                        .Include(f => f.TipoEvento)
+                                        .ToList();
+
+                    // Popula o dicionário com os dados das festas
+                    foreach (var festa in festas)
+                    {
+                        if (festa.fest_dtFesta.HasValue)
+                        {
+                            DateTime dataFesta = festa.fest_dtFesta.Value;
+                            string compromisso = $"{festa.TipoEvento?.tpev_nome ?? "Evento"}; ({festa.Cliente?.cli_nome ?? "Cliente"})";
+
+                            // Verifica se a data já existe no dicionário
+                            if (!compromissosPorData.ContainsKey(dataFesta))
+                            {
+                                compromissosPorData[dataFesta] = new List<string>();
+                            }
+
+                            // Adiciona o compromisso à lista da data correspondente
+                            compromissosPorData[dataFesta].Add(compromisso);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Trata a exceção, pode-se adicionar logging ou outras ações aqui
+                Console.WriteLine($"Erro ao popular festas: {ex.Message}");
+            }
+
+            return compromissosPorData;
+        }
+        //
+        /// <summary>
+        /// Popula o calendário com as festas do banco de dados.
+        /// </summary>
+        private void CriarDadosCalendarioEF()
+        {
+            try
+            {
+                // Recebe o dicionário com as festas por data
+                var compromissosPorData = PopularFestas();
+
+                // Percorre cada item do dicionário para popular o calendário
+                foreach (var item in compromissosPorData)
+                {
+                    DateTime date = item.Key; // Data do compromisso
+                    List<string> compromissos = item.Value; // Lista de compromissos da data
+
+                    // Verifica se a data existe no calendário
+                    if (_CalendarInfo.DateExists(date))
+                    {
+                        // Localiza o painel referente à data do compromisso
+                        int col = _CalendarInfo.Col(date); // Coluna no calendário (0 - 6)
+                        int row = _CalendarInfo.Row(date); // Linha no calendário (0 - 5)
+                        Panel? container = Controls[$"DaysRow{row}Containers"] as Panel; // Linha do mês
+                        Panel? pnl = container!.Controls[$"PnlDay{row}{col}"] as Panel;  // Dia da linha
+
+                        // Habilita a barra de rolagem vertical
+                        pnl!.AutoScroll = true;
+                        pnl.HorizontalScroll.Enabled = false; // Desabilita a barra de rolagem horizontal
+                        pnl.HorizontalScroll.Visible = false; // Garante que a barra de rolagem horizontal não seja visível
+
+                        int cont = 1;
+
+                        // Adiciona cada compromisso do dia
+                        foreach (string compromisso in compromissos)
+                        {
+                            // Calcula a altura acumulada das labels existentes
+                            int totalHeight = pnl.Controls.Cast<Control>().Sum(ctrl => ctrl.Height);
+
+                            // Define o tamanho da fonte com base no estado do formulário principal
+                            Font labelFont = FormMenuMain.InstanceFrmMain!.WindowState == FormWindowState.Maximized
+                                ? new Font("Segoe UI", 9, FontStyle.Regular)
+                                : new Font("Segoe UI", 7, FontStyle.Regular);
+
+                            // Cria e configura a label que recebe a festa e cliente
+                            Label lbl = new myLblCompromisso() // Controle personalizado
+                            {
+                                Name = $"LblEvento{row}{col}{pnl.Controls.Count}", // Garante nomes únicos para cada label
+                                BackColor = Color.Transparent, // Define a cor de fundo da label
+                                ForeColor = Color.White, // Define a cor do texto da label
+                                Text = $"{cont++}. {compromisso}", // Define o texto da label
+                                TextAlign = ContentAlignment.TopLeft, // Alinha o texto à esquerda e no topo
+                                Size = new Size(pnl.Width, 18), // Define a altura do label
+                                Location = new Point(0, totalHeight + 5), // Ajusta a posição para evitar sobreposição
+                                AutoSize = true, // Permite ajuste do tamanho
+                                MaximumSize = new Size(pnl.Width, 0), // Limita a largura, permitindo quebra de linha
+                                Font = labelFont // Define o tamanho da fonte
+                            };
+
+                            // Adiciona o label ao painel do dia
+                            pnl.Controls.Add(lbl);
+                        }
+
+                        // Define o tamanho mínimo para a barra de rolagem (altura total dos controles dentro do pnl)
+                        int vtotalHeight = pnl.Controls.Cast<Control>().Sum(ctrl => ctrl.Height);
+                        pnl.AutoScrollMinSize = new Size(0, vtotalHeight);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Exceção para tratamento de erros, você pode adicionar logging ou outras ações aqui
+                Console.WriteLine($"Erro ao criar dados do calendário: {ex.Message}");
+            }
+        }
+        //
+        //*********************** SEM USO **********************
+        //
+        #region Códigos substituidos e sem uso
+        //
+        // Método para popular dados no calendário EM DUAS LINHAS
+        private void CriarDadosCalendarioEFSEMUSO()
+        {
+            using (clsFestasContext context = new())
+            {
+                // Dicionário para armazenar datas das festas e seus respectivos clientes e tipos de eventos
+                var compromissosPorData = new Dictionary<DateTime, List<(string TipoEvento, string Cliente)>>();
+
+                // Consultar dados do banco de dados
+                var festas = context.Festas
+                                    .Include(f => f.Cliente)
+                                    .Include(f => f.TipoEvento)
+                                    .ToList();
+
+                // Popula o Dicionário
+                foreach (var festa in festas)
+                {
+                    if (festa.fest_dtFesta.HasValue)
+                    {
+                        DateTime dataFesta = festa.fest_dtFesta.Value;
+                        string tipoEvento = festa.TipoEvento?.tpev_nome ?? "Evento";
+                        string cliente = festa.Cliente?.cli_nome ?? "Cliente";
+
+                        if (!compromissosPorData.ContainsKey(dataFesta))
+                        {
+                            compromissosPorData[dataFesta] = new List<(string TipoEvento, string Cliente)>();
+                        }
+                        compromissosPorData[dataFesta].Add((tipoEvento, cliente));
+                    }
+                }
+
+                // Mostra o Dicionário
+                foreach (var item in compromissosPorData)
+                {
+                    DateTime date = item.Key; // data do compromisso
+                    List<(string TipoEvento, string Cliente)> compromissos = item.Value; // compromissos da data
+
+                    if (_CalendarInfo.DateExists(date))
+                    {
+                        // Localiza o painel referente à data do compromisso
+                        int col = _CalendarInfo.Col(date);
+                        int row = _CalendarInfo.Row(date);
+                        Panel? container = Controls[$"DaysRow{row}Containers"] as Panel; // linha do mês
+                        Panel? pnl = container!.Controls[$"PnlDay{row}{col}"] as Panel;  // dia da linha
+
+                        // Adiciona cada compromisso do dia
+                        foreach (var compromisso in compromissos)
+                        {
+                            string tipoEvento = compromisso.TipoEvento;
+                            string cliente = compromisso.Cliente;
+
+                            Label lblTipoEvento = new myLblCompromisso()
+                            {
+                                Name = $"LblTipoEvento{row}{col}{pnl!.Controls.Count}", // Garante nomes únicos para cada label
+                                BackColor = Color.FromArgb(240, 240, 240),
+                                ForeColor = Color.Black,
+                                Text = tipoEvento,
+                                TextAlign = ContentAlignment.MiddleLeft,
+                                Size = new Size(pnl.Width, 20), // Define o tamanho do Label
+                                Location = new Point(0, 40 * pnl.Controls.Count) // Ajusta a posição para evitar sobreposição
+                            };
+                            pnl.Controls.Add(lblTipoEvento);
+
+                            Label lblCliente = new myLblCompromisso()
+                            {
+                                Name = $"LblCliente{row}{col}{pnl.Controls.Count}", // Garante nomes únicos para cada label
+                                BackColor = Color.FromArgb(240, 240, 240),
+                                ForeColor = Color.Gray,
+                                Text = cliente,
+                                TextAlign = ContentAlignment.MiddleLeft,
+                                Size = new Size(pnl.Width, 20), // Define o tamanho do Label
+                                Location = new Point(0, lblTipoEvento.Location.Y + 20) // Ajusta a posição para evitar sobreposição
+                            };
+                            pnl.Controls.Add(lblCliente);
+                        }
+                    }
+                }
+            }
+        }
+        //
+        // Método para popular dados no calendário
+        private void CriarDadosTesteSEMUSO()
         {
             // Remove eventos antigos do calendário
-            RemoverDadosEventos(this);
+            //RemoverDadosEventos(this);
 
-            // Dicionário para armazenar datas e seus respectivos compromissos
+            // Dicionário para armazenar datas das festas e seus respectivos clientes
+            // extrair de tblfestas - fest_dtfesta; fest_tpev;
+            // extrair de tblclientes - cli_nome
+
             var compromissosPorData = new Dictionary<DateTime, List<string>>()
             {
                 { new DateTime(2024, 5, 18), new List<string> { "Compromisso 1" } },
@@ -282,73 +579,9 @@ namespace FestasApp.Views.Calendario
                 }
             }
         }
+        #endregion
         //
-        // Método chamado ao clicar no label lblMonthYear de mês e ano
-        private void MonthYearContainer_Click(object? sender, EventArgs e)
-        {
-            int midPointX = LblMonthYear.Width / 2;
-            Point pointClicked = LblMonthYear.PointToClient(Cursor.Position);
-            DateTime activeMonth = new DateTime(_CalendarInfo.Year, _CalendarInfo.Month, 1);
-            DateTime newMonth;
-            if (pointClicked.X < midPointX)
-            {
-                newMonth = activeMonth.AddMonths(-1); // Mês anterior
-            }
-            else
-            {
-                newMonth = activeMonth.AddMonths(1); // Próximo mês
-            }
-            _CalendarInfo.GoToMonth(newMonth.Year, newMonth.Month);
-            AtualizaMesAno();
-        }
-        // Método chamado ao clicar no container de mês e ano
-        private void MudarMesAntes_Click(object? sender, EventArgs e)
-        {
-            DateTime activeMonth = new DateTime(_CalendarInfo.Year, _CalendarInfo.Month, 1);
-            DateTime newMonth;
-            newMonth = activeMonth.AddMonths(-1); // Mês anterior
-            _CalendarInfo.GoToMonth(newMonth.Year, newMonth.Month);
-            AtualizaMesAno();
-        }
-        // Método chamado ao clicar no container de mês e ano
-        private void MudarMesApos_Click(object? sender, EventArgs e)
-        {
-            DateTime activeMonth = new DateTime(_CalendarInfo.Year, _CalendarInfo.Month, 1);
-            DateTime newMonth;
-            newMonth = activeMonth.AddMonths(1); // Próximo mês
-            _CalendarInfo.GoToMonth(newMonth.Year, newMonth.Month);
-            lblMesAntes.Text = $"{NomeMes(_CalendarInfo.Month)} {_CalendarInfo.Year}";
-            AtualizaMesAno();
-        }
-        private void AtualizaMesAno()
-        {
-            RemoverDadosEventos(this);
-            PreencherCalendario();
-            CriarDadosTeste();
-        }
-        //
-        // Método recursivo para remover dados de teste do calendário
-        private void RemoverDadosEventos(Control c)
-        {
-            foreach (Control ctrl in c.Controls)
-            {
-                RemoverDadosEventos(ctrl);
-                if (ctrl.Parent != null && ctrl.Name.Contains("LblEvento"))
-                    ctrl.Parent.Controls.Remove(ctrl);
-            }
-        }
-        //
-        // Função auxiliar para retornar o nome do mês com base no número do mês
-        private string NomeMes(int month)
-        {
-            return CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(month);
-        }
 
-        private void picBtnFechar_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-        //
     }// end class
 } // namespace
 

@@ -8,22 +8,23 @@
 //   
 //   FORMULÁRIO DE FESTAS
 //--------------------------------------------------------------
-
+//
 namespace FestasApp.Views
 {
     public partial class FormFestasCadastro : FormBaseCadastro
     {
         // DataGridFestas
-        private DataTable dtFestas = new DataTable();
+        //private DataTable dtFestas = new DataTable();
         // dependências: instancia objetos das classes...
-        private clsFestas festa = new clsFestas();
-        private clsFestasContext _context = new clsFestasContext();
-        private clsFestasDetalhes festasDetalhes = new clsFestasDetalhes();
-        // variavels para gravar o id da festa selecionada
-        //private int? festaId;
-        private clsParam festaId = new();
+        //private clsFestas festa = new();
+        //private clsFestasContext _context = new();
+        //private clsFestasDetalhes festasDetalhes = new();
+
         //
-        // criação - construtor - no ...new Form();
+        // variaveis para gravar o id da festa selecionada
+        private clsParam festaIdParam = new();
+        //
+        // construtor padrão - no ...new Form();
         public FormFestasCadastro()
         {
             /* Aqui é o lugar ideal para configurar:
@@ -31,15 +32,15 @@ namespace FestasApp.Views
             2.Event Handlers: Associação de eventos aos seus respectivos manipuladores, como clique de botão, alteração de texto, etc.
             3.Definição de propriedades estáticas: Propriedades que não vão depender de nenhuma lógica dinâmica ou de dados que precisam ser carregados de fontes externas.
              */
-
             SuspendLayout();
-            InitializeComponent();
-            SetThisForm();
-            SetControls();
-            AddToolStripEventHandlers();
+                InitializeComponent();
+                SetThisForm();
+                SetControls();
+                AddEventHandlers();
             ResumeLayout(false);
         }
-         // carregamento - no .Show();
+        //
+        // carregamento - no .Show();
         private void FormFestasCadastro_Load(object sender, EventArgs e)
         {
             /* Aqui é o lugar ideal para configurar:
@@ -48,10 +49,8 @@ namespace FestasApp.Views
             3.Configuração dinâmica: Configuração de controles com base em dados carregados dinamicamente ou estado da aplicação.
              */
             SuspendLayout();
-            //SetControls();
-            CarregarDtgFestasEF();
+                CarregarDtgFestasEF();
             ResumeLayout(false);
-
         }
         //
         // Configurações iniciais do formulário de cliente
@@ -62,10 +61,31 @@ namespace FestasApp.Views
             lblTitulo.Text = "C a d a s t r o  d e  F e s t a s";
             lblTitulo.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
         }
+        //
         private void SetControls()
         {
             ConfigurarColunasDtgFestas();
             ConfigurarColunasDtgItensFestas();
+        }
+        //
+        // adiciona eventos aos controles...
+        private void AddEventHandlers()
+        {
+            // Adiciona o manipulador de eventos para os botões do ToolStrip
+            this.tstbtnNovo.Click += TstbtnNovo_Click;
+            this.tstbtnEditar.Click += TstbtnEditar_Click;
+            this.tstbtnConsultar.Click += TstbtnConsultar_Click;
+            this.tstbtnExcluir.Click += TstbtnExcluir_Click;
+            this.Load += FormFestasCadastro_Load!;
+
+            // para o datagrid
+            this.dtgFestas.SelectionChanged += DtgFestas_SelectionChanged;
+            this.dtgFestas.CellContentDoubleClick += DtgFestas_CellContentDoubleClick;
+        }
+        //
+        private void DtgFestas_CellContentDoubleClick(object? sender, DataGridViewCellEventArgs e)
+        {
+            tstbtnEditar.PerformClick();
         }
         //
         private void TratarControles(bool desabilitar)
@@ -77,7 +97,7 @@ namespace FestasApp.Views
             TratarBtnCrud(desabilitar);
         }
         //
-        // ENTITY FRAMEWORK
+        // método que popula dtgFestas
         private void CarregarDtgFestasEF()
         {
             // testa a conexão
@@ -134,6 +154,7 @@ namespace FestasApp.Views
             }
         }
         //
+        // método calcula do dtgFestas, totalRegistro, totalFestas, periodo
         private void CalcularDataGridEF()
         {
             using (var context = new clsFestasContext())
@@ -200,7 +221,7 @@ namespace FestasApp.Views
             //dtg.CellFormatting += Dtg_CellFormatting;
         }
         // formatação dtgFestas
-        private void Dtg_CellFormatting(object? sender, DataGridViewCellFormattingEventArgs e)
+        private void Dtg_CellFormattingSEMUSO(object? sender, DataGridViewCellFormattingEventArgs e)
         {
             // Verificar se a coluna é "Valor" e se o valor não é nulo
             if (e.ColumnIndex == ColValor && e.Value != null)
@@ -214,45 +235,31 @@ namespace FestasApp.Views
             }
         }
         //
-        // adiciona eventos aos stripsButtons...
-        private void AddToolStripEventHandlers()
-        {
-            // Adiciona o manipulador de eventos para os botões do ToolStrip
-            this.tstbtnNovo.Click += TstbtnNovo_Click;
-            this.tstbtnEditar.Click += TstbtnEditar_Click;
-            this.tstbtnConsultar.Click += TstbtnConsultar_Click;
-            this.tstbtnExcluir.Click += TstbtnExcluir_Click;
-            this.Load += FormFestasCadastro_Load!;
-
-            // para o datagrid
-            this.dtgFestas.SelectionChanged += DtgFestas_SelectionChanged;
-        }
-        //
-        
+        // método captura id da festa ao clicar no dtgFestas
         private void DtgFestas_SelectionChanged(object? sender, EventArgs e)
         {
             if (dtgFestas.SelectedRows.Count > 0)
             {
                 var selectedRow = dtgFestas.SelectedRows[0]; // Obtém a linha selecionada
-                festaId.Id = Convert.ToInt32(selectedRow.Cells[ColId].Value); // obtém o valor do Id da Festa da linha selecionada
-                
+                festaIdParam.Id = Convert.ToInt32(selectedRow.Cells[ColId].Value); // obtém o valor do Id da Festa da linha selecionada
+                // limpa os campos e mostra detalhes da festa selecionada
                 LimparCamposDetalhesEF();
                 SetControlsDetalhesFestaEF();
             }
             else
             {
-                festaId.Id = 0; // Define festaId como 0 se nenhuma linha estiver selecionada
+                festaIdParam.Id = 0; // Define festaIdParam como 0 se nenhuma linha estiver selecionada
             }
         }
         //
-        // DataGridItens
+        // configurar DataGridItens
         // constantes com Numeros das colunas
         private const int ItemNome = 0;
         private const int ItemQtde = 1;
         private const int ItemValor = 2;
         private void ConfigurarColunasDtgItensFestas()
         {
-            //ConfiguraCabecalhodtgItensFestas();
+            //
             DataGridView dtgItem = dtgItensFestas;
             // Limpar colunas existentes
             dtgItem.Columns.Clear();
@@ -272,29 +279,29 @@ namespace FestasApp.Views
             //
             // Configuração da altura geral das linhas
             dtgItem.RowTemplate.Height = 25;
+            dtgItem.BackgroundColor = Control.DefaultBackColor;
         }
         //
         // método utiliza entity framework para popular controles dos detalhes da festa no form
         private async void SetControlsDetalhesFestaEF()
         {
-            if (festaId.IsValid())
+            if (festaIdParam.IsValid())
             {
                 // cria nova entidade context
-                using (var context = new clsFestasContext())
+                using (clsFestasContext context = new())
                 {
                     // Carrega a festa com os detalhes e as entidades relacionadas
                     var festa = context.Festas
                         .Include(f => f.TipoEvento)
                         .Include(f => f.Status)
                         .Include(f => f.Detalhes)
-                        .FirstOrDefault(f => f.fest_id == festaId.Id);
+                        .FirstOrDefault(f => f.fest_id == festaIdParam.Id);
 
                     // se encontrar registros na tabela para a festa
                     if (festa != null)
                     {
                         // nome do cliente direto do dtgFestas.
                         lblNomeCliente.Text = dtgFestas.SelectedRows[0].Cells[ColClienteNome].Value?.ToString() ?? string.Empty;
-                        lblNomeCliente.ForeColor = Color.DarkGoldenrod;
 
                         // Atribui os valores às labels
                         lblTipoEvento.Text = festa.TipoEvento?.tpev_nome ?? string.Empty;
@@ -302,24 +309,23 @@ namespace FestasApp.Views
 
                         // Verifica se existem detalhes da festa
                         var detalhesFesta = festa.Detalhes?.FirstOrDefault();
+                        //
                         if (detalhesFesta != null)
                         {
-                            lblHoraInicio.Text = myDateTime.FormatTimeForDisplay(detalhesFesta.detfest_iniciohora);
-                            lblHoraFim.Text = myDateTime.FormatTimeForDisplay(detalhesFesta.detfest_fimhora);
+                            lblHoraInicio.Text = myDateTime.FormatTimeForDisplay(detalhesFesta.detfest_iniciohora, @"hh\:mm");
+                            lblHoraFim.Text = myDateTime.FormatTimeForDisplay(detalhesFesta.detfest_fimhora, @"hh\:mm");
                             lblCriancasPagantes.Text = detalhesFesta.detfest_criancaspagantes?.ToString() ?? string.Empty;
                             lblCriancasNaoPagantes.Text = detalhesFesta.detfest_criancasnaopagantes?.ToString() ?? string.Empty;
                             lblAdultos.Text = detalhesFesta.detfest_adultos?.ToString() ?? string.Empty;
                             lblTotalPessoa.Text = detalhesFesta.detfest_totalpessoas?.ToString() ?? string.Empty;
                             lblObservacaoFestas.Text = detalhesFesta.detfest_observacao ?? string.Empty;
                             lblPessoasAMais.Text = detalhesFesta.detfest_pessoasamais?.ToString() ?? string.Empty;
-
                             // contrato
                             var contrato = await context.Contratos.FirstOrDefaultAsync(c => c.ctt_id == detalhesFesta.detfest_ctt_id);
                             if (contrato != null)
                             {
-                                lblContratoModelo.Text = contrato.ctt_nome; // ERRO TRATAR
+                                lblContratoModelo.Text = contrato.ctt_nome;
                             }
-
                         }
                         //mostra em dtgItensFestas os itens da festa
                         CarregarDtgItensFestaEF();
@@ -345,48 +351,55 @@ namespace FestasApp.Views
             int alturaLinha = 25;
             int alturaMaxima = 140;
 
-            if (festaId.IsValid())
+            try
             {
-                // cria nova entidade context
-                using (var context = new clsFestasContext())
+                if (festaIdParam.IsValid())
                 {
-                    // Obtém os adicionais da festa selecionada, incluindo os itens relacionados
-                    var adicionaisFesta = repAdicionaisEF.GetItensFestaEF(festaId.Id!.Value);
-                   
-                    // Limpa os dados existentes no DataGridView
-                    dtgItensFestas.Rows.Clear();
-
-                    if (adicionaisFesta != null)
+                    // cria nova entidade context
+                    using (var context = new clsFestasContext())
                     {
-                        foreach (var adicional in adicionaisFesta)
-                        {
-                            // Adiciona uma nova linha ao DataGridView
-                            int rowIndex = dtgItensFestas.Rows.Add();
-                            // Popula as células da linha com os dados dos itens adicionais
+                        // Obtém os adicionais da festa selecionada, incluindo os itens relacionados
+                        var adicionaisFesta = repAdicionaisEF.GetItensFestaEF(festaIdParam.Id!.Value);
 
-                            dtgItensFestas.Rows[rowIndex].Cells[ItemNome].Value = adicional.ItensFestas != null ? adicional.ItensFestas.itensfest_nome ?? "N/A" : "N/A";
-                            dtgItensFestas.Rows[rowIndex].Cells[ItemQtde].Value = adicional.add_qtde;
+                        // Limpa os dados existentes no DataGridView
+                        dtgItensFestas.Rows.Clear();
 
-                            dtgItensFestas.Rows[rowIndex].Cells[ItemValor].Value = adicional.add_valor;
-                        }
-                        // Desmarcar seleção
-                        dtgItensFestas.ClearSelection();
+                        if (adicionaisFesta != null)
+                        {
+                            foreach (var adicional in adicionaisFesta)
+                            {
+                                // Adiciona uma nova linha ao DataGridView
+                                int rowIndex = dtgItensFestas.Rows.Add();
+                                // Popula as células da linha com os dados dos itens adicionais
 
-                        // Calcula a altura necessária
-                        int alturaNecessaria = (adicionaisFesta.Count * alturaLinha) + 25; // acrescentar 25 do cabeçalho
-                        // Define a altura do DataGridView
-                        if (alturaNecessaria <= alturaMaxima)
-                        {
-                            //dtgItensFestas.Height = alturaNecessaria < alturaLinha ? alturaLinha : alturaNecessaria;
-                            dtgItensFestas.Height = alturaNecessaria;
-                        }
-                        else
-                        {
-                            dtgItensFestas.Height = alturaMaxima;
-                            dtgItensFestas.ScrollBars = ScrollBars.Vertical;
+                                dtgItensFestas.Rows[rowIndex].Cells[ItemNome].Value = adicional.ItensFestas != null ? adicional.ItensFestas.itensfest_nome ?? "N/A" : "N/A";
+                                dtgItensFestas.Rows[rowIndex].Cells[ItemQtde].Value = adicional.add_qtde;
+
+                                dtgItensFestas.Rows[rowIndex].Cells[ItemValor].Value = adicional.add_valor;
+                            }
+                            // Desmarcar seleção
+                            dtgItensFestas.ClearSelection();
+
+                            // Calcula a altura necessária
+                            int alturaNecessaria = (adicionaisFesta.Count * alturaLinha) + 25; // acrescentar 25 do cabeçalho
+                                                                                               // Define a altura do DataGridView
+                            if (alturaNecessaria <= alturaMaxima)
+                            {
+                                //dtgItensFestas.Height = alturaNecessaria < alturaLinha ? alturaLinha : alturaNecessaria;
+                                dtgItensFestas.Height = alturaNecessaria;
+                            }
+                            else
+                            {
+                                dtgItensFestas.Height = alturaMaxima;
+                                dtgItensFestas.ScrollBars = ScrollBars.Vertical;
+                            }
                         }
                     }
                 }
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
         //
@@ -434,23 +447,27 @@ namespace FestasApp.Views
             OperacaoCRUD operacao = OperacaoCRUD.NOVO;
             AbrirFormCRUDEF(operacao);
         }
-        //
-        // 
-        private void AbrirFormCRUDEF(OperacaoCRUD operacao)
+        //-----------------------------------------------------------
+        // método que chama formCRUD com base na operação selecionada
+        private async void AbrirFormCRUDEF(OperacaoCRUD operacao)
         {
-            // Verifique se há uma festaId selecionada no DataGridView
-            if (festaId.IsValid() || operacao == OperacaoCRUD.NOVO)
+            // Verifique se há uma festaIdParam selecionada no DataGridView
+            if (festaIdParam.IsValid()) // || operacao == OperacaoCRUD.NOVO)
             {
                 try
                 {
                     // Abra o formulário CRUD para edição passando o ID da festa e a operação
-                    using (FormFestasCRUD frm = new FormFestasCRUD(festaId.Id, operacao))
+                    using (FormFestasCRUD frm = new(festaIdParam, operacao))
                     {
                         // Usar a Modal para exibir o FormCRUD
-                        FormMenuMain.ShowModalOverlay(frm);
+                        await FormMenuMain.ShowModalOverlay(frm);
 
                         // quando volta do CRUD, atualiza dataGrid com dados da tabela no BD
                         CarregarDtgFestasEF();
+
+                        // Selecionar a linha correspondente ao FestaIdParam.Id
+                        SelecionarFestaNoDataGridView(frm.FestaIdParam.Id!.Value);
+
                     }
                 }
                 catch (InvalidCastException)
@@ -465,6 +482,20 @@ namespace FestasApp.Views
             else
             {
                 FormMenuMain.ShowMyMessageBox("Nenhuma linha está selecionada.\nAbrirFormCRUDEF", "Erro de Seleção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+        // Método para selecionar a linha no DataGridView
+        private void SelecionarFestaNoDataGridView(int festaId)
+        {
+            foreach (DataGridViewRow row in dtgFestas.Rows)
+            {
+                // Verifica se o valor da célula na coluna de ID corresponde ao festaId
+                if (row.Cells[ColId].Value != null && (int)row.Cells[ColId].Value == festaId)
+                {
+                    row.Selected = true;
+                    dtgFestas.CurrentCell = row.Cells[0]; // Define o foco na célula da linha selecionada
+                    break; // Encerra a iteração após encontrar a linha correspondente
+                }
             }
         }
         //

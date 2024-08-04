@@ -20,6 +20,7 @@ namespace FestasApp.Views.FestasStatus
         // declara instâncias
         private readonly repStatusEF statusFesta = new();
         private readonly OperacaoCRUD operacao = new();
+        public clsFestasStatus StatusAtual { get; private set; } = new();
         private int? idRegistro;
 
         public FormStatusCRUD(clsParam idRegistro, OperacaoCRUD operacao)
@@ -66,14 +67,14 @@ namespace FestasApp.Views.FestasStatus
         }
         //
         //
-        private void SalvarRegistro()
+        private async void SalvarRegistro()
         {
             var txtNome = this.pnlCentral.Controls["txtStatus"] as TextBox;
 
             // Validação dos controles - Verifica se todos os campos necessários estão preenchidos
             if (string.IsNullOrEmpty(txtNome!.Text))
             {
-                myUtilities.myMessageBox(this, "Por favor, preencha nome do Status da Festas.", "Status da Festa");
+                await myUtilities.myMessageBox(this, "Por favor, preencha nome do Status da Festas.", "Status da Festa");
                 return;
             }
 
@@ -90,12 +91,13 @@ namespace FestasApp.Views.FestasStatus
                     // Tenta adicionar o item de festa ao banco de dados
                     if (repStatusEF.AddItem(item))
                     {
-                        myUtilities.myMessageBox(this, "Status de Festas adicionado com sucesso!", "Status de Festas");
+                        await myUtilities.myMessageBox(this, "Status de Festas adicionado com sucesso!", "Status de Festas");
+                        StatusAtual = item;
                         this.Close();
                     }
                     else
                     {
-                        myUtilities.myMessageBox(this, "Falha ao adicionar o Status de Festas.", "Status de Festas");
+                        await myUtilities.myMessageBox(this, "Falha ao adicionar o Status de Festas.", "Status de Festas");
                     }
                 }
                 else if (operacao == OperacaoCRUD.EDITAR)
@@ -103,22 +105,22 @@ namespace FestasApp.Views.FestasStatus
                     // Tenta adicionar o item de festa ao banco de dados
                     if (repStatusEF.AlterItem(idRegistro!.Value, item))
                     {
-                        myUtilities.myMessageBox(this, "Status da Festas alterado com sucesso!", "Espaço de Festas");
+                        await myUtilities.myMessageBox(this, "Status da Festas alterado com sucesso!", "Espaço de Festas");
                         this.Close();
                     }
                     else
                     {
-                        myUtilities.myMessageBox(this, "Falha ao alterar o Status da Festas.", "Espaço de Festas");
+                        await myUtilities.myMessageBox(this, "Falha ao alterar o Status da Festas.", "Espaço de Festas");
                     }
                 }
             }
             catch (Exception ex)
             {
-                myUtilities.myMessageBox(this, $"Falha ao salvar Item. Erro: {ex.Message}", "Itens de Festas");
+                await myUtilities.myMessageBox(this, $"Falha ao salvar Item. Erro: {ex.Message}", "Itens de Festas");
             }
         }
         //
-        private void DeletarRegistro()
+        private async void DeletarRegistro()
         {
             // Exibe a mensagem de confirmação usando MessageBox.Show
             var message = $"""
@@ -126,7 +128,7 @@ namespace FestasApp.Views.FestasStatus
                         
                         Esta ação não poderá ser desfeita!
                         """;
-            var result = myUtilities.myMessageBox(this, message, "Excluir Item", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            var result = await myUtilities.myMessageBox(this, message, "Excluir Item", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
             if (result == DialogResult.Yes)
             {
@@ -141,16 +143,16 @@ namespace FestasApp.Views.FestasStatus
                     else
                     {
                         // Exibe a mensagem de erro se a exclusão falhar
-                        myUtilities.myMessageBox(this, "Erro ao excluir Status da festas!", "Item Excluir", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        await myUtilities.myMessageBox(this, "Erro ao excluir Status da festas!", "Item Excluir", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
                 catch (MySqlException mysqlEx)
                 {
-                    myUtilities.myMessageBox(this, $"Erro no banco de dados: {mysqlEx.Message}", "Erro SQL", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    await myUtilities.myMessageBox(this, $"Erro no banco de dados: {mysqlEx.Message}", "Erro SQL", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 catch (Exception ex)
                 {
-                    myUtilities.myMessageBox(this, ex.Message, "Item Excluir", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    await myUtilities.myMessageBox(this, ex.Message, "Item Excluir", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -213,7 +215,7 @@ namespace FestasApp.Views.FestasStatus
         }
         //
         // mostra dados do registro selecionado
-        private void MostrarRegistro()
+        private async void MostrarRegistro()
         {
             try
             {
@@ -234,12 +236,12 @@ namespace FestasApp.Views.FestasStatus
                 else
                 {
                     // Exibe mensagem caso o registro não seja encontrado
-                    // myUtilities.myMessageBox(this, "Registro não encontrado.");
+                    // await myUtilities.myMessageBox(this, "Registro não encontrado.");
                 }
             }
             catch (Exception ex)
             {
-                myUtilities.myMessageBox(this, $"Erro ao preencher dados do Pacote: {ex.Message}");
+                await myUtilities.myMessageBox(this, $"Erro ao preencher dados do Pacote: {ex.Message}");
             }
         }
 

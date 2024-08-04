@@ -18,6 +18,7 @@ namespace FestasApp.Repositories
         // construtor
         public repAdicionaisEF() { }
         //
+        //
         public static List<clsFestasAdicionais>? GetItensFestaEF(int festaId)
         {
             // testa conexão

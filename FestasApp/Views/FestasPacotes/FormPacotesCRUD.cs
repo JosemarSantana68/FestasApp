@@ -16,10 +16,16 @@ namespace FestasApp.Views.FestasPacotes
 {
     public partial class FormPacotesCRUD : FormBaseCRUD
     {
+        // instância de repositório para crud
         private readonly repPacotesEF pacotesFestas = new();
+        // enumerabel
         private readonly OperacaoCRUD operacao = new();
+        // instància de um novo objeto da classe
+        public clsFestasPacotes PacoteAtual { get; private set; } = new();
+        // constante para id
         private int? idRegistro;
-
+        //
+        // construtor padrão
         public FormPacotesCRUD(clsParam idRegistro, OperacaoCRUD operacao)
         {
             InitializeComponent();
@@ -27,182 +33,32 @@ namespace FestasApp.Views.FestasPacotes
             this.idRegistro = idRegistro.Id;
 
             SuspendLayout();
-            ConfigurarFormBaseCrud("P a c o t e s", operacao);
-            AddEventHandlers();
-            SetControls();
-            SetOperacao();
+                ConfigurarFormBaseCrud("P a c o t e s", operacao);
+                AddEventHandlers();
+                SetControls();
             ResumeLayout();
-
         }
         //
         private void FormPacotesCRUD_Load(object? sender, EventArgs e)
         {
-
+            SetOperacao();
         }
+        //
         private void AddEventHandlers()
         {
             this.tstbtnSalvar.Click += TstbtnSalvar_Click;
             this.Load += FormPacotesCRUD_Load;
         }
-
-        private void TstbtnSalvar_Click(object? sender, EventArgs e)
-        {
-            // Testa a operacao e configura os controles...
-            switch (operacao)
-            {
-                case OperacaoCRUD.NOVO:
-                    SalvarItensFestas();
-                    break;
-                case OperacaoCRUD.EDITAR:
-                    SalvarItensFestas();
-                    break;
-                case OperacaoCRUD.EXCLUIR:
-                    DeletarRegistro();
-                    break;
-            }
-        }
-
-        private void SalvarItensFestas()
-        {
-            var txtNome = this.pnlCentral.Controls["txtNome"] as TextBox;
-            var txtDescricao = this.pnlCentral.Controls["txtDescricao"] as TextBox;
-            var txtDuracao = this.pnlCentral.Controls["txtDuracao"] as TextBox;
-            var txtValor = this.pnlCentral.Controls["txtValor"] as TextBox;
-
-            if (!ValidarControles(txtNome, txtDescricao, txtDuracao, txtValor))
-                return;
-            
-            // Recupera os valores dos controles
-            string nome = txtNome.Text ?? string.Empty;
-            string descricao = txtDescricao.Text ?? string.Empty;
-            string duracao = txtDuracao.Text ?? string.Empty;
-            double valor = double.Parse(0 + txtValor.Text);
-            //double.TryParse(txtValor.Text, out double valor);
-
-            // Cria uma instância da classe clsFestasPacotes e preenche os dados sem passar o ID
-            clsFestasPacotes item = new(nome, descricao, duracao, valor);
-            try
-            {
-                if (operacao == OperacaoCRUD.NOVO)
-                {
-                    // Tenta adicionar o pacote de festa ao banco de dados
-                    if (repPacotesEF.AddItem(item))
-                    {
-                        myUtilities.myMessageBox(this, "Pacote de Festas adicionado com sucesso!", "Pacote de Festas");
-                        this.Close();
-                    }
-                    else
-                    {
-                        myUtilities.myMessageBox(this, "Falha ao adicionar o Pacote de Festas.", "Pacote de Festas");
-                    }
-                }
-                else if (operacao == OperacaoCRUD.EDITAR)
-                {
-                    // Tenta adicionar o item de festa ao banco de dados
-                    if (repPacotesEF.AlterItem(idRegistro!.Value, item))
-                    {
-                        myUtilities.myMessageBox(this, "Pacote de Festas alterado com sucesso!", "Pacote de Festas");
-                        this.Close();
-                    }
-                    else
-                    {
-                        myUtilities.myMessageBox(this, "Falha ao alterar o Pacote de Festas.", "Pacote de Festas");
-                    }
-                }
-
-            }
-            catch (Exception ex)
-            {
-                myUtilities.myMessageBox(this, $"Falha ao salvar Item. Erro: {ex.Message}", "Pacote de Festas");
-            }
-        }
         //
-        private bool ValidarControles(TextBox? txtNome, TextBox? txtDescricao, TextBox? txtDuracao, TextBox? txtValor)
-        {
-            // Validação dos controles - Verifica se todos os campos necessários estão preenchidos
-            if (string.IsNullOrEmpty(txtNome.Text))
-            {
-                myUtilities.myMessageBox(this, "Por favor, preencha o nome do Pacote.", "Pacote de Festas");
-                txtNome.Focus();
-                return false;
-            }
-            //
-            if (string.IsNullOrEmpty(txtDescricao.Text))
-            {
-                myUtilities.myMessageBox(this, "Por favor, preencha a descrição do Pacote.", "Pacote de Festas");
-                txtDescricao.Focus();
-                return false;
-            }
-            //
-            if (string.IsNullOrEmpty(txtDuracao.Text))
-            {
-                myUtilities.myMessageBox(this, "Por favor, preencha a duração do Pacote.", "Pacote de Festas");
-                txtDuracao.Focus();
-                return false;
-            }
-            
-            // Tenta converter o valor de 'txtValor' para double
-            if (!double.TryParse(txtValor.Text, out double valor))
-            {
-                myUtilities.myMessageBox(this, "Por favor, insira um valor válido.", "Pacote de Festas");
-                txtValor.Focus();
-                return false;
-            }
-
-            return true;
-        }
-
-        //
-        //
-        private void DeletarRegistro()
-        {
-            // Exibe a mensagem de confirmação usando MessageBox.Show
-            var message = $"""
-                        Deseja Excluir o Pacote {pacotesFestas.pct_nome} ?
-                        
-                        Esta ação não poderá ser desfeita!
-                        """;
-            var result = myUtilities.myMessageBox(this, message, "Excluir Item", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-
-            if (result == DialogResult.Yes)
-            {
-                try
-                {
-                    // Chama o método para excluir o cliente
-                    if (repPacotesEF.DeleteItem(idRegistro!.Value))
-                    {
-                        this.Close();
-                        return;
-                    }
-                    else
-                    {
-                        // Exibe a mensagem de erro se a exclusão falhar
-                        myUtilities.myMessageBox(this, "Erro ao excluir Pacote de festa!", "Item Excluir", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-                catch (MySqlException mysqlEx)
-                {
-                    myUtilities.myMessageBox(this, $"Erro no banco de dados: {mysqlEx.Message}", "Erro SQL", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                catch (Exception ex)
-                {
-                    myUtilities.myMessageBox(this, ex.Message, "Item Excluir", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-        }
-        //
-
-        //
-        //
-        // Configura o formulário com base na tabela selecionada
+        // Configura os controles do formulário com base na tabela selecionada
         private void SetControls()
         {
             // Limpa os controles existentes
             this.pnlCentral.Controls.Clear();
 
-            int lblCol = 20; // coluna do label
-            int txtCol = lblCol + 120; // coluna do textbox
-            int rowControl = 20; // mesma linha
+            int lblCol = 20; // coluna do label inicial
+            int txtCol = lblCol + 120; // coluna do textbox inicial
+            int rowControl = 20; // mesma linha inicial
 
             // Definição das larguras dos TextBox
             int larguraNome = 300;
@@ -210,22 +66,47 @@ namespace FestasApp.Views.FestasPacotes
             int larguraDuracao = 80;
             int larguraValor = 100;
 
-            Label lblNome = new Label { Text = "Nome:", Location = new Point(lblCol, rowControl) };
-            TextBox txtNome = new myTextBox { Location = new Point(txtCol, rowControl), Name = "txtNome", Width = larguraNome };
+            //
+            int maxLengthNome = myFunctions.GetMaxLength("tblfestaspacotes", "pct_nome");
+            int maxLengthDescricao = myFunctions.GetMaxLength("tblfestaspacotes", "pct_descricao");
+            int maxLengthDuracao = myFunctions.GetMaxLength("tblfestaspacotes", "pct_duracao");
+            int maxLenghttValor = 12;
+
+            //
+            Label lblNome = new() { Text = "Nome:", Location = new Point(lblCol, rowControl) };
+            myTextBox txtNome = new() { Location = new Point(txtCol, rowControl), Name = "txtNome", Width = larguraNome, MaxLength = maxLengthNome };
+            //
             rowControl += 30;
-            Label lblDescricao = new Label { Text = "Descrição:", Location = new Point(lblCol, rowControl) };
-            TextBox txtDescricao = new myTextBox { Location = new Point(txtCol, rowControl), Name = "txtDescricao", Width = larguraDescricao };
+            Label lblDescricao = new() { Text = "Descrição:", Location = new Point(lblCol, rowControl) };
+            myTextBox txtDescricao = new() { Location = new Point(txtCol, rowControl), Name = "txtDescricao", Width = larguraDescricao, MaxLength = maxLengthDescricao };
+            //
             rowControl += 30;
-            Label lblDuracao = new Label { Text = "Duração:", Location = new Point(lblCol, rowControl) };
-            TextBox txtDuracao = new myTextBox { Location = new Point(txtCol, rowControl), Name = "txtDuracao", Width = larguraDuracao };
+            Label lblDuracao = new() { Text = "Duração:", Location = new Point(lblCol, rowControl) };
+            myTextBox txtDuracao = new() { Location = new Point(txtCol, rowControl), Name = "txtDuracao", Width = larguraDuracao, MaxLength = maxLengthDuracao };
+            
+            // valor do pacote
             rowControl += 30;
-            Label lblValor = new Label { Text = "Valor:", Location = new Point(lblCol, rowControl) };
-            TextBox txtValor = new myTextBoxNumericos { Location = new Point(txtCol, rowControl), Name = "txtValor", Width = larguraValor, TextAlign = HorizontalAlignment.Right, MyPermitirZerado = true };
+            Label lblValor = new() { Text = "Valor:", Location = new Point(lblCol, rowControl) };
+            //
+            myTextBoxNumericos txtValor = new()
+            {
+                Location = new Point(txtCol, rowControl),
+                Name = "txtValor",
+                Width = larguraValor,
+                Text = "0,00",
+                TextAlign = HorizontalAlignment.Right,
+                MyMoeda = false,
+                MyCasasDecimais = 2,
+                MyPermitirZerado = true,
+                //MyForcarFormatacao = true, // ativar para formatar valores -- sem uso em MyFramework
+                MaxLength = maxLenghttValor
+            };
 
             // Adiciona os controles ao painel central
+            // id
             //this.pnlCentral.Controls.Add(lblId);
             //this.pnlCentral.Controls.Add(txtId);
-
+            //
             this.pnlCentral.Controls.Add(lblNome);
             this.pnlCentral.Controls.Add(txtNome);
             this.pnlCentral.Controls.Add(lblDescricao);
@@ -248,6 +129,155 @@ namespace FestasApp.Views.FestasPacotes
             this.Height = pnlTitulo.Height + alturaControles + pnlRodape.Height;
             // Ajusta a largura do formulário
             this.Width = larguraTotal;
+        }
+        //
+        private void TstbtnSalvar_Click(object? sender, EventArgs e)
+        {
+            // Testa a operacao e configura os controles...
+            switch (operacao)
+            {
+                case OperacaoCRUD.NOVO:
+                    SalvarItensFestas();
+                    break;
+                case OperacaoCRUD.EDITAR:
+                    SalvarItensFestas();
+                    break;
+                case OperacaoCRUD.EXCLUIR:
+                    DeletarRegistro();
+                    break;
+            }
+        }
+        //
+        private async void SalvarItensFestas()
+        {
+            var txtNome = this.pnlCentral.Controls["txtNome"] as myTextBox;
+            var txtDescricao = this.pnlCentral.Controls["txtDescricao"] as myTextBox;
+            var txtDuracao = this.pnlCentral.Controls["txtDuracao"] as myTextBox;
+            var txtValor = this.pnlCentral.Controls["txtValor"] as myTextBoxNumericos;
+
+            bool isValid = await ValidarControles(txtNome!, txtDescricao!, txtDuracao!, txtValor!);
+            if (!isValid)
+                return;
+            
+            // Recupera os valores dos controles
+            var nome = txtNome!.Text ?? string.Empty;
+            var descricao = txtDescricao!.Text ?? string.Empty;
+            var duracao = txtDuracao!.Text ?? string.Empty;
+            double valor = double.Parse(0 + txtValor!.Text);
+            //double.TryParse(txtValor.Text, out double valor);
+
+            // Cria uma instância da classe clsFestasPacotes e preenche os dados sem passar o ID
+            clsFestasPacotes item = new(nome, descricao, duracao, valor);
+            try
+            {
+                if (operacao == OperacaoCRUD.NOVO)
+                {
+                    // Tenta adicionar o pacote de festa ao banco de dados
+                    if (repPacotesEF.AddItem(item))
+                    {
+                        await myUtilities.myMessageBox(this, "Pacote de Festas adicionado com sucesso!", "Pacote de Festas");
+                        PacoteAtual = item; // nova classe publica para ser taratada em formfestasCRUD
+                        this.Close();
+                    }
+                    else
+                    {
+                        await myUtilities.myMessageBox(this, "Falha ao adicionar o Pacote de Festas.", "Pacote de Festas");
+                    }
+                }
+                //
+                // continua o código...
+                //
+                else if (operacao == OperacaoCRUD.EDITAR)
+                {
+                    // Tenta editar o item de festa no banco de dados
+                    if (repPacotesEF.AlterItem(idRegistro!.Value, item))
+                    {
+                        await myUtilities.myMessageBox(this, "Pacote de Festas alterado com sucesso!", "Pacote de Festas");
+                        this.Close();
+                    }
+                    else
+                    {
+                        await myUtilities.myMessageBox(this, "Falha ao alterar o Pacote de Festas.", "Pacote de Festas");
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                await myUtilities.myMessageBox(this, $"Falha ao salvar Item. Erro: {ex.Message}", "Pacote de Festas");
+            }
+        }
+        //
+        private async Task<bool> ValidarControles(myTextBox txtNome, myTextBox txtDescricao, myTextBox txtDuracao, myTextBoxNumericos txtValor)
+        {
+            // Validação dos controles - Verifica se todos os campos necessários estão preenchidos
+            if (string.IsNullOrEmpty(txtNome.Text))
+            {
+                await myUtilities.myMessageBox(this, "Por favor, preencha o nome do Pacote.", "Pacote de Festas");
+                txtNome.Focus();
+                return false;
+            }
+            //
+            if (string.IsNullOrEmpty(txtDescricao.Text))
+            {
+                await myUtilities.myMessageBox(this, "Por favor, preencha a descrição do Pacote.", "Pacote de Festas");
+                txtDescricao.Focus();
+                return false;
+            }
+            //
+            if (string.IsNullOrEmpty(txtDuracao.Text))
+            {
+                await myUtilities.myMessageBox(this, "Por favor, preencha a duração do Pacote.", "Pacote de Festas");
+                txtDuracao.Focus();
+                return false;
+            }
+            
+            // Tenta converter o valor de 'txtValor' para double
+            if (!double.TryParse(txtValor.Text, out double valor))
+            {
+                await myUtilities.myMessageBox(this, "Por favor, insira um valor válido.", "Pacote de Festas");
+                txtValor.Focus();
+                return false;
+            }
+
+            return true;
+        }
+        //
+        private async void DeletarRegistro()
+        {
+            // Exibe a mensagem de confirmação usando MessageBox.Show
+            var message = $"""
+                        Deseja Excluir o Pacote {pacotesFestas.pct_nome} ?
+                        
+                        Esta ação não poderá ser desfeita!
+                        """;
+            var result = await myUtilities.myMessageBox(this, message, "Excluir Item", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+            if (result == DialogResult.Yes)
+            {
+                try
+                {
+                    // Chama o método para excluir o cliente
+                    if (repPacotesEF.DeleteItem(idRegistro!.Value))
+                    {
+                        this.Close();
+                        return;
+                    }
+                    else
+                    {
+                        // Exibe a mensagem de erro se a exclusão falhar
+                        await myUtilities.myMessageBox(this, "Erro ao excluir Pacote de festa!", "Item Excluir", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                catch (MySqlException mysqlEx)
+                {
+                    await myUtilities.myMessageBox(this, $"Erro no banco de dados: {mysqlEx.Message}", "Erro SQL", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                catch (Exception ex)
+                {
+                    await myUtilities.myMessageBox(this, ex.Message, "Item Excluir", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
         //
         private void SetOperacao()
@@ -274,7 +304,7 @@ namespace FestasApp.Views.FestasPacotes
         }
         //
         // mostra dados do registro selecionado
-        private void MostrarRegistro()
+        private async void MostrarRegistro()
         {
             try
             {
@@ -283,15 +313,38 @@ namespace FestasApp.Views.FestasPacotes
 
                 if (item != null)
                 {
-                    var txtNome = this.pnlCentral.Controls["txtNome"] as TextBox;
-                    var txtDescricao = this.pnlCentral.Controls["txtDescricao"] as TextBox;
-                    var txtDuracao = this.pnlCentral.Controls["txtDuracao"] as TextBox;
-                    var txtValor = this.pnlCentral.Controls["txtValor"] as TextBox;
-
-                    if (txtNome != null) txtNome.Text = item.pct_nome;
-                    if (txtDescricao != null) txtDescricao.Text = item.pct_descricao;
-                    if (txtDuracao != null) txtDuracao.Text = item.pct_duracao ?? string.Empty;
-                    if (txtValor != null) txtValor.Text = (item.pct_valor)?.ToString("F2") ?? "0,00";
+                    //
+                    var txtNome = this.pnlCentral.Controls["txtNome"] as myTextBox;
+                    var txtDescricao = this.pnlCentral.Controls["txtDescricao"] as myTextBox;
+                    var txtDuracao = this.pnlCentral.Controls["txtDuracao"] as myTextBox;
+                    var txtValor = this.pnlCentral.Controls["txtValor"] as myTextBoxNumericos;
+                    //
+                    if (txtNome != null)
+                    {
+                        txtNome.Text = item.pct_nome;
+                        //int maxLength = myFunctions.GetMaxLength("tblfestaspacotes", "pct_nome");
+                        //if (maxLength > 0) txtNome.MaxLength = maxLength;
+                    }
+                    //
+                    if (txtDescricao != null)
+                    {
+                        txtDescricao.Text = item.pct_descricao;
+                        //int maxLength = myFunctions.GetMaxLength("tblfestaspacotes", "pct_descricao");
+                        //if (maxLength > 0) txtDescricao.MaxLength = maxLength;
+                    }
+                    //
+                    if (txtDuracao != null)
+                    {
+                        txtDuracao.Text = item.pct_duracao ?? string.Empty;
+                        //int maxLength = myFunctions.GetMaxLength("tblfestaspacotes", "pct_duracao");
+                        //if (maxLength > 0) txtDuracao.MaxLength = maxLength;
+                    }
+                    //
+                    if (txtValor != null)
+                    {
+                        txtValor.Text = (item.pct_valor)?.ToString("N2") ?? "0,00";
+                        //txtValor.MaxLength = 12;
+                    }
                 }
                 else
                 {
@@ -301,7 +354,7 @@ namespace FestasApp.Views.FestasPacotes
             }
             catch (Exception ex)
             {
-                myUtilities.myMessageBox(this, $"Erro ao preencher dados do Pacote: {ex.Message}");
+                await myUtilities.myMessageBox(this, $"Erro ao preencher dados do Pacote: {ex.Message}");
             }
         }
 

@@ -62,15 +62,15 @@ namespace FestasApp.Views.Usuarios
         }
         //
         // btn NOVO (CREATE)
-        private void TstbtnNovo_Click(object? sender, EventArgs e)
+        private async void TstbtnNovo_Click(object? sender, EventArgs e)
         {
             // incrementar Lógica do evento do botão
             clsUsuarios usuario = new clsUsuarios(); // usuario para passar
             OperacaoCRUD operacao = OperacaoCRUD.NOVO;
             FormUsuariosCRUD frm = new FormUsuariosCRUD(usuario, operacao);
 
-            // Usar a CreateModalOverlay para exibir o FormClientesCRUD
-            FormMenuMain.ShowModalOverlay(frm);
+            // Usar a CreateModalOverlayAsync para exibir o FormClientesCRUD
+            await FormMenuMain.ShowModalOverlay(frm);
 
             // quando volta do CRUD, atualiza dataGrid com dados da tabela no BD
             CarregarDtgUsuarios();
@@ -96,7 +96,7 @@ namespace FestasApp.Views.Usuarios
             OperacaoCRUD operacao = OperacaoCRUD.EXCLUIR;
             AbrirFormCRUD(operacao);
         }
-        //---------------------------------------------------------------
+        //-----------------------
         // Abrir Formulário CRUD
         private void AbrirFormCRUD(OperacaoCRUD operacao)
         {

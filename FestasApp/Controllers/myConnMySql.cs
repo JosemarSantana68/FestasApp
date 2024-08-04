@@ -26,7 +26,7 @@ namespace FestasApp.Controllers
         // Método para testar a conexão e atualizar status no label
         public static bool TestarConexao()
         {
-            var formMenuMain = FormMenuMain.Instance;
+            var formMenuMain = FormMenuMain.InstanceFrmMain;
             try
             {
                 using (MySqlConnection conn = new(strConnMySql))

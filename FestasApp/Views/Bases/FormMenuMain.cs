@@ -5,10 +5,10 @@
 //   Linguagem: C# .NET
 //
 //   Inicio: 23/05/2024
-//   Criação deste Módulo: 23/05/2024
-//   Ultima Alteração: 18/06/2024
+//   Criaï¿½ï¿½o deste Mï¿½dulo: 23/05/2024
+//   Ultima Alteraï¿½ï¿½o: 18/06/2024
 //   
-//   FORMULÁRIO PRINCIPAL
+//   FORMULï¿½RIO PRINCIPAL
 //
 //----------------------------------------------------------------
 
@@ -23,41 +23,41 @@ namespace FestasApp
         // dicionario para os forms
         private Dictionary<Type, (Form form, bool manterAberto)> openForms = new Dictionary<Type, (Form form, bool manterAberto)>();
 
-        // instancia formularios...
-        public static FormMenuMain? Instance { get; private set; }
+        // instancia formulÃ¡rios...
+        public static FormMenuMain? InstanceFrmMain { get; private set; }
 
         // construtor
         public FormMenuMain()
         {
-            /* Aqui é o lugar ideal para configurar:
-            1.Inicialização de componentes: Configuração básica dos controles que estarão no formulário (definição de propriedades visuais e comportamentais).
-            2.Event Handlers: Associação de eventos aos seus respectivos manipuladores, como clique de botão, alteração de texto, etc.
-            3.Definição de propriedades estáticas: Propriedades que não vão depender de nenhuma lógica dinâmica ou de dados que precisam ser carregados de fontes externas.
+            /* Aqui ï¿½ o lugar ideal para configurar:
+            1.Inicializaï¿½ï¿½o de componentes: Configuraï¿½ï¿½o bï¿½sica dos controles que estarï¿½o no formulï¿½rio (definiï¿½ï¿½o de propriedades visuais e comportamentais).
+            2.Event Handlers: Associaï¿½ï¿½o de eventos aos seus respectivos manipuladores, como clique de botï¿½o, alteraï¿½ï¿½o de texto, etc.
+            3.Definiï¿½ï¿½o de propriedades estï¿½ticas: Propriedades que nï¿½o vï¿½o depender de nenhuma lï¿½gica dinï¿½mica ou de dados que precisam ser carregados de fontes externas.
              */
 
             InitializeComponent();
 
-            this.IsMdiContainer = true; // Define o formulário como container MDI
+            this.IsMdiContainer = true; // Define o formulï¿½rio como container MDI
 
-            Instance = this; // Atribui o valor dentro do construtor
+            InstanceFrmMain = this; // Atribui o valor dentro do construtor
             ConfigurarFrmMenu();
-            // Testar a conexão ao iniciar o formulário
+            // Testar a conexï¿½o ao iniciar o formulï¿½rio
             AtualizarStatusConexao();
-            // Chama o método para configurar propriedades MDI...
+            // Chama o mï¿½todo para configurar propriedades MDI...
             MdiPropiedades();
         }
         //
         // evento load
         private void FormMenuBase_Load(object sender, EventArgs e)
         {
-            /* Aqui é o lugar ideal para configurar:
+            /* Aqui ï¿½ o lugar ideal para configurar:
             1.Carregamento de dados: Busca e carregamento de dados de fontes externas, como bancos de dados ou arquivos.
-            2.Inicialização de lógica de negócio: Qualquer lógica de inicialização que dependa de dados ou estado do sistema.
-            3.Configuração dinâmica: Configuração de controles com base em dados carregados dinamicamente ou estado da aplicação.
+            2.Inicializaï¿½ï¿½o de lï¿½gica de negï¿½cio: Qualquer lï¿½gica de inicializaï¿½ï¿½o que dependa de dados ou estado do sistema.
+            3.Configuraï¿½ï¿½o dinï¿½mica: Configuraï¿½ï¿½o de controles com base em dados carregados dinamicamente ou estado da aplicaï¿½ï¿½o.
              */
 
         }
-        // Método para atualizar o status da conexão
+        // Mï¿½todo para atualizar o status da conexï¿½o
         //public static bool ConexaoAtiva { get; private set; }
         //
         private void AtualizarStatusConexao()
@@ -79,10 +79,10 @@ namespace FestasApp
             }
         }
         //
-        // Configura propriedades específicas para o formulário MDI...
+        // Configura propriedades especï¿½ficas para o formulï¿½rio MDI...
         private void MdiPropiedades()
         {
-            // Utiliza o método de extensão ConfiguraBorda da classe clsMdiProperties
+            // Utiliza o mï¿½todo de extensï¿½o ConfiguraBorda da classe clsMdiProperties
             // para remover a borda (bevel) do cliente MDI...
             this.ConfiguraBorda(show: false);
 
@@ -90,26 +90,26 @@ namespace FestasApp
             MdiClient? mdiClient = Controls.OfType<MdiClient>().FirstOrDefault();
             if (mdiClient != null)
             {
-                // Define a cor de fundo do MdiClient para um tom específico...
+                // Define a cor de fundo do MdiClient para um tom especï¿½fico...
                 mdiClient.BackColor = Color.FromArgb(232, 234, 237);
                 //mdiClient.BackColor = Color.White;
             }
         }
         // 
         //----------------------------------------------
-        // Configurações iniciais do formulário...
+        // Configuraï¿½ï¿½es iniciais do formulï¿½rio...
         private void ConfigurarFrmMenu()
         {
-            // Configurações de exibição do formulário
+            // Configuraï¿½ï¿½es de exibiï¿½ï¿½o do formulï¿½rio
             this.FormBorderStyle = FormBorderStyle.None;
 
-            // Ajusta o estado do formulário para maximizado
+            // Ajusta o estado do formulï¿½rio para maximizado
             this.WindowState = FormWindowState.Maximized;
             //
             picRestaurar.Visible = true;
             picMaximizar.Visible = false;
             //
-            // Associações de eventos MouseEnter e MouseLeave para os PictureBox...
+            // Associaï¿½ï¿½es de eventos MouseEnter e MouseLeave para os PictureBox...
             AssociarPicEventosMouse(picMaximizar);
             AssociarPicEventosMouse(picMinimizar);
             AssociarPicEventosMouse(picRestaurar);
@@ -123,23 +123,26 @@ namespace FestasApp
             picture.MouseLeave += Pic_MouseLeave;
         }
         //
-        // Eventos para maximizar, minimizar, restaurar e fechar o formulário
+        // Eventos para maximizar, minimizar, restaurar e fechar o formulï¿½rio
         private void PicMaximizar_Click(object sender, EventArgs e)
         {
             this.WindowState = FormWindowState.Maximized;
             picMaximizar.Visible = false;
             picRestaurar.Visible = true;
         }
+        //
         private void PicMinimizar_Click(object sender, EventArgs e)
         {
             this.WindowState = FormWindowState.Minimized;
         }
+        //
         private void PicRestaurar_Click(object sender, EventArgs e)
         {
             this.WindowState = FormWindowState.Normal;
             picRestaurar.Visible = false;
             picMaximizar.Visible = true;
         }
+        //
         private void PicFechar_Click(object sender, EventArgs e)
         {
             Application.Exit();
@@ -166,24 +169,25 @@ namespace FestasApp
         {
             if (sender is PictureBox pic)
             {
-                pic.BackColor = Color.Transparent; // ou a cor original que você deseja
+                pic.BackColor = Color.Transparent; // ou a cor original que vocï¿½ deseja
             }
         }
 
-        #region  métodos mover formulario...
+        //
+        #region  MÃ©todos para mover formulario...
         //---------------------
-        // Método e bibliotecas para mover o formulário...
+        // Mï¿½todo e bibliotecas para mover o formulï¿½rio...
         [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
         private extern static void ReleaseCapture();
 
-        // SUGESTÃO GPT...
+        // SUGESTï¿½O GPT...
         //[LibraryImport("user32.DLL")]
         //private static partial void ReleaseCapture();
 
         [DllImport("user32.DLL", EntryPoint = "SendMessage")]
         private extern static void SendMessage(System.IntPtr hWnd, int wMsg, int wParam, int lParam);
 
-        // SUGESTÃO GPT...
+        // SUGESTï¿½O GPT...
         //[LibraryImport("user32.DLL")]
         //private static partial void SendMessage(IntPtr hWnd, int wMsg, int wParam, int lParam);
 
@@ -192,21 +196,22 @@ namespace FestasApp
             ReleaseCapture();
             SendMessage(this.Handle, 0x112, 0xf012, 0);
 
-            // Verifica se o formulário mudou de maximizado para normal
+            // Verifica se o formulï¿½rio mudou de maximizado para normal
             if (this.WindowState == FormWindowState.Normal)
             {
                 picRestaurar.Visible = false;
                 picMaximizar.Visible = true;
             }
-        } // end mover formulário
-        #endregion mover formulários.
+        } // end mover formulï¿½rio
+        #endregion mover formulÃ¡rios.
 
-        #region menu lateral e sub menu finaceiro responsivo
+        //
+        #region Menu lateral e Sub menu finaceiro responsivo
         //--------------------------------------------------------------------------
         // MENU RESPONSIVO...
-        // Evento para ocultar ou mostrar o menu lateral ao clicar no botão btnMenu
+        // Evento para ocultar ou mostrar o menu lateral ao clicar no botï¿½o btnMenu
         //
-        // Indica se menu lateral está expandido...
+        // Indica se menu lateral estï¿½ expandido...
         private bool sidebarExpand = true;
         private void PicMenuBar_Click(object sender, EventArgs e)
         {
@@ -216,7 +221,7 @@ namespace FestasApp
         // Timer para movimentar o Menu barra Lateral...
         private void tmSidebarTransition_Tick(object sender, EventArgs e)
         {
-            // se o menu está expandido...
+            // se o menu estï¿½ expandido...
             if (sidebarExpand)
             {
                 pnlBarraLateralMenu.Width -= 10;
@@ -226,7 +231,7 @@ namespace FestasApp
                     tmSidebarTransition.Stop();
                 }
             }
-            // Se o menu está retraido...
+            // Se o menu estï¿½ retraido...
             else
             {
                 pnlBarraLateralMenu.Width += 10;
@@ -240,7 +245,7 @@ namespace FestasApp
         //
         // Evento para ocultar ou mostrar o SUBMENU-financeiro ao clicar no btnFinanceiro...
         //
-        // Indica se o submenu financeiro está expandido...
+        // Indica se o submenu financeiro estï¿½ expandido...
         private bool subMenuFinanceiroExpand = false;
         private void BtnFinanceiro_Click(object sender, EventArgs e)
         {
@@ -283,6 +288,9 @@ namespace FestasApp
             }
         }
         #endregion menu lateral e sub menu finaceiro responsivo
+
+        //
+        #region Chamadas Para Abrir FormulÃ¡rios
         // 
         // btn FESTAS...
         private void btnFestas_Click(object sender, EventArgs e)
@@ -319,12 +327,12 @@ namespace FestasApp
         {
             //AbrirFormulario(new FormUsuariosCadastro(), manterAberto: false);
 
-            Form frm = new FormUsuariosCadastro();
+            FormUsuariosCadastro frm = new();
 
-            // Verifica se o formulário FormUsuariosCadastro já está aberto antes de abrir um novo
+            // Verifica se o formulÃ¡rio FormUsuariosCadastro jÃ¡ estï¿½ aberto antes de abrir um novo
             if (!IsFormOpen(typeof(FormUsuariosCadastro)))
             {
-                // Chama o método para abrir o formulário FormUsuariosCadastro
+                // Chama o mï¿½todo para abrir o formulï¿½rio FormUsuariosCadastro
                 AbrirFormulario(frm, manterAberto: false);
             }
             else
@@ -333,30 +341,96 @@ namespace FestasApp
                 frm.Activate();
             }
         }
-        //
-        // Método que verifica se um formulário do tipo especificado está aberto
-        private bool IsFormOpen(Type formType)
+        #endregion
+
+        //-----------------------------------------------------------------------
+        // MÃ©todo que verifica se um formulï¿½rio do tipo especificado estÃ¡ aberto
+        private static bool IsFormOpen(Type formType)
         {
-            // Verifica todos os formulários abertos na aplicação
+            // Verifica todos os formulÃ¡rios abertos na aplicaÃ§Ã£o
             foreach (Form openForm in Application.OpenForms)
             {
-                // Se algum formulário aberto for do tipo especificado, retorna verdadeiro
+                // Se algum formulÃ¡rio aberto for do tipo especificado, retorna verdadeiro
                 if (openForm.GetType() == formType)
                 {
                     return true;
                 }
             }
-            // Se nenhum formulário aberto for do tipo especificado, retorna falso
+            // Se nenhum formulÃ¡rio aberto for do tipo especificado, retorna falso
             return false;
         }
+        //------------------------------
+        // mÃ©todo para ABRIR formulÃ¡rios
+        private async void AbrirFormulario(Form form, bool manterAberto = false)
+        {
+            try
+            {
+                Type formType = form.GetType();
+
+                // Fecha todos os formulÃ¡rios que nÃ¡o precisam ser mantidos abertos
+                foreach (var key in new List<Type>(openForms.Keys))
+                {
+                    if (!openForms[key].manterAberto && openForms[key].form != null)
+                    {
+                        openForms[key].form.Close(); // Fecha o formulï¿½rio
+                        openForms.Remove(key); // Remove do dicionï¿½rio
+                    }
+                }
+
+                // Verifica se o formulÃ¡rio jÃ¡ estÃ¡ aberto e ativo
+                if (openForms.ContainsKey(formType) && openForms[formType].form != null && !openForms[formType].form.IsDisposed)
+                {
+                    openForms[formType].form.Activate(); // Ativa o formulï¿½rio jÃ¡ aberto
+                }
+                else
+                {
+                    // Se o formulÃ¡rio jÃ¡ estava no dicionÃ¡rio, mas foi fechado, recria a instÃ¢ncia
+                    if (openForms.ContainsKey(formType) && openForms[formType].form != null && openForms[formType].form.IsDisposed)
+                    {
+                        openForms.Remove(formType); // Remove a entrada do dicionï¿½rio
+                    }
+
+                    // Configura o evento FormClosed para liberar recursos
+                    form.FormClosed += (sender, e) =>
+                    {
+                        if (!manterAberto)
+                        {
+                            openForms.Remove(formType); // Remove do dicionÃ¡rio
+                            form.Dispose(); // Libera recursos ao fechar
+                        }
+                        else
+                        {
+                            // Atualiza o dicionï¿½rio para refletir que o formulÃ¡rio foi fechado
+                            openForms[formType] = (null!, true); // Usa null-forgiving operator (!) para indicar que o valor pode ser null
+                        }
+                    };
+
+                    // Define o formulÃ¡rio como filho MDI e exibe
+                    form.MdiParent = this;
+                    form.Dock = DockStyle.Fill;
+
+                    //form.Show();
+                    await ShowModalOverlay(form, delay: 1000, modal: false);
+
+                    // Adiciona ou atualiza o formulÃ¡rio no dicionï¿½rio
+                    openForms[formType] = (form, manterAberto);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Tratamento de exceÃ§Ãµes
+                Console.WriteLine($"Erro ao abrir o formulÃ¡rio: {ex.Message}");
+            }
+        }
         //
-        // método para ABRIR formulários
-        private void AbrirFormulario(Form form, bool manterAberto = false)
+        //------------------------------
+        // mÃ©todo para ABRIR formulÃ¡rios
+        private void AbrirFormularioOLD(Form form, bool manterAberto = false)
         {
             Type formType = form.GetType();
             
             // Cria e mostra o FormLoading
-            using (FormLoading formLoading = new FormLoading(5000))
+            using (FormLoading formLoading = new FormLoading(form, 5000))
             {
                 formLoading.SetMessage("Carregando...");
                 formLoading.StartTimer();
@@ -365,27 +439,27 @@ namespace FestasApp
                 formLoading.TopMost = true;
                 formLoading.Show();
 
-                // Fecha todos os formulários que não precisam ser mantidos abertos
+                // Fecha todos os formulÃ¡rios que nÃ¡o precisam ser mantidos abertos
                 foreach (var key in new List<Type>(openForms.Keys))
                 {
                     if (!openForms[key].manterAberto && openForms[key].form != null)
                     {
-                        openForms[key].form.Close(); // Fecha o formulário
-                        openForms.Remove(key); // Remove do dicionário
+                        openForms[key].form.Close(); // Fecha o formulï¿½rio
+                        openForms.Remove(key); // Remove do dicionï¿½rio
                     }
                 }
 
-                // Verifica se o formulário já está aberto e ativo
+                // Verifica se o formulÃ¡rio jÃ¡ estÃ¡ aberto e ativo
                 if (openForms.ContainsKey(formType) && openForms[formType].form != null && !openForms[formType].form.IsDisposed)
                 {
-                    openForms[formType].form.Activate(); // Ativa o formulário já aberto
+                    openForms[formType].form.Activate(); // Ativa o formulï¿½rio jÃ¡ aberto
                 }
                 else
                 {
-                    // Se o formulário já estava no dicionário, mas foi fechado, recria a instância
+                    // Se o formulï¿½rio jÃ¡ estava no dicionÃ¡rio, mas foi fechado, recria a instÃ¢ncia
                     if (openForms.ContainsKey(formType) && openForms[formType].form != null && openForms[formType].form.IsDisposed)
                     {
-                        openForms.Remove(formType); // Remove a entrada do dicionário
+                        openForms.Remove(formType); // Remove a entrada do dicionï¿½rio
                     }
 
                     // Configura o evento FormClosed para liberar recursos
@@ -393,74 +467,83 @@ namespace FestasApp
                     {
                         if (!manterAberto)
                         {
-                            openForms.Remove(formType); // Remove do dicionário
+                            openForms.Remove(formType); // Remove do dicionÃ¡rio
                             form.Dispose(); // Libera recursos ao fechar
                         }
                         else
                         {
-                            // Atualiza o dicionário para refletir que o formulário foi fechado
+                            // Atualiza o dicionï¿½rio para refletir que o formulï¿½rio foi fechado
                             openForms[formType] = (null!, true); // Usa null-forgiving operator (!) para indicar que o valor pode ser null
                         }
                     };
 
-                    // Define o formulário como filho MDI e exibe
+                    // Define o formulï¿½rio como filho MDI e exibe
                     form.MdiParent = this;
                     form.Dock = DockStyle.Fill;
 
                     // Adiciona um handler para o evento Shown
                     form.Shown += (sender, e) =>
                     {
-                        // Fecha o FormLoading após o formulário estar completamente montado
+                        // Fecha o FormLoading apï¿½s o formulï¿½rio estar completamente montado
                         formLoading.Close();
                     };
 
-                    form.Show(); // Exibe o formulário
+                    form.Show(); // Exibe o formulÃ¡rio
                     //formLoading.Close();
 
-                    // Adiciona ou atualiza o formulário no dicionário
+                    // Adiciona ou atualiza o formulÃ¡rio no dicionï¿½rio
                     openForms[formType] = (form, manterAberto);
                 }
             }
         }
         //
         //***********************************************************************************************************
-        // Para evitar a necessidade de verificar a nulidade de FormMenuBase.Instance repetidamente
-        // antes de chamar myUtilities.myMessageBox,
-        // criar um método auxiliar dentro da classe FormMenuBase que encapsule essa verificação.
-        // Dessa forma, centraliza a verificação em um único lugar e simplifica o código em outras partes do programa.
+        // Para evitar a necessidade de verificar a nulidade de FormMenuMain.Instance repetidamente
+        // antes de chamar await myUtilities.myMessageBox,
+        // esse mÃ©todo auxiliar dentro da classe FormMenuMain encapsula essa verificaÃ§Ã£o.
+        // Dessa forma, centraliza a verificaÃ§Ã£o em um Ãºnico lugar e simplifica o cÃ³digo em outras partes do programa.
         //***********************************************************************************************************
         //
-        public static void ShowMyMessageBox(string mensagem, string titulo = "Mensagem", MessageBoxButtons botoes = MessageBoxButtons.OK, MessageBoxIcon icone = MessageBoxIcon.Information, int opacidade = 60, Color cor = default)
+        // MÃ©todo auxiliar para exibir menssagens com bakground modal
+        public async static void ShowMyMessageBox(string mensagem, 
+                                            string titulo = "Mensagem", 
+                                            MessageBoxButtons botoes = MessageBoxButtons.OK, 
+                                            MessageBoxIcon icone = MessageBoxIcon.Information, 
+                                            int opacidade = 60, 
+                                            Color cor = default)
         {
-            if (Instance != null)
+            if (InstanceFrmMain != null)
             {
-                myUtilities.myMessageBox(Instance, mensagem, titulo, botoes, icone, opacidade, cor);
+                await myUtilities.myMessageBox(InstanceFrmMain, mensagem, titulo, botoes, icone, opacidade, cor);
             }
             else
             {
-                // Opcional: lançar uma exceção ou logar o erro caso a Instance seja nula
-                throw new InvalidOperationException("FormMenuBase.Instance não está inicializada.");
+                // Opcional: lanï¿½ar uma exceï¿½ï¿½o ou logar o erro caso a InstanceFrmMain seja nula
+                throw new InvalidOperationException("FormMenuMain.Instance nÃ£o estÃ¡ inicializada.");
             }
         }
+
         //
-        // método auxiliar para exibir formularios CreateModalOverlay...
-        public static void ShowModalOverlay(Form? frmExibir, 
+        // mÃ©todo auxiliar para exibir formularios CreateModalOverlayAsync...
+        public static async Task ShowModalOverlay(Form? frmExibir, 
                                             Action? mostrarMensagem = null, 
                                             int opacidade = 60, 
                                             Color cor = default,
-                                            int delay = 1000)
+                                            int delay = 1000,
+                                            bool modal = true)
         {
-            if (Instance != null)
+            if (InstanceFrmMain != null)
             {
-                // Mostra o formulário a ser carregado
-                myUtilities.CreateModalOverlay(Instance, mostrarMensagem, frmExibir, opacidade, cor, delay);
+                // Mostra o formulÃ¡rio a ser carregado
+                await myUtilities.CreateModalOverlayAsync(InstanceFrmMain, mostrarMensagem, frmExibir, opacidade, cor, delay, modal);
             }
             else
             {
-                // Opcional: lançar uma exceção ou logar o erro caso a Instance seja nula
-                throw new InvalidOperationException("FormMenuBase.Instance não está inicializada.");
+                // Opcional: lanï¿½ar uma exceï¿½ï¿½o ou logar o erro caso a InstanceFrmMain seja nula
+                throw new InvalidOperationException("FormMenuMain.Instance nÃ£o estÃ¡ inicializada.");
             }
         }
+        //
 
     } // end class FormMenuBase...
 } // end namespace

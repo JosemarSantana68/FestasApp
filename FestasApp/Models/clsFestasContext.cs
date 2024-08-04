@@ -1,4 +1,4 @@
-﻿//***********************************************************
+﻿//-----------------------------------------------------------------------------------
 //
 //   Festa.Com - Aplicativo para Controle de Festas & Eventos
 //   Autor: Josemar Santana
@@ -6,11 +6,11 @@
 //
 //   Inicio de criação do aplicativo: 23/05/2024
 //   Criação do módulo: 29/06/2024
-//   Ultima Alteração: 29/06/2024
+//   Ultima Alteração: 30/07/2024
 //   
 //   CLASSE para auxiliar nas relações entre classes-objetos com  ENTITY FRAMEWORK
 //
-//************************************************************
+//-----------------------------------------------------------------------------------
 
 namespace FestasApp.Models
 {
@@ -33,7 +33,6 @@ namespace FestasApp.Models
         // construtor
         //public clsFestasContext(DbContextOptions<clsFestasContext> options) : base(options) { }
 
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
@@ -45,29 +44,34 @@ namespace FestasApp.Models
                     optionsBuilder.UseMySql(conexaoStr, ServerVersion.AutoDetect(conexaoStr));
                 }
             }
-            catch (Exception)
-            {
-            }
+            catch (Exception) { }
         }
+        //
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Definições de relacionamentos com tblfestas
+
+            //
+            // Clientes
+            //
             modelBuilder.Entity<clsFestas>()
                 .HasOne(f => f.Cliente) 
                 .WithMany()
-                .HasForeignKey(f => f.fest_cli_id); // tblclientes
-            
+                .HasForeignKey(f => f.fest_cli_id); // festas -> tblclientes
+            //
             // Usuarios
+            //
             modelBuilder.Entity<clsFestas>()
                 .HasOne(f => f.Usuario) 
                 .WithMany()
-                .HasForeignKey(f => f.fest_user_id); // tblusuarios
-            
+                .HasForeignKey(f => f.fest_user_id); // festas -> tblusuarios
+            //
             // Pacotes
+            //
             modelBuilder.Entity<clsFestas>()
                 .HasOne(f => f.Pacote)
                 .WithMany()
-                .HasForeignKey(f => f.fest_pct_id); // tblfestapacotes
+                .HasForeignKey(f => f.fest_pct_id); // festas -> tblfestapacotes
 
             modelBuilder.Entity<clsFestasPacotes>()
                 .Property(p => p.pct_descricao)
@@ -81,39 +85,46 @@ namespace FestasApp.Models
 
             modelBuilder.Entity<clsFestasPacotes>()
                 .Property(p => p.pct_valor)
-                    //.HasDefaultValue(0)
-                    .IsRequired(false); // Propriedade anulável
-           
+                //.HasDefaultValue(0)
+                .IsRequired(false); // Propriedade anulável
+
+            //
             // Temas
+            //
             modelBuilder.Entity<clsFestas>()
                 .HasOne(f => f.Tema)
                 .WithMany()
-                .HasForeignKey(f => f.fest_tema_id); // tblfestastemas
+                .HasForeignKey(f => f.fest_tema_id); // festas -> tblfestastemas
 
             modelBuilder.Entity<clsFestasTemas>()
                 .Property(t => t.tema_descricao)
                 .HasDefaultValue("Não Especificado")
                 .IsRequired(false); // Propriedade anulável
-            
+
+            //
             // Espacos
+            //
             modelBuilder.Entity<clsFestas>()
                 .HasOne(f => f.Espaco)
                 .WithMany()
-                .HasForeignKey(f => f.fest_espc_id); // tblfestasespacos
-
+                .HasForeignKey(f => f.fest_espc_id); // festas -> tblfestasespacos
+            //
             // Status
+            //
             modelBuilder.Entity<clsFestas>()
                 .HasOne(f => f.Status)
                 .WithMany()
-                .HasForeignKey(f => f.fest_stt_id); // tblfestasstatus
-
+                .HasForeignKey(f => f.fest_stt_id); // festas -> tblfestasstatus
+            //
             // TipoEvento
+            //
             modelBuilder.Entity<clsFestas>()
                 .HasOne(f => f.TipoEvento)
                 .WithMany()
-                .HasForeignKey(f => f.fest_tpEv_id); // tblfestastipoevento
-
+                .HasForeignKey(f => f.fest_tpEv_id); // festas -> tblfestastipoevento
+            //
             // Detalhes
+            // Relacionamento clsFestasDetalhes
             modelBuilder.Entity<clsFestasDetalhes>()
                 .HasOne(d => d.Festas)
                 .WithMany(f => f.Detalhes)
@@ -126,16 +137,14 @@ namespace FestasApp.Models
 
             modelBuilder.Entity<clsFestasDetalhes>()
                 .Property(a => a.detfest_iniciohora)
-                    //.HasDefaultValue(0)
-                    .IsRequired(false); // Propriedade anulável
+                .IsRequired(false); // Propriedade anulável
 
             modelBuilder.Entity<clsFestasDetalhes>()
                 .Property(a => a.detfest_fimhora)
-                    //.HasDefaultValue(0)
-                    .IsRequired(false); // Propriedade anulável
-
-
+                .IsRequired(false); // Propriedade anulável
+            //
             // Adicionais
+            // Relacionamento clsFestasAdicionais
             modelBuilder.Entity<clsFestasAdicionais>()
                 .HasOne(a => a.Festas)
                 .WithMany(f => f.Adicionais)
@@ -143,15 +152,14 @@ namespace FestasApp.Models
 
             modelBuilder.Entity<clsFestasAdicionais>()
                 .Property(a => a.add_qtde)
-                    //.HasDefaultValue(0)
-                    .IsRequired(false); // Propriedade anulável
+                .IsRequired(false); // Propriedade anulável
 
             modelBuilder.Entity<clsFestasAdicionais>()
                 .Property(a => a.add_valor)
-                //.HasDefaultValue(0)
                 .IsRequired(false); // Propriedade anulável
-
+            //
             // ItensFestas
+            // Relacionamento clsFestasItens
             modelBuilder.Entity<clsFestasAdicionais>()
                 .HasOne(a => a.ItensFestas)
                 .WithMany()
@@ -169,10 +177,9 @@ namespace FestasApp.Models
 
             modelBuilder.Entity<clsFestasItens>()
                 .Property(i => i.itensfest_valor)
-                //.HasDefaultValue(0)
                 .IsRequired(false); // Propriedade anulável
-
         }
         //
+
     } // end class clsFestasContext
 } // end namespace FestasApp.Models

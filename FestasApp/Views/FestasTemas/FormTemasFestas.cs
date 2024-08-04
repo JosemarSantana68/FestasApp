@@ -20,6 +20,7 @@ namespace FestasApp.Views.FestasTemas
         // declarar instâncias
         private readonly repTemasEF temaFestas = new();
         private readonly OperacaoCRUD operacao = new();
+        public clsFestasTemas TemaAtual { get; private set; } = new();
         private int? idRegistro;
 
         public FormTemasFestas(clsParam idRegistro, OperacaoCRUD operacao)
@@ -65,7 +66,7 @@ namespace FestasApp.Views.FestasTemas
             }
         }
         //
-        private void SalvarRegistro()
+        private async void SalvarRegistro()
         {
             var txtNome = this.pnlCentral.Controls["txtNome"] as TextBox;
             var txtDescricao = this.pnlCentral.Controls["txtDescricao"] as TextBox;
@@ -74,7 +75,7 @@ namespace FestasApp.Views.FestasTemas
             //ValidarForm();
             if (string.IsNullOrEmpty(txtNome!.Text) || string.IsNullOrEmpty(txtDescricao!.Text))
             {
-                myUtilities.myMessageBox(this, "Por favor, preencha nome do Temas das Festas.", "Temas das Festas");
+                await myUtilities.myMessageBox(this, "Por favor, preencha nome do Temas das Festas.", "Temas das Festas");
                 return;
             }
 
@@ -92,12 +93,15 @@ namespace FestasApp.Views.FestasTemas
                     // Tenta adicionar o item de festa ao banco de dados
                     if (repTemasEF.AddItem(item))
                     {
-                        myUtilities.myMessageBox(this, "Tema de Festas adicionado com sucesso!", "Temas de Festas");
+                        await myUtilities.myMessageBox(this, "Tema de Festas adicionado com sucesso!", "Temas de Festas");
+                        
+                        TemaAtual = item;
+
                         this.Close();
                     }
                     else
                     {
-                        myUtilities.myMessageBox(this, "Falha ao adicionar o Tema de Festas.", "Temas de Festas");
+                        await myUtilities.myMessageBox(this, "Falha ao adicionar o Tema de Festas.", "Temas de Festas");
                     }
                 }
                 else if (operacao == OperacaoCRUD.EDITAR)
@@ -105,22 +109,22 @@ namespace FestasApp.Views.FestasTemas
                     // Tenta adicionar o item de festa ao banco de dados
                     if (repTemasEF.AlterItem(idRegistro!.Value, item))
                     {
-                        myUtilities.myMessageBox(this, "Tema da Festas alterado com sucesso!", "Temas de Festas");
+                        await myUtilities.myMessageBox(this, "Tema da Festas alterado com sucesso!", "Temas de Festas");
                         this.Close();
                     }
                     else
                     {
-                        myUtilities.myMessageBox(this, "Falha ao alterar o Tema da Festas.", "Temas de Festas");
+                        await myUtilities.myMessageBox(this, "Falha ao alterar o Tema da Festas.", "Temas de Festas");
                     }
                 }
             }
             catch (Exception ex)
             {
-                myUtilities.myMessageBox(this, $"Falha ao salvar Tema. Erro: {ex.Message}", "Temas de Festas");
+                await myUtilities.myMessageBox(this, $"Falha ao salvar Tema. Erro: {ex.Message}", "Temas de Festas");
             }
         }
         //
-        private void DeletarRegistro()
+        private async void DeletarRegistro()
         {
             // Exibe a mensagem de confirmação usando MessageBox.Show
             var message = $"""
@@ -128,7 +132,7 @@ namespace FestasApp.Views.FestasTemas
                         
                         Esta ação não poderá ser desfeita!
                         """;
-            var result = myUtilities.myMessageBox(this, message, "Excluir Item", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            var result = await myUtilities.myMessageBox(this, message, "Excluir Item", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
             if (result == DialogResult.Yes)
             {
@@ -143,16 +147,16 @@ namespace FestasApp.Views.FestasTemas
                     else
                     {
                         // Exibe a mensagem de erro se a exclusão falhar
-                        myUtilities.myMessageBox(this, "Erro ao excluir Tema da festas!", "Temas Excluir", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        await myUtilities.myMessageBox(this, "Erro ao excluir Tema da festas!", "Temas Excluir", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
                 catch (MySqlException mysqlEx)
                 {
-                    myUtilities.myMessageBox(this, $"Erro no banco de dados: {mysqlEx.Message}", "Erro SQL", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    await myUtilities.myMessageBox(this, $"Erro no banco de dados: {mysqlEx.Message}", "Erro SQL", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 catch (Exception ex)
                 {
-                    myUtilities.myMessageBox(this, ex.Message, "Tema Excluir", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    await myUtilities.myMessageBox(this, ex.Message, "Tema Excluir", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -225,7 +229,7 @@ namespace FestasApp.Views.FestasTemas
         }
         //
         // mostra dados do registro selecionado
-        private void MostrarRegistro()
+        private async void MostrarRegistro()
         {
             try
             {
@@ -253,12 +257,12 @@ namespace FestasApp.Views.FestasTemas
                 //else
                 //{
                 //    // Exibe mensagem caso o registro não seja encontrado
-                //    // myUtilities.myMessageBox(this, "Registro não encontrado.");
+                //    // await myUtilities.myMessageBox(this, "Registro não encontrado.");
                 //}
             }
             catch (Exception ex)
             {
-                myUtilities.myMessageBox(this, $"Erro ao preencher dados do Tema: {ex.Message}");
+                await myUtilities.myMessageBox(this, $"Erro ao preencher dados do Tema: {ex.Message}");
             }
         }
 

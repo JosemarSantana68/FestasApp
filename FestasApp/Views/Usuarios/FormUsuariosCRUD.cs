@@ -85,7 +85,7 @@ namespace FestasApp.Views.Usuarios
         }
         //
         // DELETAR usuario
-        private void DeletarUsuario()
+        private async void DeletarUsuario()
         {
             try
             {
@@ -95,7 +95,7 @@ namespace FestasApp.Views.Usuarios
                         
                         Esta ação não poderá ser desfeita!
                         """;
-                var result = myUtilities.myMessageBox(this, message, "Excluir Usuário", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                var result = await myUtilities.myMessageBox(this, message, "Excluir Usuário", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
                 if (result == DialogResult.Yes)
                 {
@@ -108,34 +108,35 @@ namespace FestasApp.Views.Usuarios
                     else
                     {
                         // Exibe a mensagem de erro se a exclusão falhar
-                        myUtilities.myMessageBox(this, "Erro ao excluir usuário!", "Usuário Excluir", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        await myUtilities.myMessageBox(this, "Erro ao excluir usuário!", "Usuário Excluir", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }
             catch (MySqlException mysqlEx)
             {
-                myUtilities.myMessageBox(this, $"Erro no banco de dados: {mysqlEx.Message}", "Erro SQL", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                await myUtilities.myMessageBox(this, $"Erro no banco de dados: {mysqlEx.Message}", "Erro SQL", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
-                myUtilities.myMessageBox(this, ex.Message, "Usuário Excluir", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                await myUtilities.myMessageBox(this, ex.Message, "Usuário Excluir", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         //
         // EDITAR usuário
-        private void EditarUsuario()
+        private async void EditarUsuario()
         {
             try
             {
                 // Verifica se houve mudança nos dados do usuário
                 if (!ValidarClsUsuario())
                 {
-                    myUtilities.myMessageBox(this, "Não houve nenhuma mudança nos dados do usuário.", "Informação", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    await myUtilities.myMessageBox(this, "Não houve nenhuma mudança nos dados do usuário.", "Informação", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }
 
                 // Verifica se os controles são válidos
-                if (!ValidarControles())
+                bool isValid = await ValidarControles();
+                if (!isValid)
                     return;
 
                 AtualizarClsUsuario();
@@ -144,27 +145,28 @@ namespace FestasApp.Views.Usuarios
                 if (repUser.UpdateUsuario(usuario))
                 {
                     // Exibe a mensagem de sucesso usando a nova função myMessageBox
-                    myUtilities.myMessageBox(this, $"Usuário {usuario.user_nome} alterado com sucesso!", "A l t e r a r", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    await myUtilities.myMessageBox(this, $"Usuário {usuario.user_nome} alterado com sucesso!", "A l t e r a r", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     this.Close(); // Fecha o formulário após salvar 
                 }
             }
             catch (MySqlException mysqlEx)
             {
-                myUtilities.myMessageBox(this, $"Erro no banco de dados: {mysqlEx.Message}", "Erro SQL", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                await myUtilities.myMessageBox(this, $"Erro no banco de dados: {mysqlEx.Message}", "Erro SQL", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
-                myUtilities.myMessageBox(this, ex.Message, "Usuário Alterar", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                await myUtilities.myMessageBox(this, ex.Message, "Usuário Alterar", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         //
         // NOVO usuário
-        private void SalvarNovoUsuario()
+        private async void SalvarNovoUsuario()
         {
             try
             {
                 // Verifica se os controles são válidos
-                if (!ValidarControles())
+                bool isValid = await ValidarControles();
+                if (!isValid)
                     return;
 
                 AtualizarClsUsuario();
@@ -173,17 +175,17 @@ namespace FestasApp.Views.Usuarios
                 if (repUser.CreateUsuario(usuario))
                 {
                     // Exibe a mensagem de sucesso usando a nova função myMessageBox
-                    myUtilities.myMessageBox(this, $"Novo Usuário {usuario.user_nome} criado com sucesso!", "A d i c i o n a r", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                   await myUtilities.myMessageBox(this, $"Novo Usuário {usuario.user_nome} criado com sucesso!", "A d i c i o n a r", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     this.Close(); // Fecha o formulário após salvar 
                 }
             }
             catch (MySqlException mysqlEx)
             {
-                myUtilities.myMessageBox(this, $"Erro no banco de dados: {mysqlEx.Message}", "Erro SQL", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                await myUtilities.myMessageBox(this, $"Erro no banco de dados: {mysqlEx.Message}", "Erro SQL", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
-                myUtilities.myMessageBox(this, ex.Message, "Usuário Novo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                await myUtilities.myMessageBox(this, ex.Message, "Usuário Novo", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         //
@@ -270,12 +272,12 @@ namespace FestasApp.Views.Usuarios
         }
         //
         // Método para validar os controles antes de salvar ou alterar
-        private bool ValidarControles()
+        private async Task<bool> ValidarControles()
         {
             // Valida o campo Nome
             if (string.IsNullOrWhiteSpace(txtUserNome.Text))
             {
-                myUtilities.myMessageBox(this, "O nome do usuário é obrigatório.", "Erro de Validação", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                await myUtilities.myMessageBox(this, "O nome do usuário é obrigatório.", "Erro de Validação", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 txtUserNome.Focus();
                 return false;
             }
@@ -283,7 +285,7 @@ namespace FestasApp.Views.Usuarios
             // Valida o campo Login
             if (string.IsNullOrWhiteSpace(txtUserLogin.Text))
             {
-                myUtilities.myMessageBox(this, "O login do usuário é obrigatório.", "Erro de Validação", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                await myUtilities.myMessageBox(this, "O login do usuário é obrigatório.", "Erro de Validação", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 txtUserLogin.Focus();
                 return false;
             }
@@ -291,7 +293,7 @@ namespace FestasApp.Views.Usuarios
             // Valida o campo Email
             if (string.IsNullOrWhiteSpace(txtUserEmail.Text) || !myUtilities.IsValidEmail(txtUserEmail.Text))
             {
-                myUtilities.myMessageBox(this, "O email é inválido.", "Erro de Validação", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                await myUtilities.myMessageBox(this, "O email é inválido.", "Erro de Validação", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 txtUserEmail.Focus();
                 return false;
             }
@@ -299,7 +301,7 @@ namespace FestasApp.Views.Usuarios
             // Valida o campo Senha
             if (string.IsNullOrWhiteSpace(txtUserSenha.Text))
             {
-                myUtilities.myMessageBox(this, "A senha do usuário é obrigatória.", "Erro de Validação", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                await myUtilities.myMessageBox(this, "A senha do usuário é obrigatória.", "Erro de Validação", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 txtUserSenha.Focus();
                 return false;
             }

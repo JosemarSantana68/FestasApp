@@ -19,12 +19,14 @@ namespace FestasApp.Views.FestasTipoEventos
         // declarar instâncias
         private readonly repTipoEventoEF tipoEventos = new();
         private readonly OperacaoCRUD operacao = new();
-        private int? idRegistro;
-
+        public clsFestasTipoEvento TipoAtual { get; private set; } = new();
+        private clsParam idRegistro;
+        //
+        // construtor
         public FormTipoEvento(clsParam idRegistro, OperacaoCRUD operacao)
         {
             InitializeComponent();
-            this.idRegistro = idRegistro.Id;
+            this.idRegistro = idRegistro;
             this.operacao = operacao;
 
             SuspendLayout();
@@ -53,7 +55,7 @@ namespace FestasApp.Views.FestasTipoEventos
             switch (operacao)
             {
                 case OperacaoCRUD.NOVO:
-                    idRegistro = 0;
+                    idRegistro.Id = 0;
                     //MostrarItemFesta();
                     break;
                 case OperacaoCRUD.EDITAR:
@@ -71,12 +73,12 @@ namespace FestasApp.Views.FestasTipoEventos
         }
         //
         // mostra dados do registro selecionado
-        private void MostrarRegistro()
+        private async void MostrarRegistro()
         {
             try
             {
                 //var item = new repItensFestasEF();
-                var item = tipoEventos.GetItem(idRegistro!.Value);
+                var item = tipoEventos.GetItem(idRegistro.Id!.Value);
 
                 if (item != null)
                 {
@@ -92,7 +94,7 @@ namespace FestasApp.Views.FestasTipoEventos
             }
             catch (Exception ex)
             {
-                myUtilities.myMessageBox(this, $"Erro ao preencher dados do Tipo de Evento: {ex.Message}");
+                await myUtilities.myMessageBox(this, $"Erro ao preencher dados do Tipo de Evento: {ex.Message}");
             }
         }
         //
@@ -112,15 +114,15 @@ namespace FestasApp.Views.FestasTipoEventos
                     break;
             }
         }
-        //
-        private void SalvarRegistro()
+        // Método SalvarRegistro
+        private async void SalvarRegistro()
         {
             var txtNome = this.pnlCentral.Controls["txtNome"] as TextBox;
 
             // Validação dos controles - Verifica se todos os campos necessários estão preenchidos
             if (string.IsNullOrEmpty(txtNome!.Text))
             {
-                myUtilities.myMessageBox(this, "Por favor, preencha nome do Tipo de Evento.", "Tipos de Eventos");
+                await myUtilities.myMessageBox(this, "Por favor, preencha nome do Tipo de Evento.", "Tipos de Eventos");
                 return;
             }
 
@@ -137,35 +139,39 @@ namespace FestasApp.Views.FestasTipoEventos
                     // Tenta adicionar o item de festa ao banco de dados
                     if (repTipoEventoEF.AddItem(item))
                     {
-                        myUtilities.myMessageBox(this, "Tipo de Evento adicionado com sucesso!", "Tipos de Eventos");
+                        await myUtilities.myMessageBox(this, "Tipo de Evento adicionado com sucesso!", "Tipos de Eventos");
+                        TipoAtual = item;
                         this.Close();
                     }
                     else
                     {
-                        myUtilities.myMessageBox(this, "Falha ao adicionar o Tipo de Evento.", "Tipos de Eventos");
+                        await myUtilities.myMessageBox(this, "Falha ao adicionar o Tipo de Evento.", "Tipos de Eventos");
                     }
                 }
+                // continua o código
+                //
+
                 else if (operacao == OperacaoCRUD.EDITAR)
                 {
                     // Tenta adicionar o item de festa ao banco de dados
-                    if (repTipoEventoEF.AlterItem(idRegistro!.Value, item))
+                    if (repTipoEventoEF.AlterItem(idRegistro.Id!.Value, item))
                     {
-                        myUtilities.myMessageBox(this, "Tipo de Evento alterado com sucesso!", "Tipos de Eventos");
+                        await myUtilities.myMessageBox(this, "Tipo de Evento alterado com sucesso!", "Tipos de Eventos");
                         this.Close();
                     }
                     else
                     {
-                        myUtilities.myMessageBox(this, "Falha ao alterar o Tipo de Evento.", "Tipos de Eventos");
+                        await myUtilities.myMessageBox(this, "Falha ao alterar o Tipo de Evento.", "Tipos de Eventos");
                     }
                 }
             }
             catch (Exception ex)
             {
-                myUtilities.myMessageBox(this, $"Falha ao salvar Tipo de Evento. Erro: {ex.Message}", "Tipos de Eventos");
+                await myUtilities.myMessageBox(this, $"Falha ao salvar Tipo de Evento. Erro: {ex.Message}", "Tipos de Eventos");
             }
         }
         //
-        private void DeletarRegistro()
+        private async void DeletarRegistro()
         {
             // Exibe a mensagem de confirmação usando MessageBox.Show
             var message = $"""
@@ -173,14 +179,14 @@ namespace FestasApp.Views.FestasTipoEventos
                         
                         Esta ação não poderá ser desfeita!
                         """;
-            var result = myUtilities.myMessageBox(this, message, "Excluir Item", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            var result = await myUtilities.myMessageBox(this, message, "Excluir Item", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
             if (result == DialogResult.Yes)
             {
                 try
                 {
                     // Chama o método para excluir o cliente
-                    if (repTipoEventoEF.DeleteItem(idRegistro!.Value))
+                    if (repTipoEventoEF.DeleteItem(idRegistro.Id!.Value))
                     {
                         this.Close();
                         return;
@@ -188,16 +194,16 @@ namespace FestasApp.Views.FestasTipoEventos
                     else
                     {
                         // Exibe a mensagem de erro se a exclusão falhar
-                        myUtilities.myMessageBox(this, "Erro ao excluir Tipo de Evento!", "Tipo de Evento Excluir", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        await myUtilities.myMessageBox(this, "Erro ao excluir Tipo de Evento!", "Tipo de Evento Excluir", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
                 catch (MySqlException mysqlEx)
                 {
-                    myUtilities.myMessageBox(this, $"Erro no banco de dados: {mysqlEx.Message}", "Erro SQL", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    await myUtilities.myMessageBox(this, $"Erro no banco de dados: {mysqlEx.Message}", "Erro SQL", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 catch (Exception ex)
                 {
-                    myUtilities.myMessageBox(this, ex.Message, "Item Excluir", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    await myUtilities.myMessageBox(this, ex.Message, "Item Excluir", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }

@@ -11,16 +11,23 @@
 //   Classe TabelaAuxiliarManager
 //
 //------------------------------------------------------------
-
-using FestasApp.Views.TabelasAuxiliares;
-using System.Windows.Forms;
+//
 
 namespace FestasApp.Managers
 {
     public class TabelaAuxiliarManager
     {
-        public TabelaAuxiliarManager() { }
+        /// <summary>
+        /// construtor padrão
+        /// </summary>
+        public TabelaAuxiliarManager() 
+        {
 
+        }
+
+        /// <summary>
+        /// Lista com nomes das Tabelas Auxiliares
+        /// </summary>
         public readonly List<string> tabelasAuxiliares = new List<string>
         {
             "Itens das Festas",
@@ -31,7 +38,13 @@ namespace FestasApp.Managers
             "Temas",
             "Tipo de Eventos"
         };
-        //
+        /// <summary>
+        /// método que retorna true ou flase se o nome da tabela está selecionada no dtgTabelas
+        /// </summary>
+        /// <param name="tabela"></param>
+        /// <param name="form"></param>
+        /// <param name="dtgTabelas"></param>
+        /// <returns></returns>
         public bool IsTabelaSelecionada(string tabela, FormAuxiliaresMain? form = null, DataGridView? dtgTabelas = null)
         {
             dtgTabelas ??= form?.dtgTabelasAuxiliares;
@@ -80,5 +93,5 @@ namespace FestasApp.Managers
 
         // Adicione mais métodos conforme necessário para outras tabelas
 
-    }
-}
+    } // end class TabelaAuxiliarManager
+} // end namespace FestasApp.Managers

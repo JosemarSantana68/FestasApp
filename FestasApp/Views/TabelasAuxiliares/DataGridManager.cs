@@ -17,43 +17,58 @@ namespace FestasApp.Views.TabelasAuxiliares
         //public static DataGridView? dtgTabelasAuxiliares;
         //public DataGridView dtgTabelasAuxiliares { get; set; } // Torne este membro público para acesso
 
+        /// <summary>
+        /// Instância de FormAuxiliaresMain
+        /// </summary>
         private readonly FormAuxiliaresMain _form;
-        //
+
+        /// <summary>
+        /// construtor padrão
+        /// </summary>
+        /// <param name="form"></param>
         public DataGridManager(FormAuxiliaresMain form)
         {
             _form = form;
         }
-        //
+        /// <summary>
+        /// método para configurar os dataGrids
+        /// </summary>
         public void ConfigureDataGrids()
         {
             ConfigureDtgTabelasAuxiliares();
             ConfigureDtgRegistrosTabelasAuxiliares();
         }
-        //
+        /// <summary>
+        /// configurações do cabeçalho DtgTabelasAuxiliares
+        /// </summary>
         private void ConfigureDtgTabelasAuxiliares()
         {
             DataGridView dtg = _form.dtgTabelasAuxiliares;
+
             // personaliza dtg
             SetDtgTabelasAuxiliares(dtg);
-            // colunas
-            dtg.Columns.Clear();
-            myFunctions.ConfigurarAdicionarColuna(dtg, 0, "Tabelas", 194, "", padding: new Padding(5, 0, 0, 0));
-            //dtg.Sort(dtg.Columns[0], ListSortDirection.Ascending);
-        }
-        //
-        // configurações do cabeçalho e gerais DtgTabelasAuxiliares
-        private void SetDtgTabelasAuxiliares(DataGridView dtg)
-        {
+
             // Configuração do cabeçalho
             dtg.ColumnHeadersVisible = true;
             dtg.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
             dtg.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomCenter;
             //dtg.ColumnHeadersDefaultCellStyle.BackColor = Color.DarkGoldenrod;
-
             //this.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            //this.BackgroundColor = Color.White;
 
-            // Configurações de estilo
+            // adiciona a coluna Tabelas
+            dtg.Columns.Clear();
+            myFunctions.ConfigurarAdicionarColuna(dtg, 0, "Tabelas", 194, "", padding: new Padding(5, 0, 0, 0));
+
+            //dtg.Sort(dtg.Columns[0], ListSortDirection.Ascending);
+        }
+        //
+        /// <summary>
+        /// configurações gerais DtgTabelasAuxiliares
+        /// </summary>
+        /// <param name="dtg"></param>
+        private void SetDtgTabelasAuxiliares(DataGridView dtg)
+        {
+            // Configurações de estilo das grades e bordas
             dtg.BorderStyle = BorderStyle.FixedSingle;
             dtg.CellBorderStyle = DataGridViewCellBorderStyle.None;
             dtg.BackgroundColor = Color.White; //this.BackColor;
@@ -86,24 +101,34 @@ namespace FestasApp.Views.TabelasAuxiliares
             //dtg.DefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
             dtg.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
 
-            // Definir AutoGenerateColumns como false
+            // Definir auto-gerar-colunas como false
             dtg.AutoGenerateColumns = false;
         }
         //
+        /// <summary>
+        /// algumas configurações para dtgRegistros...
+        /// </summary>
         private void ConfigureDtgRegistrosTabelasAuxiliares()
         {
             DataGridView dtg = _form.dtgRegistrosTabelasAuxiliares;
             dtg.BackgroundColor = Color.White;
             //dtg.BorderStyle = BorderStyle.FixedSingle;
-            dtg.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomCenter;
-
+            dtg.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomCenter; // cabeçalho
         }
         //
+        /// <summary>
+        /// add eventos ao dtgTabelas
+        /// </summary>
         public void AddEventHandlers()
         {
             _form.dtgTabelasAuxiliares.SelectionChanged += DtgTabelasAuxiliares_SelectionChanged;
         }
         //
+        /// <summary>
+        /// ao selecionar tabela em dtgTabelas, chama o método em DataLoader...
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DtgTabelasAuxiliares_SelectionChanged(object? sender, EventArgs e)
         {
             _form._dataLoader.HandleSelectionChanged(sender!, e);
