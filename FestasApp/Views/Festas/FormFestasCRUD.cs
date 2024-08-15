@@ -16,15 +16,23 @@ namespace FestasApp.Views.Festas
 {
     public partial class FormFestasCRUD : FormBaseCRUD
     {
-        // instanciar objetos das classe para este form
+        /// <summary>
+        /// Declarar instâncias das classe para este form
+        /// </summary>
         private clsFestas? _festa = new();
         private OperacaoCRUD operacao;
-        //
+        /// <summary>
+        /// 
+        /// </summary>
         public clsParam FestaIdParam = new(); // para retornar para o datagriFesta
         private clsParam param = new(); // param para tratar as tabelas auxiliares
 
         //
-        // CRIAÇÃO - Construtor que recebe o id da festa e a operação
+        /// <summary>
+        /// Construtor padrão, recebe o id da festa e a operação
+        /// </summary>
+        /// <param name="_festaId"></param>
+        /// <param name="_operacao"></param>
         public FormFestasCRUD(clsParam _festaId, OperacaoCRUD _operacao)
         {
             InitializeComponent();
@@ -38,7 +46,11 @@ namespace FestasApp.Views.Festas
             ResumeLayout();
         }
         //
-        // CARREGAMENTO - Load
+        /// <summary>
+        /// Load
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void FormFestasCRUD_Load(object sender, EventArgs e)
         {
             SuspendLayout();
@@ -49,7 +61,9 @@ namespace FestasApp.Views.Festas
                 MostraDadosFestaSelecionadaEF();
             ResumeLayout();
         }
-        // Adiciona eventosHandlers aos controles
+        /// <summary>
+        /// Adiciona eventosHandlers aos controles
+        /// </summary>
         private void AddEventHandlers()
         {
             this.tstbtnSalvar.Click += TstbtnSalvar_Click;
@@ -59,7 +73,9 @@ namespace FestasApp.Views.Festas
             this.txtDescontosFesta.Validating += TxtDescontosFesta_Validating;
         }
         //
-        // Configura o formulário com base na operação
+        /// <summary>
+        /// Configura o formulário com base na operação
+        /// </summary>
         private void SetOperacao()
         {
             // Testa a operacao e configura os controles...
@@ -81,7 +97,9 @@ namespace FestasApp.Views.Festas
                     break;
             }
         }
-        //
+        /// <summary>
+        /// Configura os controles deste formulário
+        /// </summary>
         private void SetControls()
         {
             // definir os maxLenght dos controles
@@ -98,32 +116,41 @@ namespace FestasApp.Views.Festas
             //
             ConfigurarAutoCompletarTxt();
         }
-        //
+        /// <summary>
+        /// Limpa os controles
+        /// </summary>
         private void LimparControles()
         {
             // limpas os controles
             txtDataVenda.Text = DateTime.Now.ToShortDateString();
             txtDataFesta.Clear();
-            txtHoraInicio.Clear();
-            txtHoraFim.Clear();
-            txtTotalPessoa.Clear();
-            txtTotalAdultos.Clear();
-            txtPessoasAMais.Clear();
-            txtCriancasPagantes.Clear();
-            txtCriancasNaoPagantes.Clear();
-            // limpa adicionais da festa
-            txtItemQtde.Clear();
-            txtItemValor.Clear();
-            dtgItens.Rows.Clear();
-            lblValorTotalIntens.Text = "0,00";
-            // valor da festa
+
+            LimpaControlesDetalhesFesta();
+            
+            LimparItensFesta();
+
+            // limpa valores da festa
             lblValorPacote.Text = "0,00";
             lblValorAdicionais.Text = "0,00";
             txtDescontosFesta.Text = "0,00";
             lblValorTotalFesta.Text = "0,00";
         }
+        /// <summary>
+        /// Limpar Itens da Festa
+        /// </summary>
+        private void LimparItensFesta()
+        {
+            // limpa adicionais da festa
+            txtItemQtde.Text = "0";
+            txtItemValor.Text = "0,00";
+            dtgItens.Rows.Clear();
+            lblValorTotalIntens.Text = "0,00";
+            cbbItemFesta.SelectedItem = -1;
+        }
         //
-        // desmarca comboboxes
+        /// <summary>
+        /// Tira a seleção dos comboboxes
+        /// </summary>
         private void UnselectComboBoxes()
         {
             cbbVendedor.SelectedItem = -1; // mostrar usuario ativo
@@ -138,7 +165,11 @@ namespace FestasApp.Views.Festas
             //
             cbbItemFesta.SelectedItem = -1;
         }
-        //
+        /// <summary>
+        /// Btn Salvar
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void TstbtnSalvar_Click(object? sender, EventArgs e)
         {
             // Testa a operacao e configura os controles...
@@ -155,8 +186,9 @@ namespace FestasApp.Views.Festas
                     break;
             }
         }
-        //
-        // 1. mostra dados de festa selecionada
+        /// <summary>
+        /// 1. Mostra no form, dados de festa selecionada
+        /// </summary>
         private void MostraDadosFestaSelecionadaEF()
         {
             // editar, consultar, excluir
@@ -205,8 +237,9 @@ namespace FestasApp.Views.Festas
                 }
             }
         }
-        //
-        // 1.1. mostra detalhes da festa selecionada
+        /// <summary>
+        /// 1.1. Mostra detalhes da festa selecionada
+        /// </summary>
         private void MostraDetalhesFestaSelecionada()
         {
             // declara uma nova instancia, não é estatica
@@ -235,8 +268,9 @@ namespace FestasApp.Views.Festas
                 LimpaControlesDetalhesFesta();
             }
         }
-        //
-        // 1.1.1.  Limpa os campos de detalhes da festa
+        /// <summary>
+        /// 1.1.1.  Limpa os controles de detalhes da festa.
+        /// </summary>
         private void LimpaControlesDetalhesFesta()
         {
             txtHoraInicio.Clear();
@@ -248,8 +282,9 @@ namespace FestasApp.Views.Festas
             txtCriancasNaoPagantes.Text = "0";
             txtObservacao.Clear();
         }
-        //
-        // 1.2. mostra itens adicionais da festa selecionada
+        /// <summary>
+        /// 1.2. Mostra itens adicionais da festa selecionada
+        /// </summary>
         private void MostraItensFestaSelecionadaEF()
         {
             // busca detalhes da itensFesta com idAtual, retorna um objeto
@@ -262,28 +297,30 @@ namespace FestasApp.Views.Festas
 
                 foreach (var adicional in adicionaisFesta)
                 {
-
+                    // ajustar aqui para mostrar valores dos itens
                     dtgItens.Rows.Add(adicional.add_itensfest_id,
                                         adicional.ItensFestas?.itensfest_nome,
                                         adicional.add_qtde,
-                                        adicional.add_valor * adicional.add_qtde);
+                                        adicional.add_valor); // * adicional.add_qtde);
                 }
             }
             SomarValorTotalItens();
         }
-        //
-        //
+        /// <summary>
+        /// Travar controles só para exibição
+        /// </summary>
         private void TravarControles()
         {
             // fatorar
         }
-        //
-        // carregar comboboxes com valores das tabelas
+        /// <summary>
+        /// Carregar comboboxes com valores das tabelas
+        /// </summary>
         private void CarregarComboBoxesEF()
         {
             if (!myConnMySql.TestarConexao())
             {
-                FormMenuMain.ShowMyMessageBox("Não foi possível carregar os dados, sem conexão com o banco de dados.\nSetComboBoxesEF", "Falha");
+                FormMenuMain.ShowMyMessageBox("Não foi possível carregar os dados, sem conexão com o banco de dados.\nEm: SetComboBoxesEF", "Falha");
                 return;
             }
 
@@ -304,8 +341,14 @@ namespace FestasApp.Views.Festas
             cbbItemFesta.SelectedIndexChanged += CbbItemFesta_SelectedIndexChanged;
             cbbPacotes.SelectedIndexChanged += CbbPacote_SelectedIndexChanged;
         }
-        //
-        // método auxiliar ao preenchimento das comboboxes
+        /// <summary>
+        /// Método auxiliar ao preenchimento das comboboxes
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="cbb"></param>
+        /// <param name="dataList"></param>
+        /// <param name="displayMember"></param>
+        /// <param name="valueMember"></param>
         private void SetComboBoxesEF<T>(ComboBox cbb, List<T> dataList, string displayMember, string valueMember) where T : class
         {
             try
@@ -324,7 +367,11 @@ namespace FestasApp.Views.Festas
             }
         }
         //
-        // método captura valor do pacote
+        /// <summary>
+        /// Método captura valor do pacote
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void CbbPacote_SelectedIndexChanged(object? sender, EventArgs e)
         {
             try
@@ -348,7 +395,11 @@ namespace FestasApp.Views.Festas
             catch (Exception) { }
         }
         //
-        // cbbItensFestas captura valor do item
+        /// <summary>
+        /// cbbItensFestas captura valor do item
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void CbbItemFesta_SelectedIndexChanged(object? sender, EventArgs e)
         {
             if (cbbItemFesta.SelectedValue is int selectedId)
@@ -362,7 +413,7 @@ namespace FestasApp.Views.Festas
 
                     if (item != null)
                     {
-                        txtItemValor.Text = ((decimal)item.itensfest_valor!).ToString("F"); // Formata como moeda
+                        txtItemValor.Text = ((decimal)item.itensfest_valor!).ToString("N2"); // Formata como moeda
                         txtItemQtde.Text = "1";
                         txtItemQtde.Focus();
                     }
@@ -370,25 +421,14 @@ namespace FestasApp.Views.Festas
             }
         }
         //
-        // salvarItens REFAZER
-        private void SalvarItens(int festaId)
-        {
-            foreach (DataGridViewRow row in dtgItens.Rows)
-            {
-                if (row.IsNewRow) continue;
-
-                string descricao = row.Cells[ColDescricao].Value?.ToString() ?? string.Empty; // Verifica nulo e atribui string vazia se for nulo
-                int quantidade = row.Cells[ColQtde].Value != null ? Convert.ToInt32(row.Cells[ColQtde].Value) : 0;
-                double valor = row.Cells[ColValor].Value != null ? Convert.ToDouble(row.Cells[ColValor].Value) : 0.0;
-
-                // Chamar método para salvar/atualizar item no banco de dados
-                //clsFestasItens.SalvarItem(festaId, descricao, quantidade, valor);
-            }
-        }
-        //
-        // salvarFestas
+        /// <summary>
+        /// Método para salvarFestas
+        /// </summary>
+        /// <param name="festaId"></param>
+        /// <returns></returns>
         private async Task SalvarFestaEF(int? festaId = null)
         {
+            // valida os controles do form
             bool isValid = await ValidarControles();
             if (!isValid)
                 return;
@@ -397,20 +437,20 @@ namespace FestasApp.Views.Festas
             {
                 using (clsFestasContext context = new())
                 {
-                    // 1. instância de festa - está ok
+                    // 1. instância de festa
                     clsFestas festa = await ObterOuCriarFesta(context, festaId);
-                    // 1.1.- está ok
+                    // 1.1.- atualiza as propriedades da festa encontrada(para editar) ou nova
                     AtualizarPropriedadesFesta(festa);
 
-                    // Salva a festa no banco de dados para garantir que o fest_id seja gerado
+                    // Salva a festa em <tblfestas> no banco de dados para garantir que o fest_id seja gerado
                     await context.SaveChangesAsync();
 
-                    // 2. instância de detalhes festa - está ok
+                    // 2. instância de detalhes festa - já com id da festa nova ou editada
                     clsFestasDetalhes detalhesFesta = await ObterOuCriarDetalhesFesta(context, festa.fest_id); // utilizar o id da festa (nova ou editada)
-                    // 2.1. - está ok
+                    // 2.1. - atualiza as propriedades dos detalhesfesta encontrada(para editar) ou nova
                     AtualizarPropriedadesDetalhesFesta(detalhesFesta);
 
-                    // 3. itens/adicionais festa -- nova ou editada
+                    // 3. atualiza as propriedades dos itensAdicionaisFesta encontrada(para editar) ou nova
                     AtualizarPropriedadesAdicionaisFesta(context, festa.fest_id); // utilizar o id da festa (nova ou editada)
 
                     // 4. Salvar as alterações no banco de dados
@@ -418,9 +458,7 @@ namespace FestasApp.Views.Festas
 
                     FestaIdParam.Id = festa.fest_id; // para retornar para o dtgFesta
                 }
-
                 await myUtilities.myMessageBox(this, "Festa salva com sucesso.", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
                 this.Close();
             }
             catch (Exception ex)
@@ -429,7 +467,13 @@ namespace FestasApp.Views.Festas
             }
         }
         //
-        // 1. verifica se festa existe ou é uma nova festa
+        /// <summary>
+        /// 1. verifica se festa existe ou é uma nova festa
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="festaId"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         private async Task<clsFestas> ObterOuCriarFesta(clsFestasContext context, int? festaId)
         {
             // declara uma instancia festa vazia
@@ -453,8 +497,10 @@ namespace FestasApp.Views.Festas
             }
             return festa; // retorna festa-encontrada ou festa-nova
         }
-        //
-        // 1.1. atualiza as propriedades da instância festa com os valores do formulário
+        /// <summary>
+        /// 1.1. atualiza as propriedades da instância festa com os valores do formulário
+        /// </summary>
+        /// <param name="festa"></param>
         private void AtualizarPropriedadesFesta(clsFestas festa)
         {
             festa.fest_user_id = (int)cbbVendedor.SelectedValue!; 
@@ -465,14 +511,17 @@ namespace FestasApp.Views.Festas
             festa.fest_tema_id = (int?)cbbTemas.SelectedValue; 
             festa.fest_stt_id = (int?)cbbStatus.SelectedValue;
 
-            // formatar em um método, valor para salvar, passar controle e mascara
-            festa.fest_valor = !string.IsNullOrWhiteSpace(lblValorTotalFesta.Text) ? (double?)Convert.ToDecimal(lblValorTotalFesta.Text) : 0;
-            // formatar em um método, datas para salvar, passar controle e mascara
-            festa.fest_dtVenda = !string.IsNullOrWhiteSpace(txtDataVenda.Text) ? DateTime.ParseExact(txtDataVenda.Text, "dd/MM/yyyy", null) : null;
-            festa.fest_dtFesta = !string.IsNullOrWhiteSpace(txtDataFesta.Text) ? DateTime.ParseExact(txtDataFesta.Text, "dd/MM/yyyy", null) : null;
+            // usando extensões personalizadas de MyFramework
+            festa.fest_valor = lblValorTotalFesta.Text.ToDouble();
+            festa.fest_dtVenda = txtDataVenda.Text.ToDate();
+            festa.fest_dtFesta = txtDataFesta.Text.ToDate();
         }
-        //
-        // 2. verifica se há detalhes para a festa, ou cria novos detalhes
+        /// <summary>
+        /// 2. verifica se há detalhes para a festa, ou cria novos detalhes
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="festaId"></param>
+        /// <returns></returns>
         private async Task<clsFestasDetalhes> ObterOuCriarDetalhesFesta(clsFestasContext context, int festaId)
         {
             // declara uma instância vazia
@@ -500,7 +549,10 @@ namespace FestasApp.Views.Festas
 
             return detalhesFesta;
         }
-        // 2.1. atualiza as propriedades da instância detalhesFesta com os valores do formulário
+        /// <summary>
+        /// 2.1. atualiza as propriedades da instância detalhesFesta com os valores do formulário
+        /// </summary>
+        /// <param name="detalhesFesta"></param>
         private void AtualizarPropriedadesDetalhesFesta(clsFestasDetalhes detalhesFesta)
         {
             detalhesFesta.detfest_iniciohora = myDateTime.FormatTimeToRap(txtHoraInicio.Text, @"hh\:mm");
@@ -513,19 +565,22 @@ namespace FestasApp.Views.Festas
             detalhesFesta.detfest_ctt_id = Convert.ToInt32(cbbContratos.SelectedValue);
             detalhesFesta.detfest_observacao = txtObservacao.Text;
         }
-        //
-        // 3. grava os dados do datagridItens nas propriedades de adicionais da festa repAdicionais
-        private void AtualizarPropriedadesAdicionaisFesta(clsFestasContext contexto, int festaId)
+        /// <summary>
+        /// 3. grava os dados do datagridItens nas propriedades de adicionais da festa repAdicionais
+        /// </summary>
+        /// <param name="contexto"></param>
+        /// <param name="festaId"></param>
+        private void AtualizarPropriedadesAdicionaisFesta(clsFestasContext context, int festaId)
         {
             // Limpa os adicionais existentes para evitar duplicações
-            var adicionaisExistentes = contexto.Adicionais
+            var adicionaisExistentes = context.Adicionais
                                                 .Where(a => a.add_fest_id == festaId)
                                                 .ToList();
 
             // apaga adicionais existentes para evitar duplicação
             foreach (var adicional in adicionaisExistentes)
             {
-                contexto.Adicionais.Remove(adicional);
+                context.Adicionais.Remove(adicional);
             }
 
             // Itera sobre as linhas do DataGridView e adiciona novos itens adicionais
@@ -546,12 +601,15 @@ namespace FestasApp.Views.Festas
                         add_qtde = itemQtde,
                         add_valor = itemValor
                     };
-                    contexto.Adicionais.Add(adicionalFesta);
+                    context.Adicionais.Add(adicionalFesta);
                 }
             }
         }
-        //
-        // deletar-festa-selecionada
+        /// <summary>
+        /// deletar-festa-selecionada
+        /// </summary>
+        /// <param name="festaId"></param>
+        /// <returns></returns>
         private async Task ExcluirFestaEF(int festaId)
         {
             if (festaId <= 0)
@@ -605,7 +663,9 @@ namespace FestasApp.Views.Festas
                 await myUtilities.myMessageBox(this, $"Erro ao excluir festa: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        // auto-completar
+        /// <summary>
+        /// auto-completar comboboxes
+        /// </summary>
         private void ConfigurarAutoCompletarTxt()
         {
             //
@@ -638,7 +698,10 @@ namespace FestasApp.Views.Festas
             //txtContrato.AutoCompleteCustomSource = CarregarNomesContratos();
         }
         //
-        // validação dos controles do formulário
+        /// <summary>
+        /// Validação dos controles do formulário
+        /// </summary>
+        /// <returns></returns>
         private async Task<bool> ValidarControles()
         {
             //
@@ -753,13 +816,17 @@ namespace FestasApp.Views.Festas
         #region DataGridViews dtgItens
         //
         // DataGridViews
-        // constantes com Numeros das colunas
+        /// <summary>
+        /// constantes com Numeros das colunas
+        /// </summary>
         private const int ColItemId = 0;
         private const int ColDescricao = 1;
         private const int ColQtde = 2;
         private const int ColValor = 3;
         private const int ColDelete = 4;
-        //
+        /// <summary>
+        /// Configura dtgItensFesta
+        /// </summary>
         private void ConfigurarDtgItens()
         {
             DataGridView dtg = dtgItens;
@@ -825,7 +892,11 @@ namespace FestasApp.Views.Festas
 
         } //end ConfigurarDtgItens
         //
-        // deletar itens dtgItensFestas
+        /// <summary>
+        /// Deletar itens em dtgItensFestas
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void DtgItens_CellContentClick(object? sender, DataGridViewCellEventArgs e)
         {
             // Verifique se o clique foi na coluna de exclusão
@@ -866,7 +937,11 @@ namespace FestasApp.Views.Festas
 
         }
         //
-        // adiciona itens no dtgItensFestas
+        /// <summary>
+        /// Adiciona itens no dtgItensFestas
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void btnAddItem_Click(object sender, EventArgs e)
         {
             // Validar os campos de entrada
@@ -899,15 +974,20 @@ namespace FestasApp.Views.Festas
 
             // soma total de itens
             SomarValorTotalItens();
-            // Limpar os campos de entrada
-            txtItemQtde.Clear();
-            txtItemValor.Clear();
             //
-            cbbItemFesta.SelectedItem = -1;
+            LimparItensFesta();
+            //// Limpar os campos de entrada
+            //txtItemQtde.Clear();
+            //txtItemValor.Clear();
+            ////
+            //cbbItemFesta.SelectedItem = -1;
+            //
             cbbItemFesta.Focus();
         }
         //
-        // valor total de itens
+        /// <summary>
+        /// Valor total de itens
+        /// </summary>
         private void SomarValorTotalItens()
         {
             double soma = 0;
@@ -920,12 +1000,18 @@ namespace FestasApp.Views.Festas
             lblValorTotalIntens.Text = soma.ToString("N2");
             SomarValorTotalFesta();
         }
-        //
+        /// <summary>
+        /// Trata descontos da festa
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TxtDescontosFesta_Validating(object? sender, CancelEventArgs e)
         {
             SomarValorTotalFesta();
         }
-        //
+        /// <summary>
+        /// Somar Valor Total das Festas
+        /// </summary>
         private void SomarValorTotalFesta()
         {
             // valor-pacote
@@ -940,7 +1026,11 @@ namespace FestasApp.Views.Festas
             lblValorTotalFesta.Text = ((pacote + valorAdicionais) - desconto).ToString("N2");
         }
         //
-        // Evento para mudar o cursor ao entrar na célula de exclusão
+        /// <summary>
+        /// Evento para mudar o cursor ao entrar na célula de exclusão
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Dtg_CellMouseEnter(object? sender, DataGridViewCellEventArgs e)
         {
             if (sender is DataGridView dtg)
@@ -952,7 +1042,11 @@ namespace FestasApp.Views.Festas
             }
         }
         //
-        // Evento para mudar o cursor ao sair da célula de exclusão
+        /// <summary>
+        /// Evento para mudar o cursor ao sair da célula de exclusão
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Dtg_CellMouseLeave(object? sender, DataGridViewCellEventArgs e)
         {
             if (sender is DataGridView dtg)
@@ -965,8 +1059,12 @@ namespace FestasApp.Views.Festas
         }
         #endregion
         //
-        // pic_Clicks
-        // add-Tipo-evento
+        #region Trata as pic/btn-add, para chamar as tabelas-auxiliares
+        /// <summary>
+        /// picture add-Tipo-evento
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void picAddTipoEvento_Click(object sender, EventArgs e)
         {
             ComboBox cbb = cbbTiposEvento;
@@ -999,7 +1097,11 @@ namespace FestasApp.Views.Festas
             }
         }
         //
-        // add-espaco
+        /// <summary>
+        /// picture add-espaco
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void picAddEspaco_Click(object sender, EventArgs e)
         {
             ComboBox cbb = cbbEspacos;
@@ -1032,7 +1134,11 @@ namespace FestasApp.Views.Festas
             }
         }
         //
-        // add-tema
+        /// <summary>
+        /// picture add-tema
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void picAddTema_Click(object sender, EventArgs e)
         {
             ComboBox cbb = cbbTemas;
@@ -1047,7 +1153,7 @@ namespace FestasApp.Views.Festas
                 await myUtilities.CreateModalOverlayAsync(this, frmExibir: frm);
 
                 // Verificar se um novo registro foi criado
-                if (!string.IsNullOrEmpty(frm.TemaAtual.tema_nome) && frm.TemaAtual.tema_nome != registroSelecionado)
+                if (!string.IsNullOrEmpty(frm._temaAtual.tema_nome) && frm._temaAtual.tema_nome != registroSelecionado)
                 {
                     // Atualizar ComboBox se houve mudanças
                     using (clsFestasContext context = new())
@@ -1055,7 +1161,7 @@ namespace FestasApp.Views.Festas
                         SetComboBoxesEF(cbbTemas, context.Temas.OrderBy(t => t.tema_nome).ToList(), "tema_nome", "tema_id");
                     }
                     // Atualizar o registro selecionado com o novo registro
-                    registroSelecionado = frm.TemaAtual.tema_nome;
+                    registroSelecionado = frm._temaAtual.tema_nome;
                 }
                 if (!string.IsNullOrEmpty(registroSelecionado))
                 {
@@ -1065,7 +1171,11 @@ namespace FestasApp.Views.Festas
             }
         }
         //
-        // add-pacote
+        /// <summary>
+        /// picture add-pacote
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void picAddPacote_Click(object sender, EventArgs e)
         {
             ComboBox cbb = cbbPacotes;
@@ -1098,7 +1208,11 @@ namespace FestasApp.Views.Festas
             }
         }
         //
-        // add-status
+        /// <summary>
+        /// picture add-status
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void picAddStatus_Click(object sender, EventArgs e)
         {
             ComboBox cbb = cbbStatus;
@@ -1132,11 +1246,15 @@ namespace FestasApp.Views.Festas
             }
         }
         //
-        // add-cliente
+        /// <summary>
+        /// picture add-cliente
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void picAddCliente_Click(object sender, EventArgs e)
         {
             ComboBox cbb = cbbClientes;
-            string registroSelecionado = cbb.Text;
+            var registroSelecionado = cbb.ValueMember;
 
             OperacaoCRUD operacao = OperacaoCRUD.NOVO;
             using (FormClientesCRUD frm = new(param, operacao))
@@ -1144,8 +1262,10 @@ namespace FestasApp.Views.Festas
                 // Usar a Modal para exibir o FormCRUD
                 await myUtilities.CreateModalOverlayAsync(this, frmExibir: frm);
 
+                var novoCliente = frm._viewModel.ClienteSelecionado!.cli_id.ToString();
+
                 // verifica se um novo registro foi criado
-                if (!string.IsNullOrEmpty(frm.ClienteAtual.cli_nome) && frm.ClienteAtual.cli_nome != registroSelecionado)
+                if (!string.IsNullOrEmpty(novoCliente) && novoCliente != registroSelecionado)
                 {
                     // atualizar combobox se houve mundanças
                     using (clsFestasContext context = new())
@@ -1153,18 +1273,21 @@ namespace FestasApp.Views.Festas
                         SetComboBoxesEF(cbbClientes, context.Clientes.OrderBy(c => c.cli_nome).ToList(), "cli_nome", "cli_id");
                     }
                     // atualiza o registro selecionado com o novo registro
-                    registroSelecionado = frm.ClienteAtual.cli_nome;
+                    registroSelecionado = novoCliente;
                 }
 
                 if (!string.IsNullOrEmpty(registroSelecionado))
                 {
                     // selecionar o item que estava selecionado antes de abrir o formulário, ou seleciona o novo
-                    cbb.Text = registroSelecionado;
+                    cbb.ValueMember = registroSelecionado;
                 }
             }
         }
         //
-
+        #endregion
+        //
+        #region Códigos temporários, substítuidos para exclusão
+        //*************************************************************
         //************************ SEM USO -- TEMP
         //// autocompletar-itens-festas
         //private AutoCompleteStringCollection CarregarItensFesta()
@@ -1236,7 +1359,7 @@ namespace FestasApp.Views.Festas
         //}
         //
         //
-
+        #endregion
         //
 
     } // end class FormFestasCRUD

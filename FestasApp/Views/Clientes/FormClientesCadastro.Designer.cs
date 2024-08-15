@@ -28,6 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
@@ -35,44 +38,49 @@
             lblCliente = new Label();
             txtPesquisaCliente = new TextBox();
             dtgClientes = new myDataGridView();
+            dtgFestasXCli = new myDataGridView();
+            pnlRodape.SuspendLayout();
             pnlTitulo.SuspendLayout();
             pnlCabecalho.SuspendLayout();
             pnlTopo.SuspendLayout();
             pnlMeio.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             ((ISupportInitialize)dtgClientes).BeginInit();
+            ((ISupportInitialize)dtgFestasXCli).BeginInit();
             SuspendLayout();
             // 
             // pnlRodape
             // 
-            pnlRodape.Location = new Point(0, 518);
-            pnlRodape.Size = new Size(948, 80);
+            pnlRodape.Controls.Add(dtgFestasXCli);
+            pnlRodape.Location = new Point(0, 480);
+            pnlRodape.Padding = new Padding(10);
+            pnlRodape.Size = new Size(945, 118);
             // 
             // pnlTitulo
             // 
-            pnlTitulo.Size = new Size(948, 30);
+            pnlTitulo.Size = new Size(945, 30);
             // 
             // lblTitulo
             // 
             lblTitulo.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblTitulo.Size = new Size(948, 30);
+            lblTitulo.Size = new Size(945, 30);
             lblTitulo.Text = "Cadastro de Clientes";
             // 
             // pnlCabecalho
             // 
-            pnlCabecalho.Size = new Size(948, 80);
+            pnlCabecalho.Size = new Size(945, 80);
             // 
             // pnlTopo
             // 
             pnlTopo.Controls.Add(tableLayoutPanel1);
             pnlTopo.Location = new Point(0, 30);
-            pnlTopo.Size = new Size(948, 50);
+            pnlTopo.Size = new Size(945, 50);
             // 
             // pnlMeio
             // 
             pnlMeio.Controls.Add(dtgClientes);
             pnlMeio.Padding = new Padding(5, 0, 5, 0);
-            pnlMeio.Size = new Size(948, 388);
+            pnlMeio.Size = new Size(945, 350);
             // 
             // tableLayoutPanel1
             // 
@@ -89,7 +97,7 @@
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 1;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.Size = new Size(948, 50);
+            tableLayoutPanel1.Size = new Size(945, 50);
             tableLayoutPanel1.TabIndex = 0;
             // 
             // lblCliente
@@ -120,26 +128,26 @@
             dtgClientes.AllowUserToDeleteRows = false;
             dtgClientes.AllowUserToOrderColumns = true;
             dtgClientes.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.BackColor = Color.LightGoldenrodYellow;
-            dtgClientes.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle4.BackColor = Color.LightGoldenrodYellow;
+            dtgClientes.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle4;
             dtgClientes.BackgroundColor = Color.White;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.BottomCenter;
-            dataGridViewCellStyle2.BackColor = Color.DarkGoldenrod;
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            dataGridViewCellStyle2.ForeColor = Color.White;
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-            dtgClientes.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.BottomCenter;
+            dataGridViewCellStyle5.BackColor = Color.DarkGoldenrod;
+            dataGridViewCellStyle5.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            dataGridViewCellStyle5.ForeColor = Color.White;
+            dataGridViewCellStyle5.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.True;
+            dtgClientes.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
             dtgClientes.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = SystemColors.Window;
-            dataGridViewCellStyle3.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle3.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
-            dtgClientes.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = SystemColors.Window;
+            dataGridViewCellStyle6.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle6.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle6.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.False;
+            dtgClientes.DefaultCellStyle = dataGridViewCellStyle6;
             dtgClientes.Dock = DockStyle.Fill;
             dtgClientes.Location = new Point(5, 0);
             dtgClientes.MultiSelect = false;
@@ -147,19 +155,55 @@
             dtgClientes.ReadOnly = true;
             dtgClientes.RowHeadersVisible = false;
             dtgClientes.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dtgClientes.Size = new Size(938, 388);
+            dtgClientes.Size = new Size(935, 350);
             dtgClientes.TabIndex = 1;
-            dtgClientes.CellContentDoubleClick += dtgClientes_CellContentDoubleClick;
+            // 
+            // dtgFestasXCli
+            // 
+            dtgFestasXCli.AllowUserToAddRows = false;
+            dtgFestasXCli.AllowUserToDeleteRows = false;
+            dtgFestasXCli.AllowUserToOrderColumns = true;
+            dtgFestasXCli.AllowUserToResizeRows = false;
+            dataGridViewCellStyle1.BackColor = Color.LightGoldenrodYellow;
+            dtgFestasXCli.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dtgFestasXCli.BackgroundColor = Color.White;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.BottomCenter;
+            dataGridViewCellStyle2.BackColor = SystemColors.Control;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            dtgFestasXCli.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dtgFestasXCli.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = SystemColors.Window;
+            dataGridViewCellStyle3.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle3.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
+            dtgFestasXCli.DefaultCellStyle = dataGridViewCellStyle3;
+            dtgFestasXCli.Dock = DockStyle.Fill;
+            dtgFestasXCli.Location = new Point(10, 10);
+            dtgFestasXCli.MultiSelect = false;
+            dtgFestasXCli.Name = "dtgFestasXCli";
+            dtgFestasXCli.ReadOnly = true;
+            dtgFestasXCli.RowHeadersVisible = false;
+            dtgFestasXCli.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dtgFestasXCli.Size = new Size(925, 98);
+            dtgFestasXCli.TabIndex = 0;
             // 
             // FormClientesCadastro
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(948, 598);
+            ClientSize = new Size(945, 598);
             FormBorderStyle = FormBorderStyle.Sizable;
             Name = "FormClientesCadastro";
             Text = "FormClientesCadastro";
             Load += FormClientesCadastro_Load;
+            pnlRodape.ResumeLayout(false);
             pnlTitulo.ResumeLayout(false);
             pnlCabecalho.ResumeLayout(false);
             pnlTopo.ResumeLayout(false);
@@ -167,6 +211,7 @@
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();
             ((ISupportInitialize)dtgClientes).EndInit();
+            ((ISupportInitialize)dtgFestasXCli).EndInit();
             ResumeLayout(false);
         }
 
@@ -176,5 +221,6 @@
         private Label lblCliente;
         private TextBox txtPesquisaCliente;
         private MyFramework.myControls.myDataGrids.myDataGridView dtgClientes;
+        private myDataGridView dtgFestasXCli;
     }
 }

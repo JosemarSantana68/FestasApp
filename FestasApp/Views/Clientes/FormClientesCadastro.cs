@@ -1,4 +1,4 @@
-﻿//***********************************************************
+﻿//---------------------------------------------------------------
 //
 //   Festa.Com - Aplicativo para Controle de Festas & Eventos
 //   Autor: Josemar Santana
@@ -9,7 +9,8 @@
 //   
 //   FORMULÁRIO DE CLIENTES - CADASTRO
 //
-//************************************************************
+//---------------------------------------------------------------
+//
 
 namespace FestasApp.Views
 {
@@ -18,15 +19,20 @@ namespace FestasApp.Views
         /// <summary>
         /// declaração de instâncias
         /// </summary>
-        private clsParam clienteId = new clsParam(); 
-        private DataTable dtClientes = new DataTable();
-        
+        private clsParam _clienteId; 
+        private DataTable dtClientes;
+        private ClientesViewModel _viewModel;
+
         /// <summary>
         /// construtor
         /// </summary>
         public FormClientesCadastro()
         {
             InitializeComponent();
+                _clienteId = new clsParam();
+                dtClientes = new DataTable();
+                _viewModel = new ClientesViewModel();
+
             SuspendLayout();
                 SetThisForm();
                 SetControls();
@@ -61,6 +67,7 @@ namespace FestasApp.Views
         {
             // Configurar as colunas do DataGridView
             ConfigurarColunasDtgClientes();
+            ConfigurarDtgFestasXCliente();
         }
         //
         /// <summary>
@@ -74,7 +81,6 @@ namespace FestasApp.Views
             this.tstbtnConsultar.Click += TstbtnConsultar_Click;
             this.tstbtnExcluir.Click += TstbtnExcluir_Click;
             this.Load += FormClientesCadastro_Load;
-            dtgClientes.SelectionChanged += DtgClientes_SelectionChanged;
         }
         /// <summary>
         /// método selectionChanged dtgClientes
@@ -86,13 +92,18 @@ namespace FestasApp.Views
             if (dtgClientes.SelectedRows.Count > 0)
             {
                 var selectedRow = dtgClientes.SelectedRows[0]; // Obtém a linha selecionada
-                clienteId.Id = Convert.ToInt32(selectedRow.Cells[ColId].Value); // obtém o valor do Id da Festa da linha selecionada
+                _clienteId.Id = Convert.ToInt32(selectedRow.Cells[ColId].Value); // obtém o valor do Id da Festa da linha selecionada
+                //
+                _viewModel.FestasDoCliente = _viewModel.ObterFestasPorCliente(_clienteId.Id.Value);
+                AtualizarDtgFestasXCli();
             }
             else
             {
-                clienteId.Id = 0; // Define como 0 se nenhuma linha estiver selecionada
+                _clienteId.Id = 0; // Define como 0 se nenhuma linha estiver selecionada
             }
         }
+        
+
         /// <summary>
         /// btn NOVO...
         /// </summary>
@@ -102,7 +113,7 @@ namespace FestasApp.Views
         {
             OperacaoCRUD operacao = OperacaoCRUD.NOVO;
             //clsParam clienteId = new clsParam(0);
-            clienteId.Id = 0;
+            _clienteId.Id = 0;
             AbrirFormCRUDEF(operacao);
         }
         /// <summary>
@@ -142,14 +153,26 @@ namespace FestasApp.Views
         private async void AbrirFormCRUDEF(OperacaoCRUD operacao)
         {
             // Verifique se há uma ClientId selecionada no DataGridView
-            if (clienteId.IsValid())
+            if (_clienteId.IsValid())
             {
                 try
                 {
                     // Abre o formulário CRUD para edição passando o ID do cliente e a operação
-                    using (FormClientesCRUD frm = new(clienteId, operacao))
+                    using (FormClientesCRUD frm = new(_clienteId, operacao))
                     {
                         await FormMenuMain.ShowModalOverlay(frm); // Usar a Modal para exibir o FormCRUD
+
+                        ////// Após o formulário CRUD ser fechado, verifique se há um cliente selecionado
+                        //if (operacao == OperacaoCRUD.NOVO && _viewModel.ClienteSelecionado != null)
+                        //{
+                        //    // Aqui o ClienteSelecionado já deve ter o novo cliente adicionado
+                            _clienteId.Id = frm._viewModel.ClienteSelecionado!.cli_id;
+                        //}
+                        //else
+                        //{
+                        //    _viewModel.ClienteSelecionado.cli_id = _clienteId.Id!.Value;
+                        //}
+
                         // quando volta do CRUD, atualiza dataGrid
                         CarregarDtgClientesEF(); 
                     }
@@ -165,12 +188,12 @@ namespace FestasApp.Views
             }
         }
         /// <summary>
-        /// carregar dataGrid com dados da tabela tblclientes do banco de dados usando LINQ e EF
+        /// Carrega dataGrid com dados da tabela tblclientes, através de ViewModel
         /// </summary>
         private void CarregarDtgClientesEF()
         {
             // testa a conexão
-            if (!myConnMySql.TestarConexao())
+            if (!_viewModel.TestarConexao())
             {
                 if (tstbtnNovo != null) tstbtnNovo.Enabled = false;
                 TratarControles(habilitar: false); // Desabilita botões de CRUD em caso de erro
@@ -179,15 +202,34 @@ namespace FestasApp.Views
             //
             DataGridView dtg = dtgClientes;
 
+            // Captura o ID do cliente atualmente selecionado
+            int? clienteIdSelecionado = null;
+
+            if (dtg.SelectedRows.Count > 0)
+            {
+                clienteIdSelecionado = Convert.ToInt32(dtg.SelectedRows[0].Cells[0].Value);
+
+                //if (_viewModel.ClienteSelecionado != null)
+                //    clienteIdSelecionado = _viewModel.ClienteSelecionado?.cli_id;
+
+                if (_clienteId.Id != clienteIdSelecionado)
+                {
+                    clienteIdSelecionado = _clienteId.Id;
+                }
+            }
+
             try
             {
                 // Desassocia a fonte de dados para evitar o erro ao limpar as linhas
                 //dtg.DataSource = null;
+
                 // Limpa as linhas existentes sem alterar as colunas
                 dtg.Rows.Clear();
 
-                // Carregar os dados do DbSet<T>
-                var listaClientes = repClientesEF.GetClientesEF();
+                // reinicia com new() para garantir atualização da lista de clientes
+                _viewModel = new();
+                // Obtem a lista atualizada de clientes do ViewModel
+                var listaClientes = _viewModel.Clientes;
 
                 // Preenche o DataTable com os dados da lista
                 if (listaClientes != null)
@@ -208,12 +250,27 @@ namespace FestasApp.Views
                         );
                     }
                 }
-                // Seleciona a primeira linha se houver linhas no DataGridView
-                if (dtg.Rows.Count > 0)
+
+                // Seleciona a linha correspondente ao cliente previamente selecionado
+                if (clienteIdSelecionado.HasValue)
                 {
+                    foreach (DataGridViewRow row in dtg.Rows)
+                    {
+                        if (Convert.ToInt32(row.Cells[0].Value) == clienteIdSelecionado.Value)
+                        {
+                            row.Selected = true;
+                            //dtg.FirstDisplayedScrollingRowIndex = row.Index; // Faz rolar até o cliente selecionado
+                            dtg.CurrentCell = row.Cells[0]; // Define o foco na célula da linha selecionada
+                            break;
+                        }
+                    }
+                }
+                else if (dtg.Rows.Count > 0)
+                {
+                    // rolar até a primeira linha para garantir que está visível
                     dtg.Rows[0].Selected = true;
-                    // Opcional: Pode rolar até a primeira linha para garantir que está visível
                     dtg.FirstDisplayedScrollingRowIndex = 0;
+                    //dtg.CurrentCell = row.Cells[0]; // Define o foco na célula da linha selecionada
                 }
             }
             catch (MySqlException mysqlEx)
@@ -270,8 +327,9 @@ namespace FestasApp.Views
 
             // Adiciona o evento CellFormatting para formatação dos dados
             dtgClientes.CellFormatting += DtgClientes_CellFormatting;
-
-        } 
+            dtgClientes.SelectionChanged += DtgClientes_SelectionChanged;
+            dtgClientes.CellContentDoubleClick += DtgClientes_CellContentDoubleClick;
+        }
         /// <summary>
         /// Evento disparado para formatar as células do DataGridView.
         /// </summary>
@@ -328,9 +386,77 @@ namespace FestasApp.Views
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void dtgClientes_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        private void DtgClientes_CellContentDoubleClick(object? sender, DataGridViewCellEventArgs e)
         {
             tstbtnEditar.PerformClick();
+        }
+        /// <summary>
+        /// Configura o DataGridView para exibir as FestasXcliente.
+        /// </summary>
+        private const int ColDataFesta = 0;
+        private const int ColTipoEvento = 1;
+        private const int ColEspaco = 2;
+        private const int ColTema = 3;
+        private const int ColPacote = 4;
+        private const int ColStatus = 5;
+        private const int ColValor = 6;
+        private void ConfigurarDtgFestasXCliente()
+        {
+            DataGridView dtg = dtgFestasXCli;
+            dtg.Columns.Clear();
+
+            // configurar colunas
+            myFunctions.ConfigurarAdicionarColuna(dtg, ColDataFesta, "Data da Festa", 160, alignment: DataGridViewContentAlignment.MiddleCenter);
+            myFunctions.ConfigurarAdicionarColuna(dtg, ColTipoEvento, "Tipo Evento", 160, alignment: DataGridViewContentAlignment.MiddleCenter);
+            myFunctions.ConfigurarAdicionarColuna(dtg, ColEspaco, "Espaço", 160, alignment: DataGridViewContentAlignment.MiddleCenter);
+            myFunctions.ConfigurarAdicionarColuna(dtg, ColTema, "Tema", 160, alignment: DataGridViewContentAlignment.MiddleCenter);
+            myFunctions.ConfigurarAdicionarColuna(dtg, ColPacote, "Pacote", 160, alignment: DataGridViewContentAlignment.MiddleCenter);
+            myFunctions.ConfigurarAdicionarColuna(dtg, ColStatus, "Status", 120, alignment: DataGridViewContentAlignment.MiddleCenter);
+            myFunctions.ConfigurarAdicionarColuna(dtg, ColValor, "Valor", 100, alignment: DataGridViewContentAlignment.MiddleCenter);
+
+            dtg.Columns[ColValor].DefaultCellStyle.Format = "N2";
+
+            // Configuração da altura geral das linhas
+            dtg.RowTemplate.Height = 25;
+
+            // Ativar modo de ajuste automático com base no conteúdo
+            //dtg.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+
+            //// Alternativamente, ajustar individualmente por coluna, se preferir
+            //dtg.Columns[ColDataFesta].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            //dtg.Columns[ColTipoEvento].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill; // Essa coluna irá preencher o espaço restante
+            //dtg.Columns[ColEspaco].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            //dtg.Columns[ColTema].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            //dtg.Columns[ColPacote].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            //dtg.Columns[ColStatus].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            //dtg.Columns[ColValor].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+
+            // Configurar DataGridView como somente leitura
+            dtg.ReadOnly = true;
+
+            // Desmarcar seleção automática ao carregar dados
+            dtg.ClearSelection();
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        private void AtualizarDtgFestasXCli()
+        {
+            dtgFestasXCli.Rows.Clear();
+
+            foreach (var festa in _viewModel.FestasDoCliente)
+            {
+                dtgFestasXCli.Rows.Add(
+                    //festa.fest_id,
+                    festa.fest_dtFesta?.ToString("dd/MM/yyyy"),
+                    festa.TipoEvento?.tpev_nome,
+                    festa.Espaco?.espc_nome,
+                    festa.Tema?.tema_nome,
+                    festa.Pacote?.pct_nome,
+                    festa.Status?.stt_status,
+                    festa.fest_valor?.ToString("C")
+                );
+            }
         }
         /// <summary>
         /// txtPesquisaCliente
@@ -353,7 +479,7 @@ namespace FestasApp.Views
             try
             {
                 // Carregar os dados do DbSet<T>
-                var listaClientes = repClientesEF.GetClientesEF();
+                var listaClientes = _viewModel.Clientes;
 
                 // Filtrar a lista de clientes com base no nome
                 var clientesFiltrados = listaClientes

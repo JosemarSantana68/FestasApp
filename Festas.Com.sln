@@ -13,8 +13,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Itens de Solução", "Itens
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyFramework", "..\..\MyFramework\MyFramework\MyFramework.csproj", "{9E4401D4-90F1-4743-AB42-5BFDFB0237B1}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contratos", "Contratos", "{E4EA2131-0F24-4F4B-B7BD-AF04A873B4AD}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

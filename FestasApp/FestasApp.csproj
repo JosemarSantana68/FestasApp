@@ -19,22 +19,30 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Relatorios\ClientesRprt.rdlc" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Relatorios\ClientesRprt.rdlc" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Contratos\" />
     <Folder Include="Services\" />
-    <Folder Include="ViewModels\" />
     <Folder Include="Views\FestasDetalhes\" />
-    <Folder Include="Views\FestasContratos\" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="iTextSharp" Version="5.5.13.4" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+    <PackageReference Include="Microsoft.SqlServer.Types" Version="160.1000.6" />
     <PackageReference Include="MySql.Data" Version="8.4.0" />
     <PackageReference Include="NLog" Version="5.3.2" />
     <PackageReference Include="NLog.Config" Version="4.7.15" />
     <PackageReference Include="PDFsharp" Version="6.1.1" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.2" />
+    <PackageReference Include="ReportViewerCore.WinForms" Version="15.1.21" />
   </ItemGroup>
 
   <ItemGroup>
@@ -58,6 +66,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Update="Relatorios\ClientesDataSet.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ClientesDataSet.xsd</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -74,6 +87,10 @@
     <None Update="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Update="Relatorios\ClientesDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>ClientesDataSet.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
 	

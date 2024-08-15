@@ -67,8 +67,8 @@
             // 
             pnlMeio.BackColor = Color.LightGray;
             pnlMeio.Controls.Add(dtgRegistrosTabelasAuxiliares);
-            pnlMeio.Location = new Point(182, 130);
-            pnlMeio.Size = new Size(965, 384);
+            pnlMeio.Controls.Add(dtgTabelasAuxiliares);
+            pnlMeio.Size = new Size(1147, 384);
             // 
             // dtgTabelasAuxiliares
             // 
@@ -76,9 +76,9 @@
             dtgTabelasAuxiliares.BorderStyle = BorderStyle.None;
             dtgTabelasAuxiliares.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dtgTabelasAuxiliares.Dock = DockStyle.Left;
-            dtgTabelasAuxiliares.Location = new Point(0, 130);
+            dtgTabelasAuxiliares.Location = new Point(0, 0);
             dtgTabelasAuxiliares.Name = "dtgTabelasAuxiliares";
-            dtgTabelasAuxiliares.Size = new Size(182, 384);
+            dtgTabelasAuxiliares.Size = new Size(180, 384);
             dtgTabelasAuxiliares.TabIndex = 2;
             // 
             // dtgRegistrosTabelasAuxiliares
@@ -109,28 +109,23 @@
             dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
             dtgRegistrosTabelasAuxiliares.DefaultCellStyle = dataGridViewCellStyle3;
             dtgRegistrosTabelasAuxiliares.Dock = DockStyle.Left;
-            dtgRegistrosTabelasAuxiliares.Location = new Point(0, 0);
+            dtgRegistrosTabelasAuxiliares.Location = new Point(180, 0);
             dtgRegistrosTabelasAuxiliares.MultiSelect = false;
             dtgRegistrosTabelasAuxiliares.Name = "dtgRegistrosTabelasAuxiliares";
             dtgRegistrosTabelasAuxiliares.ReadOnly = true;
             dtgRegistrosTabelasAuxiliares.RowHeadersVisible = false;
             dtgRegistrosTabelasAuxiliares.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dtgRegistrosTabelasAuxiliares.Size = new Size(581, 384);
-            dtgRegistrosTabelasAuxiliares.TabIndex = 5;
+            dtgRegistrosTabelasAuxiliares.Size = new Size(629, 384);
+            dtgRegistrosTabelasAuxiliares.TabIndex = 6;
             // 
             // FormAuxiliaresMain
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1147, 594);
-            Controls.Add(dtgTabelasAuxiliares);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Name = "FormAuxiliaresMain";
             Text = "FormAuxiliaresMain";
-            Controls.SetChildIndex(pnlRodape, 0);
-            Controls.SetChildIndex(pnlCabecalho, 0);
-            Controls.SetChildIndex(dtgTabelasAuxiliares, 0);
-            Controls.SetChildIndex(pnlMeio, 0);
             pnlTitulo.ResumeLayout(false);
             pnlCabecalho.ResumeLayout(false);
             pnlMeio.ResumeLayout(false);

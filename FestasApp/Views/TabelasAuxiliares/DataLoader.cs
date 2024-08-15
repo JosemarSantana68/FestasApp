@@ -20,7 +20,7 @@ namespace FestasApp.Views.TabelasAuxiliares
         /// Instância de FormAuxiliaresMain para gerenciar as tabelas auxiliares
         /// </summary>
         private readonly FormAuxiliaresMain _form;
-        private readonly clsFestasContext _context;
+        //private readonly clsFestasContext _context;
         public clsParam idRegistro = new(); // Inicialize a instância publica
 
         // Instância de TabelaAuxiliarManager para gerenciar a seleção das tabelas auxiliares no dtg
@@ -31,12 +31,11 @@ namespace FestasApp.Views.TabelasAuxiliares
         /// </summary>
         /// <param name="form"></param>
         /// <param name="context"></param>
-        public DataLoader(FormAuxiliaresMain form, clsFestasContext context)
+        public DataLoader(FormAuxiliaresMain form) //, clsFestasContext context)
         {
             _form = form;
-            _context = context;
+            //_context = context;
         }
-        //
         /// <summary>
         /// 1. Método para popular o DataGridView com as tabelas auxiliares
         /// </summary>
@@ -49,7 +48,6 @@ namespace FestasApp.Views.TabelasAuxiliares
             }
             OrdenarESelecionarPrimeiraLinha();
         }
-        //
         /// <summary>
         /// 1.1. Método para adicionar uma tabela ao DataGridView
         /// </summary>
@@ -110,7 +108,6 @@ namespace FestasApp.Views.TabelasAuxiliares
                 }
             }
         }
-        //
         /// <summary>
         /// personaliza tabela selecionada no datagridTabelas
         /// </summary>
@@ -144,7 +141,7 @@ namespace FestasApp.Views.TabelasAuxiliares
                 }
             }
         }
-        
+        ///
         /// <summary>
         /// popular dtgRegistrosTabelas de acordo com a tabela selecionada
         /// </summary>
@@ -247,9 +244,9 @@ namespace FestasApp.Views.TabelasAuxiliares
            // Continue para outras tabelas...
         }
         //
-        //------------------------------------------------------
+        //******************************************************
         /// <summary>
-        /// configurações específicas para dtg TIPO de EVENTOS
+        /// configurações específicas para dtg 1. TIPO de EVENTOS
         /// </summary>
         private void SetDtgRegistrosParaTipoEvento()
         {
@@ -261,7 +258,7 @@ namespace FestasApp.Views.TabelasAuxiliares
         }
         //------------------------------------------------------
         /// <summary>
-        /// configurações específicas para dtg TEMAS
+        /// configurações específicas para dtg 2. TEMAS
         /// </summary>
         private void SetDtgRegistrosParaTemas()
         {
@@ -269,12 +266,20 @@ namespace FestasApp.Views.TabelasAuxiliares
             dtg.Columns.Clear();
             myFunctions.ConfigurarAdicionarColuna(dtg, 0, "ID", 50, "", alignment: DataGridViewContentAlignment.MiddleCenter);
             myFunctions.ConfigurarAdicionarColuna(dtg, 1, "Temas", 220, "");
-            myFunctions.ConfigurarAdicionarColuna(dtg, 2, "Descrição", 150, "");
+            myFunctions.ConfigurarAdicionarColuna(dtg, 2, "Descrição", 220, "");
             dtg.Sort(dtg.Columns["Temas"], ListSortDirection.Ascending);
+
+            // Ajustar a largura da coluna "Descrição" com um valor mínimo
+            AjustarLarguraComMinimo(dtg.Columns["Descrição"], 220);
+
+            // para ajustar a largura com base apenas no cabeçalho:
+            //dtg.Columns["Descrição"].AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
+
+            //dtg.Sort(dtg.Columns["Temas"], ListSortDirection.Ascending);
         }
         //------------------------------------------------------
         /// <summary>
-        /// configurações específicas para dtg STATUS
+        /// configurações específicas para dtg 3. STATUS
         /// </summary>
         private void SetDtgRegistrosParaStatus()
         {
@@ -286,7 +291,7 @@ namespace FestasApp.Views.TabelasAuxiliares
         }
         //------------------------------------------------------
         /// <summary>
-        /// configurações específicas para dtg PACOTES
+        /// configurações específicas para dtg 4. PACOTES
         /// </summary>
         private void SetDtgRegistrosParaPacotes()
         {
@@ -294,15 +299,18 @@ namespace FestasApp.Views.TabelasAuxiliares
             dtg.Columns.Clear();
             myFunctions.ConfigurarAdicionarColuna(dtg, 0, "ID", 50, "", alignment: DataGridViewContentAlignment.MiddleCenter);
             myFunctions.ConfigurarAdicionarColuna(dtg, 1, "Nome", 220, "");
-            myFunctions.ConfigurarAdicionarColuna(dtg, 2, "Descrição", 200  , "");
+            myFunctions.ConfigurarAdicionarColuna(dtg, 2, "Descrição", 220  , "");
             myFunctions.ConfigurarAdicionarColuna(dtg, 3, "Duração", 100, "", alignment: DataGridViewContentAlignment.MiddleCenter);
             myFunctions.ConfigurarAdicionarColuna(dtg, 4, "Valor", 100, "", alignment: DataGridViewContentAlignment.MiddleRight);
             dtg.Sort(dtg.Columns["Nome"], ListSortDirection.Ascending);
             dtg.Columns["Valor"].DefaultCellStyle.Format = "C2";
+
+            // Ajustar a largura da coluna "Descrição" com um valor mínimo
+            AjustarLarguraComMinimo(dtg.Columns["Descrição"], 220);
         }
         //------------------------------------------------------
         /// <summary>
-        /// configurações específicas para dtg ITENS
+        /// configurações específicas para dtg 5. ITENS
         /// </summary>
         private void SetDtgRegistrosParaItens()
         {
@@ -315,11 +323,14 @@ namespace FestasApp.Views.TabelasAuxiliares
             myFunctions.ConfigurarAdicionarColuna(dtg, 4, "Valor", 100, "", alignment: DataGridViewContentAlignment.MiddleRight);
             dtg.Sort(dtg.Columns["Nome"], ListSortDirection.Ascending);
 
+            // Ajustar a largura da coluna "Descrição" com um valor mínimo
+            AjustarLarguraComMinimo(dtg.Columns["Descrição"], 220);
+
             dtg.Columns["Valor"].DefaultCellStyle.Format = "C2";
         }
         //------------------------------------------------------
         /// <summary>
-        /// configurações específicas para dtg ESPAÇOS
+        /// configurações específicas para dtg 6. ESPAÇOS
         /// </summary>
         private void SetDtgRegistrosParaEspacos()
         {
@@ -329,10 +340,25 @@ namespace FestasApp.Views.TabelasAuxiliares
             myFunctions.ConfigurarAdicionarColuna(dtg, 1, "Nome", 220, "");
             dtg.Sort(dtg.Columns["Nome"], ListSortDirection.Ascending);
         }
-        //
-        //------------------------------------------------------
         /// <summary>
-        /// configura para dtg CONTRATOS
+        /// método para ajustar largura de uma coluna especifica
+        /// </summary>
+        /// <param name="coluna"></param>
+        /// <param name="larguraMinima"></param>
+        private void AjustarLarguraComMinimo(DataGridViewColumn coluna, int larguraMinima)
+        {
+            // ativa modo autosize
+            coluna.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            // determina largura minima
+            if (coluna.Width < larguraMinima)
+            {
+                coluna.Width = larguraMinima;
+            }
+        }
+        //
+        /// *********************************
+        /// <summary>
+        /// configura para dtg 7. CONTRATOS
         /// </summary>
         private void SetDtgRegistrosParaContratos()
         {
@@ -354,6 +380,7 @@ namespace FestasApp.Views.TabelasAuxiliares
 
             // ordenar dtg por [1]"Nome"
             dtg.Sort(dtg.Columns["Nome"], ListSortDirection.Ascending);
+
             // Adicionar eventos
             _form.dtgRegistrosTabelasAuxiliares.CellContentClick += DtgRegistrosTabelasAuxiliares_CellContentClick;
             _form.dtgRegistrosTabelasAuxiliares.SelectionChanged += DtgRegistrosTabelasAuxiliares_SelectionChanged;
@@ -400,7 +427,7 @@ namespace FestasApp.Views.TabelasAuxiliares
                     {
                         var caminhoArquivo = currentRow.Cells["Arquivo"].Value?.ToString() ?? string.Empty;
                         // mostrar pdf-contrato
-                        ExibirPainelVisualizacao();
+                        //ExibirPainelVisualizacao();
                         VisualizarArquivoContrato(caminhoArquivo);
                     }
                     else
@@ -421,14 +448,15 @@ namespace FestasApp.Views.TabelasAuxiliares
             {
                 CriarPanelVisualizacao();
             }
+            //
             _form.pnlVisualizacao!.Visible = true;
             // ocupa o restante do pnlMeio com dtgRegistros
-            _form.dtgRegistrosTabelasAuxiliares.Dock = DockStyle.Fill;
+            //_form.dtgRegistrosTabelasAuxiliares.Dock = DockStyle.Fill;
         }
         /// <summary>
         /// método para fechar painel de visualizar contratos-pdf
         /// </summary>
-        private void FecharPanelVisualizacao()
+        public void FecharPanelVisualizacao()
         {
             if (_form.pnlVisualizacao != null)
             {
@@ -445,7 +473,7 @@ namespace FestasApp.Views.TabelasAuxiliares
         /// método para visualizar o arquivo de contrato em um WebBrowser
         /// </summary>
         /// <param name="filePath"></param>
-        private void VisualizarArquivoContrato(string filePath)
+        private async void VisualizarArquivoContrato(string filePath)
         {
             // se caminho estiver vazio return
             if (string.IsNullOrEmpty(filePath))
@@ -453,19 +481,37 @@ namespace FestasApp.Views.TabelasAuxiliares
                 _form.pdfViewer!.Navigate("about:blank"); // Limpar a visualização em caso de erro
                 return;
             }
-            // se panel não existir ele cria novo panel
-            if (_form.pnlVisualizacao == null) 
-            {
-                CriarPanelVisualizacao();
-            }
-            // se caminho existe
+
+            // Verificar se o arquivo existe
             if (File.Exists(filePath))
             {
-                _form.pdfViewer!.Navigate(filePath);
+                // se panel não existir ele cria novo panel
+                if (_form.pnlVisualizacao == null)
+                {
+                    CriarPanelVisualizacao();
+                }
+
+                var viewerPath = string.Empty;
+                // Obter os caminhos completos normalizados
+                if (_form.pdfViewer!.Url?.LocalPath != null)
+                {
+                    // caminho do arquivo que está aberto no viewer
+                    viewerPath = Path.GetFullPath(_form.pdfViewer!.Url?.LocalPath ?? string.Empty);
+                }
+                
+                // caminho do arquivo salvo na tabela
+                var normalizedFilePath = Path.GetFullPath(filePath);
+
+                // Verificar se o arquivo já está aberto no pdfViewer
+                if (!string.Equals(viewerPath, normalizedFilePath, StringComparison.OrdinalIgnoreCase))
+                {
+                    _form.pdfViewer.Navigate(filePath);
+                }
             }
             else
             {
-                MessageBox.Show("Arquivo do contrato não encontrado.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                await myUtilities.myMessageBox(FormMenuMain.InstanceFrmMain!, $"Arquivo do contrato {filePath} não encontrado.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
                 FecharPanelVisualizacao();
                 //_form.pdfViewer!.Navigate("about:blank"); // Limpar a visualização em caso de erro
             }
@@ -485,14 +531,16 @@ namespace FestasApp.Views.TabelasAuxiliares
                 BorderStyle = BorderStyle.FixedSingle,
                 BackColor = Color.LightGray
             };
+            // Adiciona o painel de visualização ao painel principal
+            _form.pnlMeio.Controls.Add(_form.pnlVisualizacao);
 
             // 1.1. Cria o botão de fechar
             Button btnClose = new Button
             {
                 Text = "Fechar",
-                //Dock = DockStyle.Top,
                 Height = 30,
-                //Margin = new Padding(10,10,0,0)
+                //Margin = new Padding(10,10,0,0),
+                //Image = Properties.Resources.fechar,
                 Cursor = Cursors.Hand,
             };
             btnClose.Click += BtnClosePnlVisualização_Click;
@@ -507,8 +555,6 @@ namespace FestasApp.Views.TabelasAuxiliares
             _form.pnlVisualizacao.Controls.Add(btnClose);
             _form.pnlVisualizacao.Controls.Add(_form.pdfViewer);
 
-            // Adiciona o painel de visualização ao painel principal
-            _form.pnlMeio.Controls.Add(_form.pnlVisualizacao);
         }
         //
         /// <summary>

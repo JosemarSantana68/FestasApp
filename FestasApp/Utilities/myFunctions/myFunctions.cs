@@ -17,7 +17,12 @@ namespace FestasApp.Utilities.myFunctions
     public static class myFunctions
     {
         //
-        // obtém os tamanhos dos campos nas tabelas, para determinar MaxLenght do TextBoxes
+        /// <summary>
+        /// obtém os tamanhos dos campos nas tabelas, para determinar MaxLenght do TextBoxes
+        /// </summary>
+        /// <param name="tableName"></param>
+        /// <param name="columnName"></param>
+        /// <returns></returns>
         public static int GetMaxLength(string tableName, string columnName)
         {
             try
@@ -52,7 +57,17 @@ namespace FestasApp.Utilities.myFunctions
             return int.MaxValue; // Retorna int.MaxValue para tipos que não têm tamanho, como int, date, etc.
         }
         //
-        // configurar e /ou adicionar colunas de datagriviews
+        /// <summary>
+        /// configurar e /ou adicionar colunas de datagriviews
+        /// </summary>
+        /// <param name="dtg"></param>
+        /// <param name="colIndex"></param>
+        /// <param name="headerText"></param>
+        /// <param name="width"></param>
+        /// <param name="name"></param>
+        /// <param name="alignment"></param>
+        /// <param name="padding"></param>
+        /// <param name="visible"></param>
         //
         public static void ConfigurarAdicionarColuna(
                                     DataGridView dtg,
@@ -100,7 +115,16 @@ namespace FestasApp.Utilities.myFunctions
         //
         //****************************************************************************************
         //
-        // estatisticas em DataGridViews, Total de Registros, Datas max e min, e Soma de Colunas
+        /// <summary>
+        /// estatisticas em DataGridViews, Total de Registros, Datas max e min, e Soma de Colunas
+        /// </summary>
+        /// <param name="dataGridView"></param>
+        /// <param name="colunaDataIndex"></param>
+        /// <param name="colunaValorIndex"></param>
+        /// <param name="totalRegistros"></param>
+        /// <param name="menorData"></param>
+        /// <param name="maiorData"></param>
+        /// <param name="somaColuna"></param>
         public static void CalcularDataGridDatasSomas(DataGridView dataGridView, int colunaDataIndex, int colunaValorIndex, out int totalRegistros, out DateTime? menorData, out DateTime? maiorData, out decimal somaColuna)
         {
             totalRegistros = 0;
@@ -130,8 +154,12 @@ namespace FestasApp.Utilities.myFunctions
             }
         }
         //
-        // somar coluna especifica DatagridView
-        //
+        /// <summary>
+        /// somar coluna especifica DatagridView
+        /// </summary>
+        /// <param name="dataGridView"></param>
+        /// <param name="colunaIndex"></param>
+        /// <returns></returns>
         public static decimal SomarColunaSEMUSO(DataGridView dataGridView, int colunaIndex)
         {
             decimal soma = 0;
@@ -145,7 +173,13 @@ namespace FestasApp.Utilities.myFunctions
             return soma;
         }
         //  
-        // popula comboboxes com id e nome de tabelas, retorna DataTable
+        /// <summary>
+        /// popula comboboxes com id e nome de tabelas, retorna DataTable
+        /// </summary>
+        /// <param name="tabela"></param>
+        /// <param name="campoId"></param>
+        /// <param name="campoNome"></param>
+        /// <returns></returns>
         public static DataTable GetDataComboBoxSEMUSO(string tabela, string campoId, string campoNome)
         {
             DataTable dt = new();
@@ -177,7 +211,16 @@ namespace FestasApp.Utilities.myFunctions
             return dt;
         }
         //
-        // configurar colunas de datagriviews
+        /// <summary>
+        /// configurar colunas de datagriviews
+        /// </summary>
+        /// <param name="dtg"></param>
+        /// <param name="colIndex"></param>
+        /// <param name="headerText"></param>
+        /// <param name="width"></param>
+        /// <param name="alignment"></param>
+        /// <param name="padding"></param>
+        /// <param name="visible"></param>
         public static void ConfigurarColunaSEMUSO(
                             DataGridView dtg,
                             int colIndex,
@@ -200,7 +243,8 @@ namespace FestasApp.Utilities.myFunctions
                 dtg.Columns[colIndex].Visible = visible;
             }
         }
-        // Você pode adicionar outros métodos de configuração comuns aqui
+
+        // adicionar outros métodos de configuração comuns aqui
 
     } // end class
 } // end namespace

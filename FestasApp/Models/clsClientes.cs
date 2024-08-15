@@ -1,17 +1,18 @@
-﻿//***********************************************************
+﻿//-------------------------------------------------------------------------
 //
 //   Festa.Com - Aplicativo para Controle de Festas & Eventos
 //   Autor: Josemar Santana
 //   Linguagem: C#
 //
 //   Inicio: 23/05/2024
-//   Ultima Alteração: 
+//   Criação do Módulo: 23/05/2024
+//   Ultima Alteração: 09/08/2024 comentário: incremento de DataAnnotation
 //   
 //   CLASSE DE CLIENTE
 //
-//************************************************************
+//-------------------------------------------------------------------------
 
-// campos da tabela
+// campos da tabela <tblclientes>
 // cli_id           int NOT NULL auto_increment,
 // cli_nome         varchar(100) NOT NULL,
 // cli_telefone1    varchar(11) NOT NULL,
@@ -31,21 +32,50 @@ namespace FestasApp.Models
         // Propriedades correspondentes aos campos da tabela `tblclientes`
         [Key]
         public int cli_id { get; set; }
+        //
+        [Required(ErrorMessage = "Nome do Cliente é obrigatório.")]
+        [MaxLength(100)]
         public string? cli_nome { get; set; }
+        //
+        [Required(ErrorMessage = "Um Telefone do Cliente é obrigatório.")]
+        [MaxLength(11)]
         public string? cli_telefone1 { get; set; }
+        //
+        [MaxLength(11)]
         public string? cli_telefone2 { get; set; }
+        //
+        [Required(ErrorMessage = "Cpf do Cliente é obrigatório para gerar Contratos.")]
+        //[CustomValidation(typeof(clsValidator), "ValidateCpf")]
+        [MaxLength(11)]
         public string? cli_cpf { get; set; }
+        //
+        [MaxLength(100)]
         public string? cli_endereco { get; set; }
+        //
+        [MaxLength(10)]
         public string? cli_cep { get; set; }
+        //
+        [MaxLength(50)]
         public string? cli_cidade { get; set; }
+        //
+        [MaxLength(20)]
         public string? cli_uf { get; set; }
 
         // Construtor padrão
         public clsClientes() { }
 
-        // Construtor que inicializa todas as propriedades
-        public clsClientes(int id,
-                        string nome,
+        /// <summary>
+        /// Construtor que inicializa todas as propriedades
+        /// </summary>
+        /// <param name="nome"></param>
+        /// <param name="telefone1"></param>
+        /// <param name="telefone2"></param>
+        /// <param name="cpf"></param>
+        /// <param name="endereco"></param>
+        /// <param name="cep"></param>
+        /// <param name="cidade"></param>
+        /// <param name="uf"></param>
+        public clsClientes(string nome,
                         string telefone1,
                         string telefone2,
                         string cpf,
@@ -54,7 +84,6 @@ namespace FestasApp.Models
                         string cidade,
                         string uf)
         {
-            cli_id = id;
             cli_nome = nome;
             cli_telefone1 = telefone1;
             cli_telefone2 = telefone2;
@@ -65,7 +94,11 @@ namespace FestasApp.Models
             cli_uf = uf;
         }
         //------------------------------------------------------------
-        // Método para inserir um novo cliente na tabela `tblclientes`
+        /// <summary>
+        ///  Método para inserir um novo cliente na tabela `tblclientes`
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public bool CreateCliente()
         {
             string sql = "INSERT INTO tblclientes (cli_nome, " +
@@ -122,9 +155,14 @@ namespace FestasApp.Models
             // return sem necessidade após usar throw...
             //return false;
         }
+
         //------------------------------------------------------------
         // SELECT - WHERE (especifico)
-        // Método para obter os dados de somente UM cliente a partir do seu ID
+        /// <summary>
+        /// Método para obter os dados de somente UM cliente a partir do seu ID
+        /// </summary>
+        /// <param name="IdCliente"></param>
+        /// <exception cref="Exception"></exception>
         public void ReadUmCliente(int IdCliente)
         {
             // Definindo a consulta SQL para selecionar o cliente pelo ID
@@ -174,8 +212,11 @@ namespace FestasApp.Models
 
         //-------------------------------------------------
         // SELECT (Todos)
-        // Obtém TODOS os clientes da tabela `tblclientes`.
-        // retorna Um DataTable contendo todos os clientes.
+        /// <summary>
+        /// Obtém TODOS os clientes da tabela `tblclientes`, retorna Um DataTable contendo todos os clientes.
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public static DataTable ReadAllClientes()
         {
             DataTable dt = new DataTable();
@@ -220,8 +261,13 @@ namespace FestasApp.Models
             // Retorna DataTable...
             return dt;
         }
+
         //-----------------------------
-        // UPDATE - ALTERAR registro
+        /// <summary>
+        /// UPDATE - ALTERAR registro
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public bool UpdateCliente()
         {
             string sql = "UPDATE tblclientes SET " +
@@ -269,7 +315,11 @@ namespace FestasApp.Models
         }
 
         //-------------------------------------------------------
-        // Método para excluir um cliente da tabela `tblclientes`
+        /// <summary>
+        /// Método para excluir um cliente da tabela `tblclientes`
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public bool DeleteCliente()
         {
             string sql = "DELETE FROM tblclientes WHERE cli_id=@Id";
@@ -297,6 +347,8 @@ namespace FestasApp.Models
                 throw new Exception($"Erro ao excluir cliente: {ex.Message}");
             }
         }
+        //
+
     } // end class clsClientes
 } // end namespace
  

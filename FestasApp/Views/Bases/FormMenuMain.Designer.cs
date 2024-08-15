@@ -73,6 +73,7 @@ namespace FestasApp
             btnPacotesFestas = new myButtonMenu();
             ContainerSubFinanceiro = new FlowLayoutPanel();
             btnUsuarios = new myButtonMenu();
+            btnRelatorios = new myButtonMenu();
             pnlStatusRodape = new Panel();
             lblStatusConn = new Label();
             PnlBarraTitulo.SuspendLayout();
@@ -479,6 +480,7 @@ namespace FestasApp
             flowBarraLateral.Controls.Add(btnFornecedor);
             flowBarraLateral.Controls.Add(btnPacotesFestas);
             flowBarraLateral.Controls.Add(ContainerSubFinanceiro);
+            flowBarraLateral.Controls.Add(btnRelatorios);
             flowBarraLateral.Controls.Add(btnUsuarios);
             flowBarraLateral.Dock = DockStyle.Fill;
             flowBarraLateral.Location = new Point(0, 86);
@@ -606,7 +608,7 @@ namespace FestasApp
             btnUsuarios.FlatAppearance.BorderSize = 0;
             btnUsuarios.FlatStyle = FlatStyle.Flat;
             btnUsuarios.ForeColor = Color.White;
-            btnUsuarios.Location = new Point(0, 276);
+            btnUsuarios.Location = new Point(0, 322);
             btnUsuarios.Margin = new Padding(0, 3, 3, 3);
             btnUsuarios.Name = "btnUsuarios";
             btnUsuarios.Padding = new Padding(63, 0, 0, 0);
@@ -617,6 +619,26 @@ namespace FestasApp
             btnUsuarios.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnUsuarios.UseVisualStyleBackColor = false;
             btnUsuarios.Click += btnUsuarios_Click;
+            // 
+            // btnRelatorios
+            // 
+            btnRelatorios._Image = Resources.icons8_toy_train_36;
+            btnRelatorios.BackColor = Color.FromArgb(26, 32, 40);
+            btnRelatorios.CorOnEnter = Color.Blue;
+            btnRelatorios.FlatAppearance.BorderSize = 0;
+            btnRelatorios.FlatStyle = FlatStyle.Flat;
+            btnRelatorios.ForeColor = Color.White;
+            btnRelatorios.Location = new Point(0, 276);
+            btnRelatorios.Margin = new Padding(0, 3, 3, 3);
+            btnRelatorios.Name = "btnRelatorios";
+            btnRelatorios.Padding = new Padding(63, 0, 0, 0);
+            btnRelatorios.Size = new Size(200, 40);
+            btnRelatorios.TabIndex = 0;
+            btnRelatorios.Text = "Relatórios";
+            btnRelatorios.TextAlign = ContentAlignment.MiddleLeft;
+            btnRelatorios.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnRelatorios.UseVisualStyleBackColor = false;
+            btnRelatorios.Click += btnRelatorios_Click;
             // 
             // pnlStatusRodape
             // 
@@ -719,5 +741,6 @@ namespace FestasApp
         private Panel pnlStatusRodape;
         public Label lblStatusConn;
         private PictureBox pictureBox2;
+        private myButtonMenu btnRelatorios;
     }
 }

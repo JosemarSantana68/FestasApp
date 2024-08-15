@@ -114,6 +114,7 @@ namespace FestasApp.Views.TabelasAuxiliares
             dtg.BackgroundColor = Color.White;
             //dtg.BorderStyle = BorderStyle.FixedSingle;
             dtg.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomCenter; // cabeçalho
+
         }
         //
         /// <summary>

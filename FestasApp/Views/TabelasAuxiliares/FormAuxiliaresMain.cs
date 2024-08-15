@@ -12,6 +12,8 @@
 //
 //--------------------------------------------------------------
 //
+using FestasApp.Views.FestasContratos;
+
 namespace FestasApp.Views.TabelasAuxiliares
 {
     public partial class FormAuxiliaresMain : FormBaseCadastro
@@ -33,7 +35,7 @@ namespace FestasApp.Views.TabelasAuxiliares
         /// <summary>
         /// entidade do Entity Framework
         /// </summary>
-        private clsFestasContext _context = new();
+        ///private clsFestasContext _context = new();
 
         /// <summary>
         /// 1.0. construtor
@@ -43,7 +45,7 @@ namespace FestasApp.Views.TabelasAuxiliares
             InitializeComponent();
             _controlConfigurator = new ControlConfigurator(this);
             _dataGridManager = new DataGridManager(this);
-            _dataLoader = new DataLoader(this, _context);
+            _dataLoader = new DataLoader(this);
 
             SuspendLayout();
                 SetThisForm();
@@ -52,7 +54,7 @@ namespace FestasApp.Views.TabelasAuxiliares
             ResumeLayout();
         }
         /// <summary>
-        /// 1.1.
+        /// 1.1. configurações deste formulário
         /// </summary>
         private void SetThisForm()
         {
@@ -68,13 +70,6 @@ namespace FestasApp.Views.TabelasAuxiliares
         {
             _controlConfigurator.ConfigureControls();
             _dataGridManager.ConfigureDataGrids();
-
-            //dtgRegistrosTabelasAuxiliares.Dock = DockStyle.Fill;
-            //this.pnlCabecalho.Height = 50;
-
-            //SetPanelVisualizacao();
-            //ConfigurarDtgTabelasAuxiliares();
-            //ConfigurarDtgRegistrosTabelasAuxiliares();
         }
         /// <summary>
         /// 1.3. adiciona eventos Handlers
@@ -89,11 +84,6 @@ namespace FestasApp.Views.TabelasAuxiliares
             this.Load += FormAuxiliaresMain_Load;
 
             _dataGridManager.AddEventHandlers();
-
-            // adiciona EventHandlers para selecionar tabela
-            //dtgTabelasAuxiliares.SelectionChanged += DtgTabelasAuxiliares_SelectionChanged;
-            //dtgTabelasAuxiliares.KeyDown += new KeyEventHandler(dtgTabelasAuxiliares_KeyDown);
-            //dtgRegistrosTabelasAuxiliares.SelectionChanged += DtgRegistrosTabelasAuxiliares_SelectionChanged;
         }
         /// <summary>
         /// 2.0. Load
@@ -107,31 +97,50 @@ namespace FestasApp.Views.TabelasAuxiliares
         //
         // métodos ToolStripEventHandler para os itens selecionados em dtgRegistrosTabelasAuxiliares
         //
-        // excluir registro
+        /// <summary>
+        /// btn excluir registro
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TstbtnExcluir_Click(object? sender, EventArgs e)
         {
             OperacaoCRUD operacao = OperacaoCRUD.EXCLUIR;
             AbrirFormCRUD(operacao);
         }
-        // consultar registro
+        /// <summary>
+        /// btn consultar registro
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TstbtnConsultar_Click(object? sender, EventArgs e)
         {
             OperacaoCRUD operacao = OperacaoCRUD.CONSULTAR;
             AbrirFormCRUD(operacao);
         }
-        // editar registro
+        /// <summary>
+        /// btn editar registro
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TstbtnEditar_Click(object? sender, EventArgs e)
         {
             OperacaoCRUD operacao = OperacaoCRUD.EDITAR;
             AbrirFormCRUD(operacao);
         }
-        // novo registro
+        /// <summary>
+        /// btn novo registro
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TstbtnNovo_Click(object? sender, EventArgs e)
         {
             OperacaoCRUD operacao = OperacaoCRUD.NOVO;
             AbrirFormCRUD(operacao);
         }
-        //
+        /// <summary>
+        /// abrir fórmulario CRUD de acordo com tabela selecionada
+        /// </summary>
+        /// <param name="operacao"></param>
         private async void AbrirFormCRUD(OperacaoCRUD operacao)
         {
             if (dtgTabelasAuxiliares.SelectedRows.Count > 0)
@@ -165,7 +174,18 @@ namespace FestasApp.Views.TabelasAuxiliares
                 // contratos
                 else if (_tabelaAuxiliarManager.IsTabelaContratosSelecionada(dtgTabelasAuxiliares))
                 {
-                   
+                    if (_dataLoader.idRegistro.IsValid())
+                    {
+                        // se painel de visualização aberto, fechar!
+                        _dataLoader.FecharPanelVisualizacao();
+
+                        // Abra o formulário CRUD para edição 
+                        using (FormContratosFestas frm = new(_dataLoader.idRegistro, operacao))
+                        {
+                            // Usar a Modal para exibir o FormCRUD
+                            await FormMenuMain.ShowModalOverlay(frm);
+                        }
+                    }
                 } 
                 // pacotes
                 else if (_tabelaAuxiliarManager.IsTabelaPacotesSelecionada(dtgTabelasAuxiliares))
@@ -219,9 +239,11 @@ namespace FestasApp.Views.TabelasAuxiliares
                         }
                     }
                 }
+                //
                 _dataLoader.CarregarRegistrosDaTabela();
             }
         }
+        //
 
     } // end class FormAuxiliaresMain : FormBaseCadastro
 } // end namespace FestasApp.Views.TableAuxiliares

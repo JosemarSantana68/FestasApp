@@ -353,6 +353,16 @@ namespace FestasApp.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap icons8_toy_train_36 {
+            get {
+                object obj = ResourceManager.GetObject("icons8-toy-train-36", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap menu3 {
             get {
                 object obj = ResourceManager.GetObject("menu3", resourceCulture);

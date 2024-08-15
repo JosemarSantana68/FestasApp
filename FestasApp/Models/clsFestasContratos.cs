@@ -31,9 +31,8 @@ namespace FestasApp.Models
         public string? ctt_caminho_arquivo { get; set; } // Caminho para o arquivo PDF
 
         public clsFestasContratos() { }
-        public clsFestasContratos(int ctt_id, string? ctt_nome, string? ctt_caminho_arquivo)
+        public clsFestasContratos(string? ctt_nome, string? ctt_caminho_arquivo)
         {
-            this.ctt_id = ctt_id;
             this.ctt_nome = ctt_nome;
             this.ctt_caminho_arquivo = ctt_caminho_arquivo;
         }

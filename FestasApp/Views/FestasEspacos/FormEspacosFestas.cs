@@ -21,7 +21,11 @@ namespace FestasApp.Views.FestasEspacos
         private readonly OperacaoCRUD operacao = new();
         public clsFestasEspacos EspacoAtual = new();
         private int? idRegistro;
-
+        /// <summary>
+        /// construtor padrão
+        /// </summary>
+        /// <param name="idRegistro"></param>
+        /// <param name="operacao"></param>
         public FormEspacosFestas(clsParam idRegistro, OperacaoCRUD operacao)
         {
             InitializeComponent();
@@ -35,20 +39,30 @@ namespace FestasApp.Views.FestasEspacos
             ResumeLayout();
         }
         //
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void FormStatusCRUD_Load(object? sender, EventArgs e)
         {
             SuspendLayout();
             SetOperacao();
             ResumeLayout();
         }
-        //
+        /// <summary>
+        /// método para adicionar eventos handlers
+        /// </summary>
         private void AddEventHandlers()
         {
             this.tstbtnSalvar.Click += TstBtnSalvar_Click;
             this.Load += FormStatusCRUD_Load;
         }
-        //
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TstBtnSalvar_Click(object? sender, EventArgs e)
         {
             // Testa a operacao e configura os salvar...
@@ -65,7 +79,9 @@ namespace FestasApp.Views.FestasEspacos
                     break;
             }
         }
-        //
+        /// <summary>
+        /// 
+        /// </summary>
         private async void SalvarRegistro()
         {
             var txtNome = this.pnlCentral.Controls["txtEspaco"] as TextBox;
@@ -156,7 +172,9 @@ namespace FestasApp.Views.FestasEspacos
             }
         }
         //
-        // Configura o formulário com base na tabela selecionada
+        /// <summary>
+        /// Configura o formulário com base na tabela selecionada
+        /// </summary>
         private void SetControls()
         {
             // Limpa os controles existentes
@@ -189,7 +207,9 @@ namespace FestasApp.Views.FestasEspacos
             // Ajusta a largura do formulário. com largura minima em 500
             this.Width = larguraTotal < 550 ? 550 : larguraTotal;
         }
-        //
+        /// <summary>
+        /// 
+        /// </summary>
         private void SetOperacao()
         {
             // Testa a operacao e configura os controles...
@@ -213,7 +233,9 @@ namespace FestasApp.Views.FestasEspacos
             }
         }
         //
-        // mostra dados do registro selecionado
+        /// <summary>
+        /// mostra dados do registro selecionado
+        /// </summary>
         private async void MostrarRegistro()
         {
             try

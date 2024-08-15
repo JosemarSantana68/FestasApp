@@ -1,4 +1,4 @@
-﻿//---------------------------------------------------------------
+﻿//------------------------------------------------------------------
 //
 //   Festa.Com - Aplicativo para Controle de Festas & Eventos
 //   Autor: Josemar Santana
@@ -8,9 +8,9 @@
 //   Criação do módulo: 05/07/2024
 //   Ultima Alteração: 07/07/2024
 //   
-//   CLASSE myDateTime para auxiliar nas validações de Datas
+//   CLASSE myDateTime para auxiliar nas validações de Datas e Horas
 //  
-//---------------------------------------------------------------
+//------------------------------------------------------------------
 
 namespace FestasApp.Utilities
 {

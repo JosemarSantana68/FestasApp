@@ -1,4 +1,4 @@
-﻿//***********************************************************
+﻿//-----------------------------------------------------------------------------------------
 //
 //   Festa.Com - Aplicativo para Controle de Festas & Eventos
 //   Autor: Josemar Santana
@@ -11,19 +11,26 @@
 //   CLASSE repClientesEF herda de clsClientes,
 //   utiliza ENTITY FRAMEWORK / LINQ para auxiliar nas relações com Banco de Dados MySql
 //  
-//************************************************************
-
-using System.Data.Common;
+//-----------------------------------------------------------------------------------------
+//
 
 namespace FestasApp.Repositories
 {
-    public class repClientesEF : clsClientes
+    /// <summary>
+    /// Classe do Repertório Clientes com EF
+    /// </summary>
+    public class repClientesEF
     {
-        // construtor
+        /// <summary>
+        /// Construtor padrão
+        /// </summary>
         public repClientesEF() { }
         //
-        // Método para testar a conexão
-        private static bool TestarConexao()
+        /// <summary>
+        /// Método para testar a conexão
+        /// </summary>
+        /// <returns></returns>
+        public bool TestarConexao()
         {
             if (!myConnMySql.TestarConexao())
             {
@@ -33,24 +40,33 @@ namespace FestasApp.Repositories
             return true;
         }
         //
-        // retorna um cliente através do Id
+        /// <summary>
+        /// Retorna um cliente através do Id
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
         public clsClientes? GetCliente(int Id)
         {
-            // se não tiver cliente selecionado
-            if (Id == 0) 
+            // se não houver cliente selecionado abandona
+            if (Id <= 0) 
                 return null;
 
             // testa a conexão
             if (!TestarConexao())
-            {
                 return null;
-            }
 
             try
             {
-                using (var context = new clsFestasContext())
+                using (clsFestasContext context = new())
                 {
-                    // Para obter registros com uma condição específica:
+                    /*      Find(Id) é mais eficiente quando você sabe que está lidando com a chave primária da tabela, 
+                     *  porque pode aproveitar o cache do contexto do Entity Framework, o que evita consultas desnecessárias ao banco de dados.
+                     * 
+                     *      FirstOrDefault deve ser usado quando você precisa aplicar uma condição mais complexa que
+                     *  não envolve apenas a chave primária ou quando você quer ter mais controle sobre a consulta SQL gerada.
+                     *  Portanto, para buscar um registro pela chave primária, Find(Id) é a abordagem recomendada e mais eficiente. */
+
+                    // Para obter registros com uma condição específica, retorna uma lista:
                     //var clientes = context.Clientes.Where(c => c.cli_nome.Contains("Josemar")).ToList();
 
                     // Para obter um único registro por ID:
@@ -58,20 +74,23 @@ namespace FestasApp.Repositories
 
                     var entCliente = context.Clientes.Find(Id);
 
+                    // se encontrou cliente
                     if (entCliente != null)
                     {
-                        // Copiar propriedades do cliente encontrado para a instância atual
-                        cli_id = entCliente.cli_id;
-                        cli_nome = entCliente.cli_nome;
-                        cli_telefone1 = entCliente.cli_telefone1;
-                        cli_telefone2 = entCliente.cli_telefone2;
-                        cli_cpf = entCliente.cli_cpf;
-                        cli_endereco = entCliente.cli_endereco;
-                        cli_cep = entCliente.cli_cep;
-                        cli_cidade = entCliente.cli_cidade;
-                        cli_uf = entCliente.cli_uf;
-
-                        return this; // Retornar a instância atual
+                        clsClientes cliente = new()
+                        {
+                            // Copiar propriedades do cliente encontrado para a instância atual
+                            cli_id = entCliente.cli_id,
+                            cli_nome = entCliente.cli_nome,
+                            cli_telefone1 = entCliente.cli_telefone1,
+                            cli_telefone2 = entCliente.cli_telefone2,
+                            cli_cpf = entCliente.cli_cpf,
+                            cli_endereco = entCliente.cli_endereco,
+                            cli_cep = entCliente.cli_cep,
+                            cli_cidade = entCliente.cli_cidade,
+                            cli_uf = entCliente.cli_uf
+                        };
+                        return cliente; // Retornar a instância atual
                     }
                 }
             }
@@ -83,22 +102,21 @@ namespace FestasApp.Repositories
             return null;
         }
         //
-        // retorna uma lista com todos os clientes
-        public static List<clsClientes> GetClientesEF()
+        /// <summary>
+        /// Retorna uma lista com todos os clientes
+        /// </summary>
+        /// <returns></returns>
+        public List<clsClientes> GetClientesEF()
         {
             // testa a conexão
             if (!TestarConexao())
-                //return []; // Retornando uma lista vazia em vez de null
                 return new List<clsClientes>(); // Retornando uma lista vazia em vez de null
-
             try
             {
                 using (clsFestasContext context = new())
                 {
                     // Carregar os dados do DbSet<T>
-                    //var listaClientes = context.Clientes.ToList();
-                    var listaClientes = context.Clientes.OrderBy(c => c.cli_nome).ToList();
-                    return listaClientes;
+                    return context.Clientes.OrderBy(c => c.cli_nome).ToList();
                 }
             }
             catch (MySqlException mysqlEx)
@@ -109,19 +127,22 @@ namespace FestasApp.Repositories
             {
                 myLogger.LogError("Erro ao carregar a lista de clientes.", ex);
             }
-            return [];
+            return []; // Retornando uma lista vazia em vez de null
         }
-        //
-        // salvar cliente
-        public static bool SaveCliente(clsClientes cliente)
+        /// <summary>
+        /// Salvar cliente
+        /// </summary>
+        /// <param name="cliente"></param>
+        /// <returns></returns>
+        public bool SaveCliente(clsClientes cliente)
         {
             // testa a conexão
-            if (!myConnMySql.TestarConexao())
+            if (!TestarConexao())
                 return false;
 
             try
             {
-                using (var context = new clsFestasContext())
+                using (clsFestasContext context = new())
                 {
                     // EDITA
                     if (cliente.cli_id > 0)
@@ -133,7 +154,6 @@ namespace FestasApp.Repositories
                     {
                         context.Clientes.Add(cliente);
                     }
-
                     context.SaveChanges();
                     return true;
                 }
@@ -152,13 +172,16 @@ namespace FestasApp.Repositories
                 return false;
             }
         }
-        //
-        // delete cliente
-        public static bool DeleteClienteEF(clsClientes cliente)
+        /// <summary>
+        /// Delete cliente
+        /// </summary>
+        /// <param name="cliente"></param>
+        /// <returns></returns>
+        public bool DeleteClienteEF(clsClientes cliente)
         {
             try
             {
-                using (var context = new clsFestasContext())
+                using (clsFestasContext context = new())
                 {
                     if (cliente != null)
                     {
@@ -166,7 +189,6 @@ namespace FestasApp.Repositories
                         context.SaveChanges();
                         return true;
                     }
-
                 }
             }
             catch (DbException dbEx)
@@ -182,10 +204,9 @@ namespace FestasApp.Repositories
                 Console.WriteLine($"Erro inesperado: {ex.Message}");
                 return false;
             }
-
             return false;
         }
-
+        //
 
     } // end class clsClientesEF : clsClientes
 } // end namespace

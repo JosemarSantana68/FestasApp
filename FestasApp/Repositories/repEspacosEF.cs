@@ -18,7 +18,10 @@ namespace FestasApp.Repositories
         // construtor
         public repEspacosEF() { }
         //
-        // Método para testar a conexão
+        /// <summary>
+        /// Método para testar a conexão
+        /// </summary>
+        /// <returns></returns>
         private static bool TestarConexao()
         {
             if (!myConnMySql.TestarConexao())
@@ -29,7 +32,10 @@ namespace FestasApp.Repositories
             return true;
         }
         //
-        // carrega uma lista da tblfestasespacos
+        /// <summary>
+        /// carrega uma lista da tblfestasespacos
+        /// </summary>
+        /// <returns></returns>
         public static List<clsFestasEspacos> GetEspacos()
         {
             if (!TestarConexao())
@@ -51,7 +57,11 @@ namespace FestasApp.Repositories
             }
         }
         //
-        // método retorna um Status através do Id
+        /// <summary>
+        /// método retorna um Status através do Id
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
         public clsFestasEspacos? GetItem(int Id)
         {
             // se não tiver Registro selecionado

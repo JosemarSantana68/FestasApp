@@ -18,7 +18,10 @@ namespace FestasApp.Repositories
         public repTemasEF() { }
         //
         //
-        // Método para testar a conexão
+        /// <summary>
+        /// Método para testar a conexão
+        /// </summary>
+        /// <returns></returns>
         private static bool TestarConexao()
         {
             if (!myConnMySql.TestarConexao())
@@ -29,7 +32,10 @@ namespace FestasApp.Repositories
             return true;
         }
         //
-        // Carrega a lista de Status
+        /// <summary>
+        /// Carrega a lista de Status
+        /// </summary>
+        /// <returns></returns>
         public static List<clsFestasTemas> GetTemas()
         {
             // Testa a conexão
@@ -48,7 +54,11 @@ namespace FestasApp.Repositories
             return []; // Retornando uma lista vazia em vez de null
         }
         //
-        // retorna um Item através do Id
+        /// <summary>
+        /// retorna um Item através do Id
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
         public clsFestasTemas? GetItem(int Id)
         {
             // se não tiver Item selecionado
@@ -86,7 +96,11 @@ namespace FestasApp.Repositories
             return null;
         }
         //
-        // método para adicionar um novo registro a tabela
+        /// <summary>
+        /// método para adicionar um novo registro a tabela
+        /// </summary>
+        /// <param name="newItem"></param>
+        /// <returns></returns>
         public static bool AddItem(clsFestasTemas newItem)
         {
             // testa conexão
@@ -110,7 +124,12 @@ namespace FestasApp.Repositories
             }
         }
         //
-        // método para editar um registro na tabela
+        /// <summary>
+        /// método para editar um registro na tabela
+        /// </summary>
+        /// <param name="idItem"></param>
+        /// <param name="itemAlterado"></param>
+        /// <returns></returns>
         public static bool AlterItem(int idItem, clsFestasTemas itemAlterado)
         {
             // testa conexão
@@ -141,7 +160,11 @@ namespace FestasApp.Repositories
             return false;
         }
         //
-        // método para deletar item na tabela
+        /// <summary>
+        /// método para deletar item na tabela
+        /// </summary>
+        /// <param name="idItem"></param>
+        /// <returns></returns>
         public static bool DeleteItem(int idItem)
         {
             // testa conexão

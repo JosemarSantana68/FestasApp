@@ -13,20 +13,29 @@
 //------------------------------------------------------------
 
 
+using MySqlX.XDevAPI;
+
 namespace FestasApp.Views.FestasStatus
 {
     public partial class FormStatusCRUD : FormBaseCRUD
     {
-        // declara instâncias
+        /// <summary>
+        /// declara instâncias
+        /// </summary>
         private readonly repStatusEF statusFesta = new();
         private readonly OperacaoCRUD operacao = new();
         public clsFestasStatus StatusAtual { get; private set; } = new();
-        private int? idRegistro;
-
+        private clsParam? idRegistro = new();
+        ///
+        /// <summary>
+        /// construtor padrão
+        /// </summary>
+        /// <param name="idRegistro"></param>
+        /// <param name="operacao"></param>
         public FormStatusCRUD(clsParam idRegistro, OperacaoCRUD operacao)
         {
             InitializeComponent();
-            this.idRegistro = idRegistro.Id;
+            this.idRegistro = idRegistro;
             this.operacao = operacao;
 
             SuspendLayout();
@@ -103,20 +112,20 @@ namespace FestasApp.Views.FestasStatus
                 else if (operacao == OperacaoCRUD.EDITAR)
                 {
                     // Tenta adicionar o item de festa ao banco de dados
-                    if (repStatusEF.AlterItem(idRegistro!.Value, item))
+                    if (repStatusEF.AlterItem(idRegistro!.Id!.Value, item))
                     {
-                        await myUtilities.myMessageBox(this, "Status da Festas alterado com sucesso!", "Espaço de Festas");
+                        await myUtilities.myMessageBox(this, "Status da Festas alterado com sucesso!", "Status de Festas");
                         this.Close();
                     }
                     else
                     {
-                        await myUtilities.myMessageBox(this, "Falha ao alterar o Status da Festas.", "Espaço de Festas");
+                        await myUtilities.myMessageBox(this, "Falha ao alterar o Status da Festas.", "Status de Festas");
                     }
                 }
             }
             catch (Exception ex)
             {
-                await myUtilities.myMessageBox(this, $"Falha ao salvar Item. Erro: {ex.Message}", "Itens de Festas");
+                await myUtilities.myMessageBox(this, $"Falha ao salvar Status. Erro: {ex.Message}\n\nEm: {ex.StackTrace}", "Status de Festas");
             }
         }
         //
@@ -135,7 +144,7 @@ namespace FestasApp.Views.FestasStatus
                 try
                 {
                     // Chama o método para excluir o cliente
-                    if (repStatusEF.DeleteItem(idRegistro!.Value))
+                    if (repStatusEF.DeleteItem(idRegistro!.Id!.Value))
                     {
                         this.Close();
                         return;
@@ -143,16 +152,16 @@ namespace FestasApp.Views.FestasStatus
                     else
                     {
                         // Exibe a mensagem de erro se a exclusão falhar
-                        await myUtilities.myMessageBox(this, "Erro ao excluir Status da festas!", "Item Excluir", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        await myUtilities.myMessageBox(this, "Erro ao excluir Status da festas!", "Status Excluir", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
                 catch (MySqlException mysqlEx)
                 {
-                    await myUtilities.myMessageBox(this, $"Erro no banco de dados: {mysqlEx.Message}", "Erro SQL", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    await myUtilities.myMessageBox(this, $"Erro no banco de dados: {mysqlEx.Message}\n\nEm: {mysqlEx.StackTrace}", "Erro SQL", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 catch (Exception ex)
                 {
-                    await myUtilities.myMessageBox(this, ex.Message, "Item Excluir", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    await myUtilities.myMessageBox(this, $"Erro: {ex.Message}\n\nEm: {ex.StackTrace}", "Status Excluir", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -188,7 +197,7 @@ namespace FestasApp.Views.FestasStatus
             this.Height = pnlTitulo.Height + alturaControles + pnlRodape.Height;
 
             // Ajusta a largura do formulário. com largura minima em 500
-            this.Width = larguraTotal < 550? 550: larguraTotal;
+            this.Width = larguraTotal < 550 ? 550 : larguraTotal;
         }
         //
         private void SetOperacao()
@@ -197,7 +206,7 @@ namespace FestasApp.Views.FestasStatus
             switch (operacao)
             {
                 case OperacaoCRUD.NOVO:
-                    idRegistro = 0;
+                    idRegistro!.Id = 0;
                     //MostrarItemFesta();
                     break;
                 case OperacaoCRUD.EDITAR:
@@ -214,13 +223,15 @@ namespace FestasApp.Views.FestasStatus
             }
         }
         //
-        // mostra dados do registro selecionado
+        /// <summary>
+        /// mostra dados do registro selecionado
+        /// </summary>
         private async void MostrarRegistro()
         {
             try
             {
                 //var item = new repItensFestasEF();
-                var item = statusFesta.GetItem(idRegistro!.Value);
+                var item = statusFesta.GetItem(idRegistro!.Id!.Value);
 
                 if (item != null)
                 {

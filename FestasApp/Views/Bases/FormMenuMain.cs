@@ -5,15 +5,13 @@
 //   Linguagem: C# .NET
 //
 //   Inicio: 23/05/2024
-//   Cria��o deste M�dulo: 23/05/2024
+//   Criação deste M�dulo: 23/05/2024
 //   Ultima Altera��o: 18/06/2024
 //   
-//   FORMUL�RIO PRINCIPAL
+//   FORMULÁRIO PRINCIPAL
 //
 //----------------------------------------------------------------
-
-using MyFramework.Views;
-using System.Windows.Forms;
+//
 
 namespace FestasApp
 {
@@ -26,7 +24,9 @@ namespace FestasApp
         // instancia formulários...
         public static FormMenuMain? InstanceFrmMain { get; private set; }
 
-        // construtor
+        /// <summary>
+        /// Construtor padrão
+        /// </summary>
         public FormMenuMain()
         {
             /* Aqui � o lugar ideal para configurar:
@@ -47,7 +47,11 @@ namespace FestasApp
             MdiPropiedades();
         }
         //
-        // evento load
+        /// <summary>
+        /// Evento Load do form
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void FormMenuBase_Load(object sender, EventArgs e)
         {
             /* Aqui � o lugar ideal para configurar:
@@ -57,14 +61,17 @@ namespace FestasApp
              */
 
         }
-        // M�todo para atualizar o status da conex�o
-        //public static bool ConexaoAtiva { get; private set; }
-        //
+        /// <summary>
+        /// Método para atualizar o status da conexão
+        /// </summary>
         private void AtualizarStatusConexao()
         {
             myConnMySql.TestarConexao();
         }
-        //
+        /// <summary>
+        /// Configura a labelStatusConexão
+        /// </summary>
+        /// <param name="Online"></param>
         public void SetLabelStatusConexao(bool Online)
         {
             if (Online)
@@ -79,7 +86,9 @@ namespace FestasApp
             }
         }
         //
-        // Configura propriedades espec�ficas para o formul�rio MDI...
+        /// <summary>
+        /// Configura propriedades espec�ficas para o formul�rio MDI...
+        /// </summary>
         private void MdiPropiedades()
         {
             // Utiliza o m�todo de extens�o ConfiguraBorda da classe clsMdiProperties
@@ -97,7 +106,9 @@ namespace FestasApp
         }
         // 
         //----------------------------------------------
-        // Configura��es iniciais do formul�rio...
+        /// <summary>
+        /// Configurações iniciais do formulário...
+        /// </summary>
         private void ConfigurarFrmMenu()
         {
             // Configura��es de exibi��o do formul�rio
@@ -116,14 +127,21 @@ namespace FestasApp
             AssociarPicEventosMouse(picFechar);
         }
         //
-        // Associa os eventos MouseEnter e MouseLeave aos controles icones do formulario
+        /// <summary>
+        /// Associa os eventos MouseEnter e MouseLeave aos controles icones do formulario
+        /// </summary>
+        /// <param name="picture"></param>
         private void AssociarPicEventosMouse(PictureBox picture)
         {
             picture.MouseEnter += Pic_MouseEnter;
             picture.MouseLeave += Pic_MouseLeave;
         }
         //
-        // Eventos para maximizar, minimizar, restaurar e fechar o formul�rio
+        /// <summary>
+        /// Eventos para maximizar, minimizar, restaurar e fechar o formul�rio
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void PicMaximizar_Click(object sender, EventArgs e)
         {
             this.WindowState = FormWindowState.Maximized;
@@ -148,7 +166,11 @@ namespace FestasApp
             Application.Exit();
         }
         //
-        // Evento MouseEnter para mudar a cor de fundo...
+        /// <summary>
+        /// Evento MouseEnter para mudar a cor de fundo...
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Pic_MouseEnter(object? sender, EventArgs e)
         {
             if (sender is PictureBox pic)
@@ -164,7 +186,11 @@ namespace FestasApp
             }
         }
         //
-        // Evento MouseLeave para restaurar a cor de fundo original...
+        /// <summary>
+        /// Evento MouseLeave para restaurar a cor de fundo original...
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Pic_MouseLeave(object? sender, EventArgs e)
         {
             if (sender is PictureBox pic)
@@ -292,37 +318,66 @@ namespace FestasApp
         //
         #region Chamadas Para Abrir Formulários
         // 
-        // btn FESTAS...
+        /// <summary>
+        /// FESTAS...
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnFestas_Click(object sender, EventArgs e)
         {
             AbrirFormulario(new FormFestasCadastro(), manterAberto: true);
         }
-        //
-        // CLIENTES...
+        /// <summary>
+        /// CLIENTES...
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnCliente_Click(object sender, EventArgs e)
         {
             AbrirFormulario(new FormClientesCadastro(), manterAberto: true);
         }
-        //
-        // CALENDARIO...
+        /// <summary>
+        /// CALENDARIO...
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnCalendario_Click(object sender, EventArgs e)
         {
             AbrirFormulario(new FormCalendario(), manterAberto: true);
         }
-        //
-        // FORNECEDOR
+        /// <summary>
+        /// FORNECEDOR
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnFornecedor_Click(object sender, EventArgs e)
         {
             // chamar form fornecedor
         }
-        //
-        // PACOTES / TABELAS AUXILIARES...
+        /// <summary>
+        /// PACOTES / TABELAS AUXILIARES...
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnPacotesFestas_Click(object sender, EventArgs e)
         {
             AbrirFormulario(new FormAuxiliaresMain(), manterAberto: false);
         }
+        /// <summary>
+        /// RELATÓRIOS
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnRelatorios_Click(object sender, EventArgs e)
+        {
+            AbrirFormulario(new FormRelatorios(), manterAberto: false);
+        }
         //
-        // USUARIOS...
+        /// <summary>
+        /// USUARIOS...
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnUsuarios_Click(object sender, EventArgs e)
         {
             //AbrirFormulario(new FormUsuariosCadastro(), manterAberto: false);
@@ -344,7 +399,11 @@ namespace FestasApp
         #endregion
 
         //-----------------------------------------------------------------------
-        // Método que verifica se um formul�rio do tipo especificado está aberto
+        /// <summary>
+        /// Método que verifica se um formulário do tipo especificado está aberto
+        /// </summary>
+        /// <param name="formType"></param>
+        /// <returns></returns>
         private static bool IsFormOpen(Type formType)
         {
             // Verifica todos os formulários abertos na aplicação
@@ -359,8 +418,12 @@ namespace FestasApp
             // Se nenhum formulário aberto for do tipo especificado, retorna falso
             return false;
         }
-        //------------------------------
-        // método para ABRIR formulários
+        //---------------------------------------
+        /// <summary>
+        /// método para ABRIR formulários
+        /// </summary>
+        /// <param name="form"></param>
+        /// <param name="manterAberto"></param>
         private async void AbrirFormulario(Form form, bool manterAberto = false)
         {
             try
@@ -422,13 +485,16 @@ namespace FestasApp
                 Console.WriteLine($"Erro ao abrir o formulário: {ex.Message}");
             }
         }
-        //
         //------------------------------
-        // método para ABRIR formulários
+        /// <summary>
+        /// método para ABRIR formulários SEMUSO
+        /// </summary>
+        /// <param name="form"></param>
+        /// <param name="manterAberto"></param>
         private void AbrirFormularioOLD(Form form, bool manterAberto = false)
         {
             Type formType = form.GetType();
-            
+
             // Cria e mostra o FormLoading
             using (FormLoading formLoading = new FormLoading(form, 5000))
             {
@@ -504,12 +570,21 @@ namespace FestasApp
         // Dessa forma, centraliza a verificação em um único lugar e simplifica o código em outras partes do programa.
         //***********************************************************************************************************
         //
-        // Método auxiliar para exibir menssagens com bakground modal
-        public async static void ShowMyMessageBox(string mensagem, 
-                                            string titulo = "Mensagem", 
-                                            MessageBoxButtons botoes = MessageBoxButtons.OK, 
-                                            MessageBoxIcon icone = MessageBoxIcon.Information, 
-                                            int opacidade = 60, 
+        /// <summary>
+        /// Método auxiliar para exibir menssagens com bakground modal
+        /// </summary>
+        /// <param name="mensagem"></param>
+        /// <param name="titulo"></param>
+        /// <param name="botoes"></param>
+        /// <param name="icone"></param>
+        /// <param name="opacidade"></param>
+        /// <param name="cor"></param>
+        /// <exception cref="InvalidOperationException"></exception>
+        public async static void ShowMyMessageBox(string mensagem,
+                                            string titulo = "Mensagem",
+                                            MessageBoxButtons botoes = MessageBoxButtons.OK,
+                                            MessageBoxIcon icone = MessageBoxIcon.Information,
+                                            int opacidade = 60,
                                             Color cor = default)
         {
             if (InstanceFrmMain != null)
@@ -522,12 +597,21 @@ namespace FestasApp
                 throw new InvalidOperationException("FormMenuMain.Instance não está inicializada.");
             }
         }
-
         //
-        // método auxiliar para exibir formularios CreateModalOverlayAsync...
-        public static async Task ShowModalOverlay(Form? frmExibir, 
-                                            Action? mostrarMensagem = null, 
-                                            int opacidade = 60, 
+        /// <summary>
+        /// método auxiliar para exibir formularios CreateModalOverlayAsync...
+        /// </summary>
+        /// <param name="frmExibir"></param>
+        /// <param name="mostrarMensagem"></param>
+        /// <param name="opacidade"></param>
+        /// <param name="cor"></param>
+        /// <param name="delay"></param>
+        /// <param name="modal"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"></exception>
+        public static async Task ShowModalOverlay(Form? frmExibir,
+                                            Action? mostrarMensagem = null,
+                                            int opacidade = 60,
                                             Color cor = default,
                                             int delay = 1000,
                                             bool modal = true)
@@ -543,6 +627,7 @@ namespace FestasApp
                 throw new InvalidOperationException("FormMenuMain.Instance não está inicializada.");
             }
         }
+
         //
 
     } // end class FormMenuBase...

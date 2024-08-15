@@ -16,42 +16,63 @@ namespace FestasApp.Views.Clientes
 {
     public partial class FormClientesCRUD : FormBaseCRUD
     {
-        // objeto cliente instanciado da classe...
-        public clsClientes ClienteAtual { get; private set; } = new();
-        private OperacaoCRUD operacao;
-        private int? clienteId;
+        //  objeto cliente instanciado da classe...
+        //  public clsClientes ClienteAtual { get; private set; } = new();
+        private OperacaoCRUD _operacao;
+        private clsParam? _clienteId;
+        public ClientesViewModel _viewModel { get; private set; } = new();
+        
         //
-        // Construtor que aceita um objeto clsClientes e a operação
+        /// <summary>
+        /// Construtor que aceita um objeto clsClientes e a operação
+        /// </summary>
+        /// <param name="_clienteId"></param>
+        /// <param name="_operacao"></param>
         public FormClientesCRUD(clsParam _clienteId, OperacaoCRUD _operacao)
         {
             InitializeComponent();
             // Recebe o cliente e a operação passados por parâmetro
-            this.clienteId = _clienteId.Id;
-            this.operacao = _operacao;
+            this._clienteId = _clienteId;
+            this._operacao = _operacao;
+            //this._viewModel = new ClientesViewModel();
+
+            // Carrega o cliente específico baseado no ID, se disponível
+            if (_clienteId.Id != null)
+            {
+                _viewModel.ClienteSelecionado = _viewModel.GetCliente(_clienteId.Id!.Value);
+            }
 
             SuspendLayout();
                 SetThisForm();
                 AddEventHandlers();
             ResumeLayout(false);
         }
-        // LOAD...
-        // Associa o evento KeyDown ao formulário
+        /// <summary>
+        /// LOAD...
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void FormClientesCRUD_Load(object? sender, EventArgs e)
         {
             SetControls();
             SetOperacao();
         }
         //
-        // Configura o formulário com base na operação
+        /// <summary>
+        /// Configura o formulário com base na operação
+        /// </summary>
         private void SetThisForm()
         {
             this.FormBorderStyle = FormBorderStyle.None;
-            ConfigurarFormBaseCrud("C l i e n t e s", operacao);
+            ConfigurarFormBaseCrud("C l i e n t e s", _operacao);
             //lblTitulo.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
         }
-        //
+        /// <summary>
+        /// Configura controles do Form
+        /// </summary>
         private void SetControls()
         {
+            // maxLength de acordo com os tamanhos dos campos na tabela
             txtNome.MaxLength = 100;
             txtEndereco.MaxLength = 100;
             txtCidade.MaxLength = 100;
@@ -61,11 +82,13 @@ namespace FestasApp.Views.Clientes
             txtCpf.CutCopyMaskFormat = MaskFormat.ExcludePromptAndLiterals;
             txtCep.CutCopyMaskFormat = MaskFormat.ExcludePromptAndLiterals;
         }
-        //
+        /// <summary>
+        /// Chama os métodos de acordo com a operação
+        /// </summary>
         private void SetOperacao()
         {
             // Testa a operacao e configura os controles...
-            switch (operacao)
+            switch (_operacao)
             {
                 case OperacaoCRUD.NOVO:
                     break;
@@ -82,7 +105,9 @@ namespace FestasApp.Views.Clientes
                     break;
             }
         }
-        //
+        /// <summary>
+        /// 
+        /// </summary>
         private void TravarControles()
         {
             txtNome.ReadOnly = true;
@@ -95,17 +120,22 @@ namespace FestasApp.Views.Clientes
             txtUF.ReadOnly = true;
         }
         //
-        // Método para carregar os dados do cliente nos controles do formulário
+        /// <summary>
+        /// Método para carregar os dados do cliente nos controles do formulário
+        /// </summary>
         private async void MostraDadosClienteEF()
         {
             try
             {
-                // instancia uma nova entidade...
-                repClientesEF cliente = new();
-                var clienteEncontrado = cliente.GetCliente(clienteId!.Value);
+                // Usa o ViewModel para buscar o cliente
+                //var clienteEncontrado = _viewModel.GetCliente(_clienteId!.Id!.Value);
+
+                var clienteEncontrado = _viewModel.ClienteSelecionado;
 
                 if (clienteEncontrado != null)
                 {
+                    //this.ClienteAtual = clienteEncontrado;
+
                     // Preenche os controles do formulário com os dados do cliente
                     lblID.Text = clienteEncontrado.cli_id.ToString();
                     txtNome.Text = clienteEncontrado.cli_nome;
@@ -119,7 +149,7 @@ namespace FestasApp.Views.Clientes
                 }
                 else
                 {
-                    lblID.Text = clienteId.ToString();
+                    lblID.Text = _clienteId!.Id.ToString();
                     //await myUtilities.myMessageBox(this, "Cliente não encontrado.\nMostraDadosClienteEF");
                 }
             }
@@ -129,56 +159,72 @@ namespace FestasApp.Views.Clientes
             }
         }
         //
-        // Adiciona eventos aos botões da ToolStrip
+        /// <summary>
+        /// Adiciona eventos aos botões da ToolStrip
+        /// </summary>
         private void AddEventHandlers()
         {
             this.tstbtnSalvar.Click += TstbtnSalvar_Click;
             this.Load += FormClientesCRUD_Load;
         }
         //
-        // Evento click do botão SALVAR...
+        /// <summary>
+        /// Evento click do botão SALVAR...
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TstbtnSalvar_Click(object? sender, EventArgs e)
         {
-            if (operacao == OperacaoCRUD.NOVO)
+            if (_operacao == OperacaoCRUD.NOVO)
             {
                 SalvarClienteEF();
             }
-            else if (operacao == OperacaoCRUD.EDITAR)
+            else if (_operacao == OperacaoCRUD.EDITAR)
             {
                 SalvarClienteEF();
             }
-            else if (operacao == OperacaoCRUD.EXCLUIR)
+            else if (_operacao == OperacaoCRUD.EXCLUIR)
             {
                 DeletarCliente();
             }
         }
         //
-        // NOVO e EDITAR cliente
+        /// <summary>
+        /// NOVO e EDITAR cliente
+        /// </summary>
         private async void SalvarClienteEF()
         {
             try
             {
                 // Verifica se houve mudança nos dados do cliente
-                if (operacao == OperacaoCRUD.EDITAR && !VerificarCliente())
+                if (_operacao == OperacaoCRUD.EDITAR && !VerificarCliente())
                 {
                     await myUtilities.myMessageBox(this, "Não houve nenhuma mudança nos dados do cliente.", "Informação", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }
 
-                bool isValid = await ValidarControles();
                 // Verifica se os controles são válidos
-                if (!isValid)
+                bool isValidControls = await ValidarControles();
+                if (!isValidControls)
                     return;
 
-                // Grava os dados do formulário no ClienteAtual
+                // Grava os dados do formulário no _viewModel.ClienteSelecionado
                 AtualizarClsCliente();
 
-                // Salvar usando EF, NOVO ou EDITA.
-                if (repClientesEF.SaveCliente(ClienteAtual))
+                // validar cliente em viewModel
+                bool isValidObject = await ValidarCliente();
+                if (!isValidObject)
+                {
+                    // Exibe mensagem de erro ou toma outra ação necessária
+                    return;
+                }
+
+                // Salvar usando viewModel, NOVO ou EDITA.
+                if (_viewModel.SaveCliente(_viewModel.ClienteSelecionado!))
                 {
                     // Exibe mensagem de sucesso
                     await myUtilities.myMessageBox(this, "Cliente salvo com sucesso!", "Novo Cliente", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    
+
                     this.Close();
                 }
                 else
@@ -196,25 +242,59 @@ namespace FestasApp.Views.Clientes
                 await myUtilities.myMessageBox(this, ex.Message, "Cliente Novo", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        //
-        // Atualiza os dados do cliente com base nos controles do formulário
-        private void AtualizarClsCliente()
+        /// <summary>
+        /// Valida Cliente usando Data Annotation
+        /// </summary>
+        /// <param name="clienteAtual"></param>
+        /// <returns></returns>
+        private async Task<bool> ValidarCliente()
         {
-            // Transfere os dados dos controles para o objeto clsCliente
-            if (operacao != OperacaoCRUD.NOVO) 
-                ClienteAtual.cli_id = clienteId!.Value; // o Id passado como parametro do FormCadastro
+            //var erros = clsValidator.isValidObject(_viewModel.ClienteSelecionado!);
+            
+            var erros = _viewModel.ErrosValidacao;
 
-            ClienteAtual.cli_nome = txtNome.Text;
-            ClienteAtual.cli_telefone1 = txtTelefone1.Text;
-            ClienteAtual.cli_telefone2 = txtTelefone2.Text;
-            ClienteAtual.cli_cpf = txtCpf.Text;
-            ClienteAtual.cli_endereco = txtEndereco.Text;
-            ClienteAtual.cli_cep = txtCep.Text;
-            ClienteAtual.cli_cidade = txtCidade.Text;
-            ClienteAtual.cli_uf = txtUF.Text;
+            var camposInvalidos = string.Empty;
+
+            // lista de erros
+            foreach (var erro in erros)
+            {
+                camposInvalidos += erro + "\n";
+                break;
+            }
+            // se encontrar erros
+            if (!string.IsNullOrEmpty(camposInvalidos))
+            {
+                await myUtilities.myMessageBox(this, mensagem: camposInvalidos, "Data Anottation");
+                return false;
+            }
+            return true;
         }
         //
-        // DELETAR cliente
+        /// <summary>
+        /// Atualiza os dados do cliente com base nos controles do formulário
+        /// </summary>
+        private void AtualizarClsCliente()
+        {
+            // se não é novo cliente, atribui o id para o objeto
+            if (_operacao != OperacaoCRUD.NOVO)
+                _viewModel.ClienteSelecionado!.cli_id = _clienteId!.Id!.Value;
+            else // se NOVO declara um objeto novo vazio
+                _viewModel.ClienteSelecionado = new();
+
+            // Transfere os dados dos controles para o objeto
+            _viewModel.ClienteSelecionado.cli_nome = txtNome.Text;
+            _viewModel.ClienteSelecionado.cli_telefone1 = txtTelefone1.Text;
+            _viewModel.ClienteSelecionado.cli_telefone2 = txtTelefone2.Text;
+            _viewModel.ClienteSelecionado.cli_cpf = txtCpf.Text;
+            _viewModel.ClienteSelecionado.cli_endereco = txtEndereco.Text;
+            _viewModel.ClienteSelecionado.cli_cep = txtCep.Text;
+            _viewModel.ClienteSelecionado.cli_cidade = txtCidade.Text;
+            _viewModel.ClienteSelecionado.cli_uf = txtUF.Text;
+        }
+        //
+        /// <summary>
+        /// DELETAR cliente
+        /// </summary>
         private async void DeletarCliente()
         {
             try
@@ -222,9 +302,22 @@ namespace FestasApp.Views.Clientes
                 // Grava os dados no cliente
                 AtualizarClsCliente();
 
+                // Verifica se o cliente tem festas associadas
+                using (clsFestasContext context = new())
+                {
+                    bool temFestasAssociadas = context.Festas.Any(f => f.fest_cli_id == _viewModel.ClienteSelecionado!.cli_id);
+
+                    if (temFestasAssociadas)
+                    {
+                        await myUtilities.myMessageBox(this, "Não é possível excluir o cliente, pois ele está associado a uma ou mais festas.", "Exclusão Inválida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                }
+
+
                 // Exibe a mensagem de confirmação usando MessageBox.Show
                 var message = $"""
-                        Deseja Excluir o cliente {ClienteAtual.cli_nome} ?
+                        Deseja Excluir o cliente {_viewModel.ClienteSelecionado!.cli_nome} ?
                         
                         Esta ação não poderá ser desfeita!
                         """;
@@ -233,10 +326,11 @@ namespace FestasApp.Views.Clientes
                 if (result == DialogResult.Yes)
                 {
                     // Chama o método para excluir o cliente
-                    if (repClientesEF.DeleteClienteEF(ClienteAtual))
+                    if (_viewModel.DeleteCliente(_viewModel.ClienteSelecionado!))
                     {
                         // Exibe a mensagem de sucesso usando a nova função myMessageBox
                         //await myUtilities.myMessageBox(this, "Cliente excluído com sucesso!", "E x c l u i r", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        
                         this.Close(); // Fecha o formulário após excluir
                         return;
                     }
@@ -257,7 +351,10 @@ namespace FestasApp.Views.Clientes
             }
         }
         //
-        // Método para validar os controles antes de salvar ou alterar
+        /// <summary>
+        /// Método para validar os controles antes de salvar ou alterar
+        /// </summary>
+        /// <returns></returns>
         private async Task<bool> ValidarControles()
         {
             // Valida o campo Nome
@@ -267,15 +364,15 @@ namespace FestasApp.Views.Clientes
                 txtNome.Focus();
                 return false;
             }
-            
-            //// Valida o campo Telefones
+
+            //// Valida o campo Telefones // if (txtTelefone1.Text.Length != 11)
             //if (string.IsNullOrWhiteSpace(txtTelefone1.Text) && string.IsNullOrWhiteSpace(txtTelefone2.Text))
             //{
             //    await myUtilities.myMessageBox(this, "Um dos telefones do cliente é obrigatório.", "Erro de Validação", MessageBoxButtons.OK, MessageBoxIcon.Error);
             //    txtTelefone1.Focus();
             //    return false;
             //}
-            
+
             //// Valida o campo Cpf
             //if (string.IsNullOrWhiteSpace(txtCpf.Text) || !myUtilities.ValidarCPF(txtCpf.Text))
             //{
@@ -288,23 +385,27 @@ namespace FestasApp.Views.Clientes
             return true;
         }
         //
-        // Método para validar se houve alguma alteração nos dados do clsCliente
+        /// <summary>
+        /// Método para validar se houve alguma alteração nos dados do Cliente
+        /// </summary>
+        /// <returns></returns>
         private bool VerificarCliente()
         {
             // Compara os dados do cliente com os controles do formulário
-            if (ClienteAtual.cli_nome != txtNome.Text ||
-                ClienteAtual.cli_telefone1 != txtTelefone1.Text ||
-                ClienteAtual.cli_telefone2 != txtTelefone2.Text ||
-                ClienteAtual.cli_cpf != txtCpf.Text ||
-                ClienteAtual.cli_endereco != txtEndereco.Text ||
-                ClienteAtual.cli_cep != txtCep.Text ||
-                ClienteAtual.cli_cidade != txtCidade.Text ||
-                ClienteAtual.cli_uf != txtUF.Text)
+            if (_viewModel.ClienteSelecionado!.cli_nome != txtNome.Text ||
+                _viewModel.ClienteSelecionado!.cli_telefone1 != txtTelefone1.Text ||
+                _viewModel.ClienteSelecionado!.cli_telefone2 != txtTelefone2.Text ||
+                _viewModel.ClienteSelecionado!.cli_cpf != txtCpf.Text ||
+                _viewModel.ClienteSelecionado!.cli_endereco != txtEndereco.Text ||
+                _viewModel.ClienteSelecionado!.cli_cep != txtCep.Text ||
+                _viewModel.ClienteSelecionado!.cli_cidade != txtCidade.Text ||
+                _viewModel.ClienteSelecionado!.cli_uf != txtUF.Text)
             {
                 return true; // Houve mudança
             }
             return false; // Não houve mudança
         }
+        //
 
     } // end class
 } // end namesoace

@@ -13,7 +13,7 @@
 //************************************************************
 
 /*
-CREATE TABLE `tblfestas` (
+ TABLE `tblfestas` (
   `fest_id`         int NOT NULL AUTO_INCREMENT,
   `fest_cli_id`     int NOT NULL,
   `fest_user_id`    int NOT NULL,
