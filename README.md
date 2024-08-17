@@ -1,7 +1,4 @@
-FestasApp,  
-Estudando, Pesquisando, GPTzando, C# .NET e aplicando o aprendizado no desenvolvimento de uma aplicação para gerenciamento de Festas e Eventos.
-Módulos de Festas, Clientes, Usuários, Contas a Pagar/Receber 
-Mesclando Entity Framework, LINQ, SQL, MySql.
-Visual Studio, Windows Form, DeskTop.
-Segunda Etapa Mobile!!
-Muito Café!
+O FestasApp é um sistema desenvolvido em C# com .NET para gestão completa de eventos e festas. 
+Ele integra funcionalidades como controle de clientes, reservas, orçamentos, e relatórios dinâmicos, 
+utilizando Entity Framework e uma interface intuitiva em Windows Forms. 
+O projeto foca na otimização do fluxo de trabalho, garantindo eficiência na administração e planejamento de eventos.
